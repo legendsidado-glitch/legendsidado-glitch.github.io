@@ -1,1 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>&lt;/> Scriptsell — Hot Deals</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
+  <style>
+    body { font-family: 'Nunito', sans-serif; font-weight: 800; }
+    .wavy-bg {
+      background-color: #7dd3fc;
+      background-image:
+        radial-gradient(circle at 100% 100%, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px),
+        radial-gradient(circle at 0 0, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px);
+      background-size: 40px 40px;
+    }
+    #loader{
+      position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 1s ease;
+    }
+    #loader.fade-out{opacity:0;pointer-events:none;}
+  </style>
+</head>
+<body class="wavy-bg">
+
+  <!-- Loader -->
+  <div id="loader"><h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Scriptsell</h1></div>
+
+  <!-- Header -->
+  <header class="bg-sky-400 py-6">
+    <div class="container mx-auto text-center text-white">
+      <h1 class="text-5xl font-black tracking-wider">&lt;/> SCRIPTSELL</h1>
+      <p class="text-xl font-bold mt-1">BUY ROBLOX SCRIPTS & MODELS</p>
+
+      <!-- Nav (same style, working links) -->
+      <nav class="mt-6">
+        <ul class="flex justify-center items-center space-x-2 md:space-x-4">
+          <li><a href="index.html" class="bg-white text-sky-500 py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-gray-100">HOME</a></li>
+          <li><a href="hot-deals.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Hot Deals</a></li>
+          <li><a href="products.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Products</a></li>
+          <li><a href="infos.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Infos</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <main class="container mx-auto px-4 py-10">
+    <section class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl mb-8">
+      <h2 class="text-4xl font-black text-gray-800 mb-6 text-center">🔥 Hot Deals</h2>
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Hot+Deal" class="rounded-xl shadow-lg w-full" alt="">
+        <div class="text-gray-800">
+          <h3 class="text-3xl font-black">Global Admin — Deal</h3>
+          <p class="text-red-500 text-2xl font-black mt-2 line-through">29.99€</p>
+          <p class="text-green-600 text-5xl font-black">19.99€</p>
+          <ul class="mt-4 space-y-2">
+            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i>No Delay</li>
+            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i>250+ Commands</li>
+            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i>Global Chat</li>
+          </ul>
+          <a href="#" class="mt-6 inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center py-8 text-white/70">
+    <p>Copyright © 2024 &lt;/> Scriptsell - All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    feather.replace();
+    window.addEventListener("load", () => {
+      setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 3000);
+    });
+  </script>
+</body>
+</html>
 
