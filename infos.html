@@ -27,7 +27,7 @@
 <body class="wavy-bg">
 
   <!-- Loader -->
-  <div id="loader"><h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Loading</h1></div>
+  <div id="loader"><h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Loading Infos</h1></div>
 
   <!-- Header -->
   <header class="bg-sky-400 py-6">
@@ -54,7 +54,7 @@
         <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white" alt="">
         <div>
           <h4 class="font-black text-lg text-gray-800">Email</h4>
-          <p class="text-gray-700"><a href="mailto:Legend.Sidsdo@gmail.com" class="underline">Legend.Sidsdo@gmail.com</a></p>
+          <p class="text-gray-700"><a href="mailto:Legend.Sidado@gmail.com" class="underline">Legend.Sidsdo@gmail.com</a></p>
         </div>
       </div>
 
@@ -83,20 +83,10 @@
   <script>
     feather.replace();
     window.addEventListener("load", () => {
-      setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1100);
+      setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500);
     });
- <script>
-  // This is the new script for highlighting the current page in the nav
-  document.addEventListener('DOMContentLoaded', () => {
-    const currentPage = window.location.pathname.split("/").pop();
-    document.querySelectorAll('nav a').forEach(link => {
-      if(link.getAttribute('href') === currentPage) {
-        link.classList.remove('bg-sky-500', 'text-white');
-        link.classList.add('bg-white', 'text-sky-500');
-      }
-    });
-  });
-</script>
+  </script>
 </body>
 </html>
+
 
