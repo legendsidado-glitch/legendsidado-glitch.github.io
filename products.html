@@ -100,6 +100,17 @@
       setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1100);
     });
   </script>
+  // This is the new script for highlighting the current page in the nav
+  document.addEventListener('DOMContentLoaded', () => {
+    const currentPage = window.location.pathname.split("/").pop();
+    document.querySelectorAll('nav a').forEach(link => {
+      if(link.getAttribute('href') === currentPage) {
+        link.classList.remove('bg-sky-500', 'text-white');
+        link.classList.add('bg-white', 'text-sky-500');
+      }
+    });
+  });
+</script>
 </body>
 </html>
 
