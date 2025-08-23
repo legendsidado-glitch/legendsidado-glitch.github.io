@@ -27,7 +27,7 @@
 <body class="wavy-bg">
 
   <!-- Loader -->
-  <div id="loader"><h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Loading</h1></div>
+  <div id="loader"><h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Scriptsell</h1></div>
 
   <!-- Header -->
   <header class="bg-sky-400 py-6">
@@ -97,20 +97,10 @@
   <script>
     feather.replace();
     window.addEventListener("load", () => {
-      setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1100);
+      setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 3000);
     });
   </script>
-  // This is the new script for highlighting the current page in the nav
-  document.addEventListener('DOMContentLoaded', () => {
-    const currentPage = window.location.pathname.split("/").pop();
-    document.querySelectorAll('nav a').forEach(link => {
-      if(link.getAttribute('href') === currentPage) {
-        link.classList.remove('bg-sky-500', 'text-white');
-        link.classList.add('bg-white', 'text-sky-500');
-      }
-    });
-  });
-</script>
 </body>
 </html>
+
 
