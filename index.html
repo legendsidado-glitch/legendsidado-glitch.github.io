@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>&lt;/> Scriptsell</title>
-
   
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -51,7 +50,9 @@
 <body class="wavy-bg">
 
   <!-- Loader -->
-    <div id="loader"><h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Welcome To Scriptsell</h1></div>
+  <div id="loader">
+    <h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Scriptsell</h1>
+  </div>
 
   <!-- Header Section -->
   <header class="bg-sky-400 py-6">
@@ -61,21 +62,22 @@
       
       <!-- Navigation -->
       <nav class="mt-6">
-  <ul class="flex justify-center items-center space-x-2 md:space-x-4">
-    <li><a href="index.html" class="bg-white text-sky-500 py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-gray-100">HOME</a></li>
-    <li><a href="hot-deals.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Hot Deals</a></li>
-    <li><a href="products.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Products</a></li>
-    <li><a href="infos.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Infos</a></li>
-  </ul>
-</nav>
-
+        <ul class="flex justify-center items-center space-x-2 md:space-x-4">
+          <li><a href="#" class="bg-white text-sky-500 py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-gray-100">HOME</a></li>
+          <li><a href="#" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Hot Deals</a></li>
+          <li><a href="#" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Products</a></li>
+          <li><a href="#" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Infos</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
   <!-- Main Content -->
   <main class="container mx-auto px-4 py-10">
 
     <!-- Why Choose Us Section -->
     <section id="why-us" class="bg-red-500 text-white rounded-2xl p-6 shadow-2xl mb-12">
-      <h2 class="text-3xl font-black text-center mb-6">WHY US?</h2>
+      <h2 class="text-3xl font-black text-center mb-6">WHY CHOOSE US?</h2>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
         <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">TOP DEALS</h3></div>
         <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">SAFE PRODUCTS</h3></div>
@@ -103,10 +105,7 @@
             <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Anti Cheat</li>
           </ul>
           <!-- Buy Button -->
-          <a href="https://www.paypal.com/signin" target="_blank"
-   class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">
-   Buy Now
-          </a>
+          <a href="#" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
         </div>
       </div>
     </section>
@@ -152,22 +151,13 @@
     // Loader logic
     window.addEventListener("load", () => {
       setTimeout(() => {
-        document.getElementById("loader").classList.add("fade-out");}, 1100);
+        document.getElementById("loader").classList.add("fade-out");
+      }, 3000);
     });
-  <script>
-  // This is the new script for highlighting the current page in the nav
-  document.addEventListener('DOMContentLoaded', () => {
-    const currentPage = window.location.pathname.split("/").pop();
-    document.querySelectorAll('nav a').forEach(link => {
-      if(link.getAttribute('href') === currentPage) {
-        link.classList.remove('bg-sky-500', 'text-white');
-        link.classList.add('bg-white', 'text-sky-500');
-      }
-    });
-  });
-</script>
+  </script>
 </body>
 </html>
+
 
 
 
