@@ -1,74 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All Products - Cript</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>&lt;/> Scriptsell — All Products</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts: Nunito -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Feather Icons -->
+  <script src="https://unpkg.com/feather-icons"></script>
+
   <style>
-    /* Color changing animation */
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    /* Match homepage font + weight */
     body {
-      background: linear-gradient(-45deg, #ff6ec4, #7873f5, #42e695, #f6d365);
-      background-size: 400% 400%;
-      animation: gradientShift 10s ease infinite;
-      position: relative;
-      min-height: 100vh;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
     }
-    /* Texture overlay */
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url("https://www.transparenttextures.com/patterns/waves.png");
-      opacity: 0.2;
-      pointer-events: none;
+
+    /* Same wavy texture background as your homepage */
+    .wavy-bg {
+      background-color: #7dd3fc; /* sky-300 */
+      background-image:
+        radial-gradient(circle at 100% 100%, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px),
+        radial-gradient(circle at 0 0, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px);
+      background-size: 40px 40px;
+    }
+
+    /* Animated gradient text for "ALL PRODUCTS" (blue → yellow → red → blue) */
+    .animated-heading {
+      background: linear-gradient(90deg, #0ea5e9, #f59e0b, #ef4444, #0ea5e9);
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shiftColors 6s linear infinite;
+    }
+    @keyframes shiftColors {
+      0%   { background-position:   0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position:   0% 50%; }
     }
   </style>
 </head>
-<body class="relative">
 
-  <!-- Back to Home Button -->
-  <div class="p-6">
-    <a href="index.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-md hover:bg-indigo-700 transition">
-      ⬅ Back to Home
-    </a>
-  </div>
+<body class="wavy-bg">
 
-  <section class="container mx-auto px-6 py-12 relative z-10">
-    <h1 class="text-5xl font-bold text-center text-white mb-12">All Products</h1>
+  <!-- Header (same look as homepage) -->
+  <header class="bg-sky-400 py-6">
+    <div class="container mx-auto text-center text-white">
+      <h1 class="text-5xl font-black tracking-wider">&lt;/> SCRIPTSELL</h1>
+      <p class="text-xl font-bold mt-1">BUY ROBLOX SCRIPTS & MODELS</p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      <!-- Example product -->
-      <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition">
-        <img src="https://via.placeholder.com/200" alt="Product 1" class="w-full h-48 object-cover rounded-lg mb-4">
-        <h2 class="text-xl font-bold mb-2">Product 1</h2>
-        <p class="text-gray-600 mb-4">$9.99</p>
-        <a href="https://www.paypal.com/signin" target="_blank" class="block bg-green-500 text-white px-4 py-2 rounded-lg text-center font-bold hover:bg-green-600 transition">
-          Buy Now
-        </a>
-      </div>
-
-      <!-- Duplicate this block 19 more times for products -->
-      <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition">
-        <img src="https://via.placeholder.com/200" alt="Product 2" class="w-full h-48 object-cover rounded-lg mb-4">
-        <h2 class="text-xl font-bold mb-2">Product 2</h2>
-        <p class="text-gray-600 mb-4">$14.99</p>
-        <a href="https://www.paypal.com/signin" target="_blank" class="block bg-green-500 text-white px-4 py-2 rounded-lg text-center font-bold hover:bg-green-600 transition">
-          Buy Now
-        </a>
-      </div>
-
-      <!-- keep going until 20 products -->
+      <!-- Navigation (same pill buttons) -->
+      <nav class="mt-6">
+        <ul class="flex justify-center items-center flex-wrap gap-2 md:space-x-4">
+          <li><a href="index.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">HOME</a></li>
+          <li><a href="hot-deals.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Hot Deals</a></li>
+          <li><a href="products.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Products</a></li>
+          <li><a href="infos.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Infos</a></li>
+          <!-- Current page highlighted like HOME style -->
+          <li><a href="all-products.html" class="bg-white text-sky-500 py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-gray-100">ALL PRODUCTS</a></li>
+        </ul>
+      </nav>
     </div>
-  </section>
+  </header>
+
+  <!-- Main -->
+  <main class="container mx-auto px-4 py-10">
+
+    <!-- Animated heading -->
+    <h2 class="animated-heading text-4xl md:text-5xl font-black text-center mb-10">ALL PRODUCTS</h2>
+
+    <!-- Product Grid (20 items) -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+      <!-- CARD TEMPLATE
+        - Keep the white card + green Buy button to match homepage product section
+        - Images use your same placeholder vibe (dark bg with white text)
+      -->
+
+      <!-- 1 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+1" alt="Product 1" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 1</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€9.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 2 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+2" alt="Product 2" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 2</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€12.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 3 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+3" alt="Product 3" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 3</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€14.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 4 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+4" alt="Product 4" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 4</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€16.49</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 5 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+5" alt="Product 5" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 5</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€17.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 6 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+6" alt="Product 6" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 6</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€19.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 7 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+7" alt="Product 7" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 7</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€21.49</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 8 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+8" alt="Product 8" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 8</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€22.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 9 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+9" alt="Product 9" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 9</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€24.49</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 10 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+10" alt="Product 10" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 10</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€25.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 11 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+11" alt="Product 11" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 11</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€26.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 12 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+12" alt="Product 12" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 12</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€27.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 13 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+13" alt="Product 13" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 13</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€28.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 14 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+14" alt="Product 14" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 14</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€29.49</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 15 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+15" alt="Product 15" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 15</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€29.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 16 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+16" alt="Product 16" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 16</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€31.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 17 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+17" alt="Product 17" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 17</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€34.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 18 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+18" alt="Product 18" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 18</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€39.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 19 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+19" alt="Product 19" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 19</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€44.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+
+      <!-- 20 -->
+      <div class="bg-white rounded-2xl p-6 shadow-2xl hover:shadow-[0_20px_60px_rgba(0,0,0,0.15)] transition">
+        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Product+20" alt="Product 20" class="rounded-xl shadow mb-4 w-full">
+        <h3 class="text-2xl font-black text-gray-800">Script Pack 20</h3>
+        <p class="text-green-600 text-2xl font-black my-3">€59.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-lg font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer (match homepage) -->
+  <footer class="text-center py-8 text-white/70">
+    <p>Copyright © 2024 &lt;/> Scriptsell - All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    feather.replace();
+  </script>
 </body>
 </html>
 
