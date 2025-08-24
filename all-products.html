@@ -3,144 +3,73 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>All Products - LegendSidado</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>All Products - Cript</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <style>
-    /* Wavy Background */
-    .wavy-bg {
-      background: linear-gradient(270deg, #4f46e5, #06b6d4, #10b981);
-      background-size: 600% 600%;
-      animation: wave 12s ease infinite;
-    }
-    @keyframes wave {
+    /* Color changing animation */
+    @keyframes gradientShift {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
+    body {
+      background: linear-gradient(-45deg, #ff6ec4, #7873f5, #42e695, #f6d365);
+      background-size: 400% 400%;
+      animation: gradientShift 10s ease infinite;
+      position: relative;
+      min-height: 100vh;
+    }
+    /* Texture overlay */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url("https://www.transparenttextures.com/patterns/waves.png");
+      opacity: 0.2;
+      pointer-events: none;
+    }
   </style>
 </head>
-<body class="wavy-bg min-h-screen text-white">
+<body class="relative">
 
-  <!-- Header -->
-  <header class="flex justify-between items-center p-6 bg-black/30 shadow-lg">
-    <h1 class="text-3xl font-bold">LegendSidado</h1>
-    <nav>
-      <a href="index.html" class="mr-6 hover:underline">Home</a>
-      <a href="all-products.html" class="hover:underline font-semibold">All Products</a>
-    </nav>
-  </header>
+  <!-- Back to Home Button -->
+  <div class="p-6">
+    <a href="index.html" class="inline-block bg-indigo-600 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-md hover:bg-indigo-700 transition">
+      ⬅ Back to Home
+    </a>
+  </div>
 
-  <!-- Products Section -->
-  <section class="py-12 px-6">
-    <h2 class="text-4xl font-bold text-center mb-10">All Products</h2>
+  <section class="container mx-auto px-6 py-12 relative z-10">
+    <h1 class="text-5xl font-bold text-center text-white mb-12">All Products</h1>
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      
-      <!-- Product Items -->
-      <!-- You can swap out descriptions and links later -->
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 1</h3>
-        <p class="mb-4">A cool random product.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 2</h3>
-        <p class="mb-4">Another amazing item.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 3</h3>
-        <p class="mb-4">Limited edition product.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 4</h3>
-        <p class="mb-4">High-quality item.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 5</h3>
-        <p class="mb-4">Best seller choice.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 6</h3>
-        <p class="mb-4">Stylish product you’ll love.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 7</h3>
-        <p class="mb-4">Perfect for everyday use.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 8</h3>
-        <p class="mb-4">Fan favorite item.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 9</h3>
-        <p class="mb-4">Exclusive limited stock.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 10</h3>
-        <p class="mb-4">Highly recommended.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 11</h3>
-        <p class="mb-4">Popular with customers.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 12</h3>
-        <p class="mb-4">Trendy and unique.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 13</h3>
-        <p class="mb-4">Great quality guaranteed.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 14</h3>
-        <p class="mb-4">Affordable and reliable.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 15</h3>
-        <p class="mb-4">Premium quality product.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 16</h3>
-        <p class="mb-4">Hand-picked selection.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 17</h3>
-        <p class="mb-4">Best value deal.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 18</h3>
-        <p class="mb-4">Rare find product.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 19</h3>
-        <p class="mb-4">Top choice for many.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
-      </div>
-      <div class="bg-white text-black rounded-2xl shadow-lg p-6 text-center">
-        <h3 class="text-xl font-bold mb-2">Product 20</h3>
-        <p class="mb-4">One of our favorites.</p>
-        <a href="https://www.paypal.com/signin" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Buy Now</a>
+      <!-- Example product -->
+      <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition">
+        <img src="https://via.placeholder.com/200" alt="Product 1" class="w-full h-48 object-cover rounded-lg mb-4">
+        <h2 class="text-xl font-bold mb-2">Product 1</h2>
+        <p class="text-gray-600 mb-4">$9.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="block bg-green-500 text-white px-4 py-2 rounded-lg text-center font-bold hover:bg-green-600 transition">
+          Buy Now
+        </a>
       </div>
 
+      <!-- Duplicate this block 19 more times for products -->
+      <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-2xl transition">
+        <img src="https://via.placeholder.com/200" alt="Product 2" class="w-full h-48 object-cover rounded-lg mb-4">
+        <h2 class="text-xl font-bold mb-2">Product 2</h2>
+        <p class="text-gray-600 mb-4">$14.99</p>
+        <a href="https://www.paypal.com/signin" target="_blank" class="block bg-green-500 text-white px-4 py-2 rounded-lg text-center font-bold hover:bg-green-600 transition">
+          Buy Now
+        </a>
+      </div>
+
+      <!-- keep going until 20 products -->
     </div>
   </section>
-
 </body>
 </html>
+
 
