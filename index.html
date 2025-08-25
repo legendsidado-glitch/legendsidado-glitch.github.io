@@ -224,5 +224,48 @@
 
     renderCart();
   </script>
+  <!-- Your existing content (loader, main content, footer, etc.) -->
+
+<!-- Cookie Consent Popup -->
+<div id="cookieConsent" class="fixed bottom-6 right-6 bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg w-80 text-gray-800 z-50 flex flex-col space-y-4">
+  <p class="text-sm">We use cookies to enhance your experience. You can choose your preferences.</p>
+  <div class="flex justify-between">
+    <button id="acceptAll" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full font-bold text-sm">Accept All</button>
+    <button id="requiredOnly" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full font-bold text-sm">Required Only</button>
+    <button id="cookieSettings" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-full font-bold text-sm">Settings</button>
+  </div>
+</div>
+
+<script>
+  const cookieConsent = document.getElementById('cookieConsent');
+  const acceptAll = document.getElementById('acceptAll');
+  const requiredOnly = document.getElementById('requiredOnly');
+  const cookieSettings = document.getElementById('cookieSettings');
+
+  function setCookie(name, value, days){
+    const d = new Date();
+    d.setTime(d.getTime()+(days*24*60*60*1000));
+    document.cookie = name+"="+value+";path=/;expires="+d.toUTCString();
+  }
+
+  // Show popup if consent not given
+  window.addEventListener('load', () => {
+    if(!document.cookie.includes('cookieConsent')) cookieConsent.style.display='flex';
+  });
+
+  acceptAll.addEventListener('click', () => {
+    setCookie('cookieConsent','all',365);
+    cookieConsent.style.display='none';
+  });
+
+  requiredOnly.addEventListener('click', () => {
+    setCookie('cookieConsent','required',365);
+    cookieConsent.style.display='none';
+  });
+
+  cookieSettings.addEventListener('click', () => {
+    window.location.href='settings.html'; // Open settings page
+  });
+</script>
 </body>
 </html>
