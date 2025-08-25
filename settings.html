@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>&lt;/> Scriptsell — Cookie Settings</title>
+  <link rel="icon" href="Scriptsell.png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="wavy-bg font-bold">
+
+  <!-- Header -->
+  <header class="bg-sky-400 py-6">
+    <div class="container mx-auto text-center text-white">
+      <h1 class="text-5xl font-black tracking-wider">&lt;/> SCRIPTSELL</h1>
+      <p class="text-xl font-bold mt-1">Cookie Settings</p>
+      <nav class="mt-6">
+        <ul class="flex justify-center items-center space-x-2 md:space-x-4">
+          <li><a href="index.html" class="bg-white text-sky-500 py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-gray-100">HOME</a></li>
+          <li><a href="hot-deals.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Hot Deals</a></li>
+          <li><a href="products.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Products</a></li>
+          <li><a href="infos.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-sky-600">Infos</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-10">
+    <section class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl max-w-lg mx-auto">
+      <h2 class="text-3xl font-black mb-6 text-center">Cookie Preferences</h2>
+
+      <div class="flex items-center justify-between mb-4">
+        <span>Required Cookies</span>
+        <input type="checkbox" checked disabled class="w-5 h-5" />
+      </div>
+
+      <div class="flex items-center justify-between mb-4">
+        <span>Analytics Cookies</span>
+        <input type="checkbox" id="analyticsCookies" class="w-5 h-5" />
+      </div>
+
+      <div class="flex items-center justify-between mb-4">
+        <span>Marketing Cookies</span>
+        <input type="checkbox" id="marketingCookies" class="w-5 h-5" />
+      </div>
+
+      <button id="saveCookies" class="mt-4 w-full bg-green-500 hover:bg-green-600 text-white py-3 rounded-full font-bold">Save Preferences</button>
+    </section>
+  </main>
+
+  <footer class="text-center py-8 text-white/70">
+    <p>Copyright © 2024 &lt;/> Scriptsell - All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    function setCookie(name,value,days){
+      const d=new Date();
+      d.setTime(d.getTime()+(days*24*60*60*1000));
+      document.cookie = name+"="+value+";path=/;expires="+d.toUTCString();
+    }
+
+    // Load saved preferences
+    window.addEventListener('load', ()=>{
+      const cookies=document.cookie;
+      if(cookies.includes('cookieAnalytics=1')) document.getElementById('analyticsCookies').checked=true;
+      if(cookies.includes('cookieMarketing=1')) document.getElementById('marketingCookies').checked=true;
+    });
+
+    document.getElementById('saveCookies').addEventListener('click', ()=>{
+      const analytics=document.getElementById('analyticsCookies').checked ? '1':'0';
+      const marketing=document.getElementById('marketingCookies').checked ? '1':'0';
+      setCookie('cookieConsent','custom',365);
+      setCookie('cookieAnalytics',analytics,365);
+      setCookie('cookieMarketing',marketing,365);
+      alert('Your cookie preferences have been saved!');
+      window.location.href='index.html'; // return to home
+    });
+  </script>
+</body>
+</html>
