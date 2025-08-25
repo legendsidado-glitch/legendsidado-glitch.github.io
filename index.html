@@ -20,9 +20,7 @@
         radial-gradient(circle at 0 0, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px);
       background-size: 40px 40px;
     }
-    #loader{
-      position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 1s ease;
-    }
+    #loader{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 1s ease;}
     #loader.fade-out{opacity:0;pointer-events:none;}
     /* Cookie popup animations */
     @keyframes bounceSlow { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
@@ -45,7 +43,8 @@
       <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-yellow-500">
         All Products
       </a>
-      <button id="cartButton" class="bg-blue-600 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-blue-700 transition relative">
+      <button id="cartButton" class="bg-green-500 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-green-600 transition relative">
+        <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 flex justify-center items-center text-xs rounded-full bg-white text-black">0</span>
         Cart
       </button>
     </div>
@@ -93,7 +92,10 @@
             <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Customisable</li>
             <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Anti Cheat</li>
           </ul>
-          <a href="#" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+          <div class="flex space-x-2">
+            <a href="#" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+            <button id="addToCart" class="bg-blue-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Add to Cart</button>
+          </div>
         </div>
       </div>
     </section>
@@ -120,108 +122,72 @@
     <p>Copyright © 2024 &lt;/> Scriptsell - All Rights Reserved.</p>
   </footer>
 
-  <!-- Enhanced Cookie Consent Popup -->
-  <div id="cookieConsent" class="fixed bottom-6 right-6 w-80 max-w-xs bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 flex flex-col space-y-4 transform translate-y-24 opacity-0 scale-90 transition-all duration-700 ease-out z-50 hover:animate-bounce-slow">
-    <p class="text-gray-800 text-sm text-center font-semibold">
-      🍪 We use cookies to improve your experience. Choose your preferences:
-    </p>
-    <div class="flex justify-between space-x-2">
-      <button id="acceptAll" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
-        Accept All
-        <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
-      </button>
-      <button id="requiredOnly" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
-        Required Only
-        <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
-      </button>
-      <button id="cookieSettings" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
-        Settings
-        <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
-      </button>
+  <!-- Cart Frame -->
+  <div id="cartFrame" class="fixed top-20 right-6 w-80 max-w-xs bg-white rounded-2xl shadow-2xl p-4 transform scale-95 opacity-0 transition-all duration-300 z-50">
+    <h3 class="text-lg font-black mb-4 text-gray-800">Your Cart</h3>
+    <div id="cartItems" class="space-y-2 max-h-60 overflow-y-auto"></div>
+    <div class="mt-4 flex justify-between items-center">
+      <p class="font-bold text-gray-800">Total: €<span id="cartTotal">0.00</span></p>
+      <button id="purchaseButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full font-bold shadow-lg transition">Purchase</button>
     </div>
   </div>
 
+  <!-- Scripts -->
   <script>
     feather.replace();
-
-    // Loader logic
     window.addEventListener("load", () => {
       setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500);
     });
 
-    const cookieConsent = document.getElementById('cookieConsent');
-    const acceptAll = document.getElementById('acceptAll');
-    const requiredOnly = document.getElementById('requiredOnly');
-    const cookieSettings = document.getElementById('cookieSettings');
+    // Cart logic
+    const cartButton = document.getElementById('cartButton');
+    const cartFrame = document.getElementById('cartFrame');
+    const cartItemsContainer = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const addToCartBtn = document.getElementById('addToCart');
+    const cartCountEl = document.getElementById('cartCount');
 
-    function setCookie(name, value, days){
-      const d = new Date();
-      d.setTime(d.getTime()+(days*24*60*60*1000));
-      document.cookie = name+"="+value+";path=/;expires="+d.toUTCString();
-    }
-
-    // TEST MODE: popup always shows
-    window.addEventListener('load', () => {
-      cookieConsent.style.opacity = '1';
-      cookieConsent.style.transform = 'translateY(0) scale(1)';
-      cookieConsent.style.display = 'flex';
-    });
-
-    function hidePopup() {
-      cookieConsent.style.transform = 'translateY(24px) scale(0.9)';
-      cookieConsent.style.opacity = '0';
-      setTimeout(()=>cookieConsent.style.display='none', 400);
-    }
-
-    acceptAll.addEventListener('click', () => { setCookie('cookieConsent','all',365); hidePopup(); });
-    requiredOnly.addEventListener('click', () => { setCookie('cookieConsent','required',365); hidePopup(); });
-    cookieSettings.addEventListener('click', () => { window.location.href='settings.html'; });
-
-    // --- CART LOGIC ---
-    const cartBtn = document.getElementById('cartButton');
-
-    // Create number bubble
+    let cart = [];
     let cartCount = 0;
-    const bubble = document.createElement('span');
-    bubble.id = 'cart-count';
-    bubble.textContent = cartCount;
-    bubble.style.position = 'absolute';
-    bubble.style.top = '0';
-    bubble.style.right = '0';
-    bubble.style.background = 'red';
-    bubble.style.color = 'white';
-    bubble.style.padding = '2px 6px';
-    bubble.style.borderRadius = '50%';
-    bubble.style.fontSize = '0.75rem';
-    bubble.style.fontWeight = 'bold';
-    bubble.style.transform = 'translate(50%, -50%)';
-    cartBtn.style.position = 'relative';
-    cartBtn.appendChild(bubble);
 
-    // Add "Add to Cart" buttons next to all Buy buttons
-    document.querySelectorAll('a').forEach(el => {
-      if(el.textContent.trim().toLowerCase().includes('buy')){
-        const addBtn = document.createElement('button');
-        addBtn.textContent = 'Add to Cart';
-        addBtn.className = 'ml-2 px-4 py-2 rounded-full bg-blue-500 text-white font-bold hover:bg-blue-600 transition';
-        el.insertAdjacentElement('afterend', addBtn);
-      }
+    function updateCartBubble() { cartCountEl.textContent = cartCount; }
+    function updateCartFrame() {
+      cartItemsContainer.innerHTML = '';
+      let total = 0;
+      cart.forEach((item, index) => {
+        total += item.price;
+        const itemEl = document.createElement('div');
+        itemEl.className = "flex justify-between items-center bg-gray-100 p-2 rounded-xl shadow-sm";
+        itemEl.innerHTML = `<span>${item.name} (€${item.price.toFixed(2)})</span>
+          <button class="removeItem bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-full font-bold text-xs">X</button>`;
+        itemEl.querySelector('.removeItem').addEventListener('click', () => {
+          cart.splice(index, 1); cartCount--; updateCartBubble(); updateCartFrame();
+        });
+        cartItemsContainer.appendChild(itemEl);
+      });
+      cartTotalEl.textContent = total.toFixed(2);
+    }
+
+    addToCartBtn.addEventListener('click', () => {
+      const product = { name: 'Global Admin', price: 29.99 };
+      cart.push(product); cartCount++; updateCartBubble(); updateCartFrame(); alert('Item added to cart!');
     });
 
-    // Event delegation for Add to Cart clicks
-    document.body.addEventListener('click', e => {
-      if(e.target.textContent === 'Add to Cart'){
-        cartCount++;
-        document.getElementById('cart-count').textContent = cartCount;
-      }
+    let cartOpen = false;
+    cartButton.addEventListener('click', () => {
+      cartOpen = !cartOpen;
+      if(cartOpen){ cartFrame.style.opacity='1'; cartFrame.style.transform='scale(1)'; }
+      else { cartFrame.style.opacity='0'; cartFrame.style.transform='scale(0.95)'; }
     });
 
-    // Optional: click on cart button
-    cartBtn.addEventListener('click', () => {
-      alert(`You have ${cartCount} item(s) in your cart.`);
+    document.getElementById('purchaseButton').addEventListener('click', () => {
+      if(cart.length === 0){ alert('Your cart is empty!'); return; }
+      alert('Purchased ' + cart.length + ' item(s) for €' + cart.reduce((acc,i)=>acc+i.price,0).toFixed(2));
+      cart=[]; cartCount=0; updateCartBubble(); updateCartFrame(); cartFrame.style.opacity='0'; cartFrame.style.transform='scale(0.95)'; cartOpen=false;
     });
   </script>
 </body>
 </html>
+
 
 
