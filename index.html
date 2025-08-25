@@ -224,15 +224,21 @@
 
     renderCart();
   </script>
-  <!-- Your existing content (loader, main content, footer, etc.) -->
-
-<!-- Cookie Consent Popup -->
-<div id="cookieConsent" class="fixed bottom-6 right-6 bg-white/90 backdrop-blur-sm p-6 rounded-xl shadow-lg w-80 text-gray-800 z-50 flex flex-col space-y-4">
-  <p class="text-sm">We use cookies to enhance your experience. You can choose your preferences.</p>
-  <div class="flex justify-between">
-    <button id="acceptAll" class="bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full font-bold text-sm">Accept All</button>
-    <button id="requiredOnly" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full font-bold text-sm">Required Only</button>
-    <button id="cookieSettings" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-full font-bold text-sm">Settings</button>
+  <!-- Cookie Consent Popup -->
+<div id="cookieConsent" class="fixed bottom-6 right-6 bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl w-80 max-w-xs p-6 flex flex-col space-y-4 transform translate-y-24 opacity-0 scale-95 transition-all duration-500 ease-out z-50">
+  <p class="text-gray-800 text-sm text-center">
+    🍪 We use cookies to improve your experience. Choose your preferences:
+  </p>
+  <div class="flex justify-between space-x-2">
+    <button id="acceptAll" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200">
+      Accept All
+    </button>
+    <button id="requiredOnly" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200">
+      Required Only
+    </button>
+    <button id="cookieSettings" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200">
+      Settings
+    </button>
   </div>
 </div>
 
@@ -248,23 +254,29 @@
     document.cookie = name+"="+value+";path=/;expires="+d.toUTCString();
   }
 
-  // Show popup if consent not given
   window.addEventListener('load', () => {
-    if(!document.cookie.includes('cookieConsent')) cookieConsent.style.display='flex';
+    if(!document.cookie.includes('cookieConsent')) {
+      cookieConsent.style.opacity = '1';
+      cookieConsent.style.transform = 'translateY(0) scale(1)';
+    }
   });
 
   acceptAll.addEventListener('click', () => {
     setCookie('cookieConsent','all',365);
-    cookieConsent.style.display='none';
+    cookieConsent.style.transform = 'translateY(24px) scale(0.95)';
+    cookieConsent.style.opacity = '0';
+    setTimeout(()=>cookieConsent.style.display='none',300);
   });
 
   requiredOnly.addEventListener('click', () => {
     setCookie('cookieConsent','required',365);
-    cookieConsent.style.display='none';
+    cookieConsent.style.transform = 'translateY(24px) scale(0.95)';
+    cookieConsent.style.opacity = '0';
+    setTimeout(()=>cookieConsent.style.display='none',300);
   });
 
   cookieSettings.addEventListener('click', () => {
-    window.location.href='settings.html'; // Open settings page
+    window.location.href='settings.html';
   });
 </script>
 </body>
