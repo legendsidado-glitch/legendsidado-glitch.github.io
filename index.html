@@ -6,46 +6,30 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>&lt;/> Scriptsell</title>
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts: Nunito -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
-  
-  <!-- Feather Icons -->
   <script src="https://unpkg.com/feather-icons"></script>
-
   <style>
-    body {
-      font-family: 'Nunito', sans-serif;
-      font-weight: 800;
-    }
+    body { font-family: 'Nunito', sans-serif; font-weight: 800; }
     .wavy-bg {
       background-color: #7dd3fc;
-      background-image: 
+      background-image:
         radial-gradient(circle at 100% 100%, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px),
         radial-gradient(circle at 0 0, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px);
       background-size: 40px 40px;
     }
-    /* Loader Screen */
-    #loader {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      opacity: 1;
-      transition: opacity 1s ease;
+    #loader{
+      position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 1s ease;
     }
-    #loader.fade-out {
-      opacity: 0;
-      pointer-events: none;
-    }
+    #loader.fade-out{opacity:0;pointer-events:none;}
+    /* Cookie popup animations */
+    @keyframes bounceSlow { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
+    .animate-bounce-slow { animation: bounceSlow 2s infinite; }
+    @keyframes ripple { 0%{transform:scale(0);opacity:0.5;}100%{transform:scale(4);opacity:0;} }
+    .animate-ripple { animation: ripple 0.6s ease-out; }
+    button:active span { animation: ripple 0.6s ease-out; opacity: 1; }
   </style>
 </head>
 <body class="wavy-bg">
@@ -55,49 +39,20 @@
     <h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Welcome To Scriptsell</h1>
   </div>
 
-  <!-- Cookie Consent Banner -->
-  <div id="cookieConsentBanner" class="fixed bottom-0 w-full bg-gray-900 text-white p-4 flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0 md:space-x-4 z-50 hidden">
-    <p class="text-sm md:text-base">We use cookies to improve your experience. By continuing, you agree to our use of cookies.</p>
-    <div class="flex space-x-2">
-      <button id="cookieSettingsBtn" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">Settings</button>
-      <button id="cookieAcceptBtn" class="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded">Accept</button>
-      <button id="cookieAcceptRequiredBtn" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded">Accept Required</button>
-    </div>
-  </div>
-
   <!-- Header Section -->
   <header class="bg-sky-400 py-6 relative">
-    <!-- All Products and Cart Buttons -->
-    <div class="absolute top-6 right-6 flex space-x-2 items-center">
+    <div class="absolute top-6 right-6 flex space-x-4">
       <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-yellow-500">
         All Products
       </a>
-
-      <!-- Cart Button -->
-      <div class="relative">
-        <button id="cartBtn" class="bg-green-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-green-600 flex items-center space-x-1">
-          <span>Cart</span>
-          <span id="cartCount" class="bg-white text-green-500 rounded-full px-2 py-0.5 text-sm font-bold">0</span>
-        </button>
-
-        <!-- Cart Dropdown -->
-        <div id="cartDropdown" class="hidden absolute right-0 mt-2 w-64 bg-white text-gray-800 rounded-xl shadow-lg z-50 p-4">
-          <h3 class="font-bold text-lg mb-2">Your Cart</h3>
-          <ul id="cartItems" class="space-y-2 max-h-64 overflow-y-auto"></ul>
-          <div class="mt-2 flex justify-between font-bold">
-            <span>Total:</span>
-            <span id="cartTotal">0€</span>
-          </div>
-          <button id="checkoutBtn" class="mt-2 w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-full font-bold">Checkout</button>
-        </div>
-      </div>
+      <button id="cartButton" class="bg-orange-500 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-orange-600 transition">
+        🛒 Cart
+      </button>
     </div>
 
     <div class="container mx-auto text-center text-white">
       <h1 class="text-5xl font-black tracking-wider">&lt;/> SCRIPTSELL</h1>
       <p class="text-xl font-bold mt-1">BUY ROBLOX SCRIPTS & MODELS</p>
-      
-      <!-- Navigation -->
       <nav class="mt-6">
         <ul class="flex justify-center items-center space-x-2 md:space-x-4">
           <li><a href="index.html" class="bg-white text-sky-500 py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-gray-100">HOME</a></li>
@@ -111,7 +66,6 @@
 
   <!-- Main Content -->
   <main class="container mx-auto px-4 py-10">
-
     <!-- Why Choose Us Section -->
     <section id="why-us" class="bg-red-500 text-white rounded-2xl p-6 shadow-2xl mb-12">
       <h2 class="text-3xl font-black text-center mb-6">WHY CHOOSE US?</h2>
@@ -126,11 +80,9 @@
     <!-- Product Showcase Section -->
     <section id="product" class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl mb-12">
       <div class="grid md:grid-cols-2 gap-8 items-center">
-        <!-- Product Image -->
         <div>
           <img src="https://placehold.co/600x350/1f2937/ffffff?text=Script+Interface" alt="Universal Aimbot Script Interface" class="rounded-xl shadow-lg w-full">
         </div>
-        <!-- Product Details -->
         <div class="text-gray-800">
           <h2 class="text-4xl font-black">Global Admin</h2>
           <p class="text-green-500 text-5xl font-black my-4">29.99€</p>
@@ -141,157 +93,94 @@
             <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Customisable</li>
             <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Anti Cheat</li>
           </ul>
-          <!-- Buy and Add to Cart Buttons -->
-          <div class="flex space-x-2">
-            <a href="#" onclick="addToCart('Global Admin',29.99)" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
-            <button onclick="addToCart('Global Admin',29.99)" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-full font-bold">Add to Cart</button>
-          </div>
+          <a href="#" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
         </div>
       </div>
     </section>
 
-    <!-- More sections here ... keep your original content untouched ... -->
-
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="space-y-8 mb-12">
+      <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+        <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+        <div><h4 class="font-black text-lg text-gray-800">Email</h4><p class="text-gray-700">Legend.Sidado@gmail.com</p></div>
+      </div>
+      <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+        <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+        <div><h4 class="font-black text-lg text-gray-800">Infos</h4><p class="text-gray-700">Just Message Me by Email When u need Help or Tips!</p></div>
+      </div>
+      <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+        <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+        <div><h4 class="font-black text-lg text-gray-800">Products</h4><p class="text-gray-700">Before Selling We Test them And let People rate them, so only The best comes to sale.</p></div>
+      </div>
+    </section>
   </main>
-  
+
   <!-- Footer -->
   <footer class="text-center py-8 text-white/70">
     <p>Copyright © 2024 &lt;/> Scriptsell - All Rights Reserved.</p>
   </footer>
 
+  <!-- Enhanced Cookie Consent Popup -->
+  <div id="cookieConsent" class="fixed bottom-6 right-6 w-80 max-w-xs bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 flex flex-col space-y-4 transform translate-y-24 opacity-0 scale-90 transition-all duration-700 ease-out z-50 hover:animate-bounce-slow">
+    <p class="text-gray-800 text-sm text-center font-semibold">
+      🍪 We use cookies to improve your experience. Choose your preferences:
+    </p>
+    <div class="flex justify-between space-x-2">
+      <button id="acceptAll" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
+        Accept All
+        <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
+      </button>
+      <button id="requiredOnly" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
+        Required Only
+        <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
+      </button>
+      <button id="cookieSettings" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
+        Settings
+        <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
+      </button>
+    </div>
+  </div>
+
   <script>
     feather.replace();
 
-    // Loader and Cookie logic
+    // Loader logic
     window.addEventListener("load", () => {
       setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500);
-
-      const banner = document.getElementById('cookieConsentBanner');
-      const accepted = localStorage.getItem('cookiesAccepted');
-      if(!accepted) banner.style.display = 'flex';
-
-      document.getElementById('cookieAcceptBtn').addEventListener('click', () => {
-        localStorage.setItem('cookiesAccepted', 'true');
-        banner.style.display = 'none';
-      });
-
-      document.getElementById('cookieAcceptRequiredBtn').addEventListener('click', () => {
-        alert('Required Cookies Accepted!');
-        banner.style.display = 'none';
-      });
-
-      document.getElementById('cookieSettingsBtn').addEventListener('click', () => {
-        alert('Open Settings Panel (add your logic here)');
-      });
     });
 
-    // Cart logic
-    const cartBtn = document.getElementById('cartBtn');
-    const cartDropdown = document.getElementById('cartDropdown');
-    const cartItemsEl = document.getElementById('cartItems');
-    const cartTotalEl = document.getElementById('cartTotal');
-    const cartCountEl = document.getElementById('cartCount');
-    const checkoutBtn = document.getElementById('checkoutBtn');
+    const cookieConsent = document.getElementById('cookieConsent');
+    const acceptAll = document.getElementById('acceptAll');
+    const requiredOnly = document.getElementById('requiredOnly');
+    const cookieSettings = document.getElementById('cookieSettings');
 
-    let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-    cartBtn.addEventListener('click', () => { cartDropdown.classList.toggle('hidden'); });
-
-    function renderCart() {
-      cartItemsEl.innerHTML = '';
-      let total = 0;
-      cart.forEach((item,index)=>{
-        total += item.price;
-        const li = document.createElement('li');
-        li.className='flex justify-between items-center border-b pb-1';
-        li.innerHTML = `<span>${item.name} (${item.price}€)</span><button class="text-red-500 font-bold" onclick="removeFromCart(${index})">X</button>`;
-        cartItemsEl.appendChild(li);
-      });
-      cartTotalEl.textContent = total.toFixed(2)+'€';
-      cartCountEl.textContent = cart.length;
-      localStorage.setItem('cart', JSON.stringify(cart));
+    function setCookie(name, value, days){
+      const d = new Date();
+      d.setTime(d.getTime()+(days*24*60*60*1000));
+      document.cookie = name+"="+value+";path=/;expires="+d.toUTCString();
     }
 
-    function removeFromCart(index){ cart.splice(index,1); renderCart(); }
-
-    checkoutBtn.addEventListener('click', ()=>{
-      if(cart.length===0){ alert('Your cart is empty!'); return; }
-      alert('Thank you for your purchase of '+cart.length+' item(s) totaling '+cartTotalEl.textContent);
-      cart=[]; renderCart();
+    // TEST MODE: popup always shows
+    window.addEventListener('load', () => {
+      cookieConsent.style.opacity = '1';
+      cookieConsent.style.transform = 'translateY(0) scale(1)';
+      cookieConsent.style.display = 'flex';
     });
 
-    function addToCart(name,price){ cart.push({name,price}); renderCart(); }
+    function hidePopup() {
+      cookieConsent.style.transform = 'translateY(24px) scale(0.9)';
+      cookieConsent.style.opacity = '0';
+      setTimeout(()=>cookieConsent.style.display='none', 400);
+    }
 
-    renderCart();
+    acceptAll.addEventListener('click', () => { setCookie('cookieConsent','all',365); hidePopup(); });
+    requiredOnly.addEventListener('click', () => { setCookie('cookieConsent','required',365); hidePopup(); });
+    cookieSettings.addEventListener('click', () => { window.location.href='settings.html'; });
+
+    // Optional: Cart button click
+    const cartButton = document.getElementById('cartButton');
+    cartButton.addEventListener('click', ()=>{ alert("Cart functionality will be implemented here."); });
   </script>
-<script>
-  <!-- Cookie Consent Popup -->
-<div id="cookieConsent" class="fixed bottom-6 right-6 w-80 max-w-xs bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 flex flex-col space-y-4 transform translate-y-24 opacity-0 scale-90 transition-all duration-700 ease-out z-50 hover:animate-bounce-slow">
-  <p class="text-gray-800 text-sm text-center font-semibold">
-    🍪 We use cookies to improve your experience. Choose your preferences:
-  </p>
-  <div class="flex justify-between space-x-2">
-    <button id="acceptAll" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
-      Accept All
-      <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
-    </button>
-    <button id="requiredOnly" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
-      Required Only
-      <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
-    </button>
-    <button id="cookieSettings" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
-      Settings
-      <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
-    </button>
-  </div>
-</div>
-
-<style>
-  @keyframes bounceSlow {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
-  }
-
-  .animate-bounce-slow { animation: bounceSlow 2s infinite; }
-
-  @keyframes ripple {
-    0% { transform: scale(0); opacity: 0.5; }
-    100% { transform: scale(4); opacity: 0; }
-  }
-  .animate-ripple { animation: ripple 0.6s ease-out; }
-
-  button:active span { animation: ripple 0.6s ease-out; opacity: 1; }
-</style>
-
-<script>
-  const cookieConsent = document.getElementById('cookieConsent');
-  const acceptAll = document.getElementById('acceptAll');
-  const requiredOnly = document.getElementById('requiredOnly');
-  const cookieSettings = document.getElementById('cookieSettings');
-
-  function setCookie(name, value, days){
-    const d = new Date();
-    d.setTime(d.getTime()+(days*24*60*60*1000));
-    document.cookie = name+"="+value+";path=/;expires="+d.toUTCString();
-  }
-
-  // Test mode: always show popup
-  window.addEventListener('load', () => {
-    cookieConsent.style.opacity = '1';
-    cookieConsent.style.transform = 'translateY(0) scale(1)';
-    cookieConsent.style.display = 'flex';
-  });
-
-  function hidePopup() {
-    cookieConsent.style.transform = 'translateY(24px) scale(0.9)';
-    cookieConsent.style.opacity = '0';
-    setTimeout(()=>cookieConsent.style.display='none', 400);
-  }
-
-  acceptAll.addEventListener('click', () => { setCookie('cookieConsent','all',365); hidePopup(); });
-  requiredOnly.addEventListener('click', () => { setCookie('cookieConsent','required',365); hidePopup(); });
-  cookieSettings.addEventListener('click', () => { window.location.href='settings.html'; });
-</script>
-
 </body>
 </html>
+
