@@ -45,8 +45,8 @@
       <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-yellow-500">
         All Products
       </a>
-      <button id="cartButton" class="bg-orange-500 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-orange-600 transition">
-        🛒 Cart
+      <button id="cartButton" class="bg-blue-600 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-blue-700 transition relative">
+        Cart
       </button>
     </div>
 
@@ -177,10 +177,51 @@
     requiredOnly.addEventListener('click', () => { setCookie('cookieConsent','required',365); hidePopup(); });
     cookieSettings.addEventListener('click', () => { window.location.href='settings.html'; });
 
-    // Optional: Cart button click
-    const cartButton = document.getElementById('cartButton');
-    cartButton.addEventListener('click', ()=>{ alert("Cart functionality will be implemented here."); });
+    // --- CART LOGIC ---
+    const cartBtn = document.getElementById('cartButton');
+
+    // Create number bubble
+    let cartCount = 0;
+    const bubble = document.createElement('span');
+    bubble.id = 'cart-count';
+    bubble.textContent = cartCount;
+    bubble.style.position = 'absolute';
+    bubble.style.top = '0';
+    bubble.style.right = '0';
+    bubble.style.background = 'red';
+    bubble.style.color = 'white';
+    bubble.style.padding = '2px 6px';
+    bubble.style.borderRadius = '50%';
+    bubble.style.fontSize = '0.75rem';
+    bubble.style.fontWeight = 'bold';
+    bubble.style.transform = 'translate(50%, -50%)';
+    cartBtn.style.position = 'relative';
+    cartBtn.appendChild(bubble);
+
+    // Add "Add to Cart" buttons next to all Buy buttons
+    document.querySelectorAll('a').forEach(el => {
+      if(el.textContent.trim().toLowerCase().includes('buy')){
+        const addBtn = document.createElement('button');
+        addBtn.textContent = 'Add to Cart';
+        addBtn.className = 'ml-2 px-4 py-2 rounded-full bg-blue-500 text-white font-bold hover:bg-blue-600 transition';
+        el.insertAdjacentElement('afterend', addBtn);
+      }
+    });
+
+    // Event delegation for Add to Cart clicks
+    document.body.addEventListener('click', e => {
+      if(e.target.textContent === 'Add to Cart'){
+        cartCount++;
+        document.getElementById('cart-count').textContent = cartCount;
+      }
+    });
+
+    // Optional: click on cart button
+    cartBtn.addEventListener('click', () => {
+      alert(`You have ${cartCount} item(s) in your cart.`);
+    });
   </script>
 </body>
 </html>
+
 
