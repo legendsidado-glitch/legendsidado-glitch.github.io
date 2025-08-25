@@ -225,6 +225,45 @@
     renderCart();
   </script>
 <script>
+  <!-- Cookie Consent Popup -->
+<div id="cookieConsent" class="fixed bottom-6 right-6 w-80 max-w-xs bg-white/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 flex flex-col space-y-4 transform translate-y-24 opacity-0 scale-90 transition-all duration-700 ease-out z-50 hover:animate-bounce-slow">
+  <p class="text-gray-800 text-sm text-center font-semibold">
+    🍪 We use cookies to improve your experience. Choose your preferences:
+  </p>
+  <div class="flex justify-between space-x-2">
+    <button id="acceptAll" class="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
+      Accept All
+      <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
+    </button>
+    <button id="requiredOnly" class="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
+      Required Only
+      <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
+    </button>
+    <button id="cookieSettings" class="flex-1 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-full font-bold text-sm shadow-md transform hover:scale-105 transition-all duration-200 relative overflow-hidden">
+      Settings
+      <span class="absolute inset-0 bg-white/20 rounded-full opacity-0 animate-ripple"></span>
+    </button>
+  </div>
+</div>
+
+<style>
+  @keyframes bounceSlow {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  .animate-bounce-slow { animation: bounceSlow 2s infinite; }
+
+  @keyframes ripple {
+    0% { transform: scale(0); opacity: 0.5; }
+    100% { transform: scale(4); opacity: 0; }
+  }
+  .animate-ripple { animation: ripple 0.6s ease-out; }
+
+  button:active span { animation: ripple 0.6s ease-out; opacity: 1; }
+</style>
+
+<script>
   const cookieConsent = document.getElementById('cookieConsent');
   const acceptAll = document.getElementById('acceptAll');
   const requiredOnly = document.getElementById('requiredOnly');
@@ -236,30 +275,23 @@
     document.cookie = name+"="+value+";path=/;expires="+d.toUTCString();
   }
 
-  // TEST MODE: popup always shows
+  // Test mode: always show popup
   window.addEventListener('load', () => {
     cookieConsent.style.opacity = '1';
     cookieConsent.style.transform = 'translateY(0) scale(1)';
     cookieConsent.style.display = 'flex';
   });
 
-  acceptAll.addEventListener('click', () => {
-    setCookie('cookieConsent','all',365);
-    cookieConsent.style.transform = 'translateY(24px) scale(0.95)';
+  function hidePopup() {
+    cookieConsent.style.transform = 'translateY(24px) scale(0.9)';
     cookieConsent.style.opacity = '0';
-    setTimeout(()=>cookieConsent.style.display='none',300);
-  });
+    setTimeout(()=>cookieConsent.style.display='none', 400);
+  }
 
-  requiredOnly.addEventListener('click', () => {
-    setCookie('cookieConsent','required',365);
-    cookieConsent.style.transform = 'translateY(24px) scale(0.95)';
-    cookieConsent.style.opacity = '0';
-    setTimeout(()=>cookieConsent.style.display='none',300);
-  });
-
-  cookieSettings.addEventListener('click', () => {
-    window.location.href='settings.html';
-  });
+  acceptAll.addEventListener('click', () => { setCookie('cookieConsent','all',365); hidePopup(); });
+  requiredOnly.addEventListener('click', () => { setCookie('cookieConsent','required',365); hidePopup(); });
+  cookieSettings.addEventListener('click', () => { window.location.href='settings.html'; });
 </script>
+
 </body>
 </html>
