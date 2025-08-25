@@ -139,53 +139,88 @@
       setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500);
     });
 
-    // Cart logic
-    const cartButton = document.getElementById('cartButton');
-    const cartFrame = document.getElementById('cartFrame');
-    const cartItemsContainer = document.getElementById('cartItems');
-    const cartTotalEl = document.getElementById('cartTotal');
-    const addToCartBtn = document.getElementById('addToCart');
-    const cartCountEl = document.getElementById('cartCount');
+    <script>
+  feather.replace();
+  window.addEventListener("load", () => {
+    setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500);
+  });
 
-    let cart = [];
-    let cartCount = 0;
+  // Cart logic with persistence
+  const cartButton = document.getElementById('cartButton');
+  const cartFrame = document.getElementById('cartFrame');
+  const cartItemsContainer = document.getElementById('cartItems');
+  const cartTotalEl = document.getElementById('cartTotal');
+  const addToCartBtn = document.getElementById('addToCart');
+  const cartCountEl = document.getElementById('cartCount');
 
-    function updateCartBubble() { cartCountEl.textContent = cartCount; }
-    function updateCartFrame() {
-      cartItemsContainer.innerHTML = '';
-      let total = 0;
-      cart.forEach((item, index) => {
-        total += item.price;
-        const itemEl = document.createElement('div');
-        itemEl.className = "flex justify-between items-center bg-gray-100 p-2 rounded-xl shadow-sm";
-        itemEl.innerHTML = `<span>${item.name} (€${item.price.toFixed(2)})</span>
-          <button class="removeItem bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-full font-bold text-xs">X</button>`;
-        itemEl.querySelector('.removeItem').addEventListener('click', () => {
-          cart.splice(index, 1); cartCount--; updateCartBubble(); updateCartFrame();
-        });
-        cartItemsContainer.appendChild(itemEl);
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let cartCount = cart.length;
+
+  function saveCart() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
+
+  function updateCartBubble() { cartCountEl.textContent = cartCount; }
+
+  function updateCartFrame() {
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
+    cart.forEach((item, index) => {
+      total += item.price;
+      const itemEl = document.createElement('div');
+      itemEl.className = "flex justify-between items-center bg-gray-100 p-2 rounded-xl shadow-sm";
+      itemEl.innerHTML = `<span>${item.name} (€${item.price.toFixed(2)})</span>
+        <button class="removeItem bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-full font-bold text-xs">X</button>`;
+      itemEl.querySelector('.removeItem').addEventListener('click', () => {
+        cart.splice(index, 1); 
+        cartCount--; 
+        updateCartBubble(); 
+        updateCartFrame(); 
+        saveCart();
       });
-      cartTotalEl.textContent = total.toFixed(2);
+      cartItemsContainer.appendChild(itemEl);
+    });
+    cartTotalEl.textContent = total.toFixed(2);
+  }
+
+  // Load saved cart
+  updateCartBubble();
+  updateCartFrame();
+
+  addToCartBtn.addEventListener('click', () => {
+    const product = { name: 'Global Admin', price: 29.99 };
+    cart.push(product); 
+    cartCount++; 
+    updateCartBubble(); 
+    updateCartFrame(); 
+    saveCart();
+    alert('Item added to cart!');
+  });
+
+  let cartOpen = false;
+  cartButton.addEventListener('click', () => {
+    cartOpen = !cartOpen;
+    if(cartOpen){ 
+      cartFrame.style.opacity='1'; 
+      cartFrame.style.transform='scale(1)'; 
+    } else { 
+      cartFrame.style.opacity='0'; 
+      cartFrame.style.transform='scale(0.95)'; 
     }
+  });
 
-    addToCartBtn.addEventListener('click', () => {
-      const product = { name: 'Global Admin', price: 29.99 };
-      cart.push(product); cartCount++; updateCartBubble(); updateCartFrame(); alert('Item added to cart!');
-    });
-
-    let cartOpen = false;
-    cartButton.addEventListener('click', () => {
-      cartOpen = !cartOpen;
-      if(cartOpen){ cartFrame.style.opacity='1'; cartFrame.style.transform='scale(1)'; }
-      else { cartFrame.style.opacity='0'; cartFrame.style.transform='scale(0.95)'; }
-    });
-
-    document.getElementById('purchaseButton').addEventListener('click', () => {
-      if(cart.length === 0){ alert('Your cart is empty!'); return; }
-      alert('Purchased ' + cart.length + ' item(s) for €' + cart.reduce((acc,i)=>acc+i.price,0).toFixed(2));
-      cart=[]; cartCount=0; updateCartBubble(); updateCartFrame(); cartFrame.style.opacity='0'; cartFrame.style.transform='scale(0.95)'; cartOpen=false;
-    });
-  </script>
+  document.getElementById('purchaseButton').addEventListener('click', () => {
+    if(cart.length === 0){ alert('Your cart is empty!'); return; }
+    alert('Purchased ' + cart.length + ' item(s) for €' + cart.reduce((acc,i)=>acc+i.price,0).toFixed(2));
+    cart=[]; cartCount=0; 
+    updateCartBubble(); 
+    updateCartFrame(); 
+    saveCart();
+    cartFrame.style.opacity='0'; 
+    cartFrame.style.transform='scale(0.95)'; 
+    cartOpen=false;
+  });
+</script>
 </body>
 </html>
 
