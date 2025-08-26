@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
   <link rel="icon" href="Scriptsell.png" type="image/png">
-  <link rel="icon" href="favicon.PNG" type="image/png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>&lt;/> Scriptsell</title>
@@ -21,10 +20,6 @@
     }
     #loader { position: fixed; inset:0; background:#fff; display:flex; align-items:center; justify-content:center; z-index:9999; transition:opacity 1s ease; }
     #loader.fade-out { opacity:0; pointer-events:none; }
-    @keyframes bounceSlow { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
-    .animate-bounce-slow { animation: bounceSlow 2s infinite; }
-    @keyframes ripple { 0%{transform:scale(0);opacity:0.5;}100%{transform:scale(4);opacity:0;} }
-    .animate-ripple { animation: ripple 0.6s ease-out; }
     button:active span { animation: ripple 0.6s ease-out; opacity: 1; }
   </style>
 </head>
@@ -36,102 +31,111 @@
   </div>
 
   <!-- Header -->
-  <header class="bg-sky-400 py-6 flex flex-col md:flex-row items-center justify-between px-4 md:px-12">
+  <header class="bg-sky-400 py-6 px-4 md:px-12 flex flex-col md:flex-row items-center justify-between">
 
-    <!-- Logo -->
+    <!-- Logo Centered -->
     <div class="flex-1 text-center mb-4 md:mb-0">
       <h1 class="text-3xl md:text-4xl font-black tracking-wider text-white">&lt;/> SCRIPTSELL</h1>
       <p class="text-white font-bold text-sm md:text-base mt-1">BUY ROBLOX SCRIPTS & MODELS</p>
     </div>
 
-    <!-- Navigation Buttons -->
-    <nav class="flex flex-wrap justify-center md:justify-end space-x-2 md:space-x-4 mb-2 md:mb-0">
-      <a href="index.html" class="bg-white text-sky-500 py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-gray-100 transition">HOME</a>
-      <a href="hot-deals.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-sky-600 transition">Hot Deals</a>
-      <a href="products.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-sky-600 transition">Products</a>
-      <a href="infos.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-sky-600 transition">Infos</a>
-    </nav>
-
-    <!-- Cart & All Products Buttons -->
-    <div class="flex items-center justify-center md:justify-end space-x-4 mb-2 md:mb-0 relative top-[-5px]">
-      <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-yellow-500 transition">All Products</a>
-      <button id="cartButton" class="bg-green-500 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-green-600 transition relative">
-        <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 flex justify-center items-center text-xs rounded-full bg-white text-black">0</span>
-        Cart
-      </button>
-    </div>
-
-    <!-- Search -->
-    <div class="flex items-center justify-center w-full md:w-auto mt-2 md:mt-0">
-      <input id="searchInput" type="text" placeholder="Search Products..." class="rounded-l-full px-4 py-2 w-full md:w-64 focus:outline-none">
-      <button id="searchBtn" class="bg-yellow-400 px-4 py-2 rounded-r-full font-bold text-white hover:bg-yellow-500 transition">Search</button>
+    <!-- Right Side: Cart, All Products, Search -->
+    <div class="flex flex-col items-end space-y-2 md:space-y-3">
+      <div class="flex space-x-2">
+        <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full font-bold shadow-lg hover:bg-yellow-500 transition">All Products</a>
+        <button id="cartButton" class="bg-green-500 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-green-600 transition relative">
+          <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 flex justify-center items-center text-xs rounded-full bg-white text-black">0</span>
+          Cart
+        </button>
+      </div>
+      <div class="flex items-center mt-2">
+        <input id="searchInput" type="text" placeholder="Search Products..." class="rounded-l-full px-4 py-2 focus:outline-none">
+        <button id="searchBtn" class="bg-yellow-400 px-4 py-2 rounded-r-full font-bold text-white hover:bg-yellow-500 transition">Search</button>
+      </div>
     </div>
 
   </header>
 
+  <!-- Navigation Buttons under Logo -->
+  <nav class="flex justify-center space-x-4 mt-4 mb-6">
+    <a href="index.html" class="bg-white text-sky-500 py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-gray-100 transition">HOME</a>
+    <a href="hot-deals.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-sky-600 transition">Hot Deals</a>
+    <a href="products.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-sky-600 transition">Products</a>
+    <a href="infos.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-sky-600 transition">Infos</a>
+  </nav>
+
   <!-- Main Content -->
-  <main class="container mx-auto px-4 py-10">
+  <main class="container mx-auto px-4 py-10 flex flex-col md:flex-row">
 
-    <!-- Why Choose Us Section -->
-    <section id="why-us" class="bg-red-500 text-white rounded-2xl p-6 shadow-2xl mb-12">
-      <h2 class="text-3xl font-black text-center mb-6">WHY CHOOSE US?</h2>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-        <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">TOP DEALS</h3></div>
-        <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">SAFE PRODUCTS</h3></div>
-        <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">HIGH QUALITY</h3></div>
-        <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">EASY HELP</h3></div>
-      </div>
-    </section>
+    <!-- Left Side: Products placeholder -->
+    <div class="flex-1 mb-6 md:mb-0">
+      <!-- Add your products here -->
+    </div>
 
-    <!-- Product Showcase Section -->
-    <section id="product" class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl mb-12">
-      <div class="grid md:grid-cols-2 gap-8 items-center">
-        <div>
-          <img src="https://placehold.co/600x350/1f2937/ffffff?text=Script+Interface" alt="Universal Aimbot Script Interface" class="rounded-xl shadow-lg w-full">
+    <!-- Right Side: Other sections -->
+    <div class="flex-1 md:ml-8">
+
+      <!-- Why Choose Us Section -->
+      <section id="why-us" class="bg-red-500 text-white rounded-2xl p-6 shadow-2xl mb-12">
+        <h2 class="text-3xl font-black text-center mb-6">WHY CHOOSE US?</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+          <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">TOP DEALS</h3></div>
+          <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">SAFE PRODUCTS</h3></div>
+          <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">HIGH QUALITY</h3></div>
+          <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">EASY HELP</h3></div>
         </div>
-        <div class="text-gray-800">
-          <h2 class="text-4xl font-black">Global Admin</h2>
-          <p class="text-green-500 text-5xl font-black my-4">29.99€</p>
-          <ul class="space-y-2 mb-4">
-            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> No Delay</li>
-            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> 250+ Commands</li>
-            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Global Chat</li>
-            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Customisable</li>
-            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Anti Cheat</li>
-          </ul>
-          <div class="flex space-x-2">
-            <a href="#" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
-            <button id="addToCart" class="bg-blue-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Add to Cart</button>
+      </section>
+
+      <!-- Product Showcase Section -->
+      <section id="product" class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl mb-12">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <img src="https://placehold.co/600x350/1f2937/ffffff?text=Script+Interface" alt="Universal Aimbot Script Interface" class="rounded-xl shadow-lg w-full">
+          </div>
+          <div class="text-gray-800">
+            <h2 class="text-4xl font-black">Global Admin</h2>
+            <p class="text-green-500 text-5xl font-black my-4">29.99€</p>
+            <ul class="space-y-2 mb-4">
+              <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> No Delay</li>
+              <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> 250+ Commands</li>
+              <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Global Chat</li>
+              <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Customisable</li>
+              <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Anti Cheat</li>
+            </ul>
+            <div class="flex space-x-2">
+              <a href="#" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+              <button id="addToCart" class="bg-blue-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Add to Cart</button>
+            </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- Reviews Section -->
-    <section id="testimonials" class="space-y-8 mb-12">
-      <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-        <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-        <div>
-          <h4 class="font-black text-lg text-gray-800">Email</h4>
-          <p class="text-gray-700">Legend.Sidado@gmail.com</p>
+      <!-- Reviews Section -->
+      <section id="testimonials" class="space-y-8 mb-12">
+        <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+          <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+          <div>
+            <h4 class="font-black text-lg text-gray-800">Email</h4>
+            <p class="text-gray-700">Legend.Sidado@gmail.com</p>
+          </div>
         </div>
-      </div>
-      <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-        <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-        <div>
-          <h4 class="font-black text-lg text-gray-800">Infos</h4>
-          <p class="text-gray-700">Just Message Me by Email When u need Help or Tips!</p>
+        <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+          <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+          <div>
+            <h4 class="font-black text-lg text-gray-800">Infos</h4>
+            <p class="text-gray-700">Just Message Me by Email When u need Help or Tips!</p>
+          </div>
         </div>
-      </div>
-      <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-        <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-        <div>
-          <h4 class="font-black text-lg text-gray-800">Products</h4>
-          <p class="text-gray-700">Before Selling We Test them And let People rate them, so only The best comes to sale.</p>
+        <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+          <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+          <div>
+            <h4 class="font-black text-lg text-gray-800">Products</h4>
+            <p class="text-gray-700">Before Selling We Test them And let People rate them, so only The best comes to sale.</p>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
 
+    </div>
   </main>
 
   <!-- Footer -->
@@ -152,11 +156,7 @@
   <!-- Scripts -->
   <script>
     feather.replace();
-
-    // Loader fade
-    window.addEventListener("load", () => {
-      setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500);
-    });
+    window.addEventListener("load", () => { setTimeout(()=>document.getElementById("loader").classList.add("fade-out"),1500); });
 
     // Cart logic
     const cartButton = document.getElementById('cartButton');
@@ -177,14 +177,14 @@
     function updateCartFrame() {
       cartItemsContainer.innerHTML = '';
       let total = 0;
-      cart.forEach((item, index) => {
+      cart.forEach((item,index)=>{
         total += item.price;
         const itemEl = document.createElement('div');
-        itemEl.className = "flex justify-between items-center bg-gray-100 p-2 rounded-xl shadow-sm";
-        itemEl.innerHTML = `<span>${item.name} (€${item.price.toFixed(2)})</span>
+        itemEl.className="flex justify-between items-center bg-gray-100 p-2 rounded-xl shadow-sm";
+        itemEl.innerHTML=`<span>${item.name} (€${item.price.toFixed(2)})</span>
           <button class="removeItem bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-full font-bold text-xs">X</button>`;
-        itemEl.querySelector('.removeItem').addEventListener('click', () => {
-          cart.splice(index, 1); cartCount--; updateCartBubble(); updateCartFrame();
+        itemEl.querySelector('.removeItem').addEventListener('click',()=>{
+          cart.splice(index,1); cartCount--; updateCartBubble(); updateCartFrame();
           localStorage.setItem('cart', JSON.stringify(cart));
           localStorage.setItem('cartCount', JSON.stringify(cartCount));
         });
@@ -195,32 +195,32 @@
       localStorage.setItem('cartCount', JSON.stringify(cartCount));
     }
 
-    addToCartBtn.addEventListener('click', () => {
-      const product = { name: 'Global Admin', price: 29.99 };
-      cart.push(product); cartCount++; updateCartBubble(); updateCartFrame();
-      alert('Item added to cart!');
+    addToCartBtn.addEventListener('click', ()=>{
+      const product = {name:'Global Admin',price:29.99};
+      cart.push(product); cartCount++; updateCartBubble(); updateCartFrame(); alert('Item added to cart!');
     });
 
-    let cartOpen = false;
-    cartButton.addEventListener('click', () => {
-      cartOpen = !cartOpen;
-      cartFrame.style.opacity = cartOpen ? '1' : '0';
-      cartFrame.style.transform = cartOpen ? 'scale(1)' : 'scale(0.95)';
+    let cartOpen=false;
+    cartButton.addEventListener('click',()=>{
+      cartOpen=!cartOpen;
+      cartFrame.style.opacity=cartOpen?'1':'0';
+      cartFrame.style.transform=cartOpen?'scale(1)':'scale(0.95)';
     });
 
-    document.getElementById('purchaseButton').addEventListener('click', () => {
-      if(cart.length === 0){ alert('Your cart is empty!'); return; }
-      alert('Purchased ' + cart.length + ' item(s) for €' + cart.reduce((acc,i)=>acc+i.price,0).toFixed(2));
-      cart = []; cartCount = 0; updateCartBubble(); updateCartFrame(); cartFrame.style.opacity='0'; cartFrame.style.transform='scale(0.95)'; cartOpen=false;
+    document.getElementById('purchaseButton').addEventListener('click',()=>{
+      if(cart.length===0){ alert('Your cart is empty!'); return; }
+      alert('Purchased '+cart.length+' item(s) for €'+cart.reduce((acc,i)=>acc+i.price,0).toFixed(2));
+      cart=[]; cartCount=0; updateCartBubble(); updateCartFrame(); cartFrame.style.opacity='0'; cartFrame.style.transform='scale(0.95)'; cartOpen=false;
     });
 
-    // Search functionality
-    searchBtn.addEventListener('click', () => {
+    // Search
+    searchBtn.addEventListener('click', ()=>{
       const query = searchInput.value.toLowerCase();
       if(!query) return;
-      alert('Search for: ' + query + '\n(This can be extended to filter products dynamically)');
+      alert('Search for: '+query+'\n(This can be extended to filter products dynamically)');
     });
   </script>
 
 </body>
 </html>
+
