@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="Scriptsell.png" type="image/png">
-  <link rel="icon" href="favicon.PNG" type="image/png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>&lt;/> Scriptsell</title>
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Feather Icons -->
   <script src="https://unpkg.com/feather-icons"></script>
+
   <style>
     body { font-family: 'Nunito', sans-serif; font-weight: 800; }
     .wavy-bg {
@@ -19,183 +24,205 @@
                         radial-gradient(circle at 0 0, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px);
       background-size: 40px 40px;
     }
-    #loader{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 1s ease;}
-    #loader.fade-out{opacity:0;pointer-events:none;}
+    #loader {position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 1s ease;}
+    #loader.fade-out {opacity:0;pointer-events:none;}
+    button:active span { animation: ripple 0.6s ease-out; opacity: 1; }
+    @keyframes ripple { 0%{transform:scale(0);opacity:0.5;}100%{transform:scale(4);opacity:0;} }
     @keyframes bounceSlow { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
     .animate-bounce-slow { animation: bounceSlow 2s infinite; }
-    @keyframes ripple { 0%{transform:scale(0);opacity:0.5;}100%{transform:scale(4);opacity:0;} }
-    .animate-ripple { animation: ripple 0.6s ease-out; }
-    button:active span { animation: ripple 0.6s ease-out; opacity: 1; }
   </style>
 </head>
 <body class="wavy-bg">
 
-<!-- Loader -->
-<div id="loader">
-  <h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Welcome To Scriptsell</h1>
-</div>
+  <!-- Loader -->
+  <div id="loader">
+    <h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Welcome To Scriptsell</h1>
+  </div>
 
-<!-- Header Section -->
-<header class="bg-sky-400 py-6 relative">
-  <div class="container mx-auto flex justify-between items-center">
-    
-    <!-- Search bar left -->
-    <div class="flex items-center space-x-2">
-      <input type="text" id="searchInput" placeholder="Search products..." class="rounded-full px-4 py-2 text-gray-800 focus:outline-none">
-      <button id="searchBtn" class="bg-blue-500 text-white px-4 py-2 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Search</button>
+  <!-- Header -->
+  <header class="bg-sky-400 py-6 relative flex items-center justify-between px-4 md:px-12">
+    <!-- Search -->
+    <div class="flex items-center flex-1">
+      <input id="searchInput" type="text" placeholder="Search Products..." class="rounded-l-full px-4 py-2 w-full md:w-64 focus:outline-none">
+      <button id="searchBtn" class="bg-yellow-400 px-4 py-2 rounded-r-full font-bold text-white hover:bg-yellow-500 transition">Search</button>
     </div>
 
-    <!-- Logo center -->
-    <div class="text-center flex-1">
-      <h1 class="text-4xl md:text-5xl font-black tracking-wider text-white">&lt;/> SCRIPTSELL</h1>
-      <p class="text-xl font-bold mt-1 text-white">BUY ROBLOX SCRIPTS & MODELS</p>
+    <!-- Logo -->
+    <div class="flex-1 text-center">
+      <h1 class="text-4xl md:text-5xl font-black tracking-wider">&lt;/> SCRIPTSELL</h1>
     </div>
 
-    <!-- Cart & All Products right -->
-    <div class="flex space-x-4">
-      <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-yellow-500">All Products</a>
+    <!-- Cart + All Products -->
+    <div class="flex items-center flex-1 justify-end space-x-4">
+      <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-yellow-500 transition">All Products</a>
       <button id="cartButton" class="bg-green-500 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-green-600 transition relative">
         <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 flex justify-center items-center text-xs rounded-full bg-white text-black">0</span>
         Cart
       </button>
     </div>
+  </header>
 
-  </div>
-</header>
+  <!-- Main -->
+  <main class="container mx-auto px-4 py-10">
 
-<!-- Main Content -->
-<main class="container mx-auto px-4 py-10">
-
-  <!-- Why Choose Us Section -->
-  <section id="why-us" class="bg-red-500 text-white rounded-2xl p-6 shadow-2xl mb-12">
-    <h2 class="text-3xl font-black text-center mb-6">WHY CHOOSE US?</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-      <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">TOP DEALS</h3></div>
-      <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">SAFE PRODUCTS</h3></div>
-      <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">HIGH QUALITY</h3></div>
-      <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">EASY HELP</h3></div>
-    </div>
-  </section>
-
-  <!-- Product Showcase Section -->
-  <section id="productShowcase" class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl mb-12">
-    <div class="grid md:grid-cols-2 gap-8 items-center product-item" data-name="Global Admin">
-      <div>
-        <img src="https://placehold.co/600x350/1f2937/ffffff?text=Script+Interface" alt="Universal Aimbot Script Interface" class="rounded-xl shadow-lg w-full">
+    <!-- Why Choose Us Section -->
+    <section id="why-us" class="bg-red-500 text-white rounded-2xl p-6 shadow-2xl mb-12">
+      <h2 class="text-3xl font-black text-center mb-6">WHY CHOOSE US?</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">TOP DEALS</h3></div>
+        <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">SAFE PRODUCTS</h3></div>
+        <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">HIGH QUALITY</h3></div>
+        <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">EASY HELP</h3></div>
       </div>
-      <div class="text-gray-800">
-        <h2 class="text-4xl font-black">Global Admin</h2>
-        <p class="text-green-500 text-5xl font-black my-4">29.99€</p>
-        <ul class="space-y-2 mb-4">
-          <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> No Delay</li>
-          <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> 250+ Commands</li>
-          <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Global Chat</li>
-          <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Customisable</li>
-          <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Anti Cheat</li>
-        </ul>
-        <div class="flex space-x-2">
-          <a href="#" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
-          <button class="addToCartBtn bg-blue-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Add to Cart</button>
+    </section>
+
+    <!-- Product Showcase Section -->
+    <section id="product" class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl mb-12">
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div>
+          <img src="https://placehold.co/600x350/1f2937/ffffff?text=Script+Interface" alt="Universal Aimbot Script Interface" class="rounded-xl shadow-lg w-full">
+        </div>
+        <div class="text-gray-800">
+          <h2 class="text-3xl md:text-4xl font-black">Global Admin</h2>
+          <p class="text-green-500 text-4xl md:text-5xl font-black my-4">29.99€</p>
+          <ul class="space-y-2 mb-4">
+            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> No Delay</li>
+            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> 250+ Commands</li>
+            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Global Chat</li>
+            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Customisable</li>
+            <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> Anti Cheat</li>
+          </ul>
+          <div class="flex space-x-2">
+            <a href="#" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
+            <button class="addToCart bg-blue-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Add to Cart</button>
+          </div>
         </div>
       </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section id="reviews" class="mb-12">
+      <h2 class="text-3xl font-black mb-6">Reviews</h2>
+      <div class="space-y-6">
+        <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+          <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+          <div>
+            <h4 class="font-black text-lg text-gray-800">Email</h4>
+            <p class="text-gray-700">Legend.Sidado@gmail.com</p>
+          </div>
+        </div>
+        <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+          <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+          <div>
+            <h4 class="font-black text-lg text-gray-800">Infos</h4>
+            <p class="text-gray-700">Just Message Me by Email When u need Help or Tips!</p>
+          </div>
+        </div>
+        <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+          <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+          <div>
+            <h4 class="font-black text-lg text-gray-800">Products</h4>
+            <p class="text-gray-700">Before Selling We Test them And let People rate them, so only The best comes to sale.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-8 text-white/70">
+    <p>Copyright © 2024 &lt;/> Scriptsell - All Rights Reserved.</p>
+  </footer>
+
+  <!-- Cart Frame -->
+  <div id="cartFrame" class="fixed top-20 right-6 w-80 max-w-xs bg-white rounded-2xl shadow-2xl p-4 transform scale-95 opacity-0 transition-all duration-300 z-50">
+    <h3 class="text-lg font-black mb-4 text-gray-800">Your Cart</h3>
+    <div id="cartItems" class="space-y-2 max-h-60 overflow-y-auto"></div>
+    <div class="mt-4 flex justify-between items-center">
+      <p class="font-bold text-gray-800">Total: €<span id="cartTotal">0.00</span></p>
+      <button id="purchaseButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full font-bold shadow-lg transition">Purchase</button>
     </div>
-
-  </section>
-
-</main>
-
-<!-- Footer -->
-<footer class="text-center py-8 text-white/70">
-  <p>Copyright © 2024 &lt;/> Scriptsell - All Rights Reserved.</p>
-</footer>
-
-<!-- Cart Frame -->
-<div id="cartFrame" class="fixed top-20 right-6 w-80 max-w-xs bg-white rounded-2xl shadow-2xl p-4 transform scale-95 opacity-0 transition-all duration-300 z-50">
-  <h3 class="text-lg font-black mb-4 text-gray-800">Your Cart</h3>
-  <div id="cartItems" class="space-y-2 max-h-60 overflow-y-auto"></div>
-  <div class="mt-4 flex justify-between items-center">
-    <p class="font-bold text-gray-800">Total: €<span id="cartTotal">0.00</span></p>
-    <button id="purchaseButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full font-bold shadow-lg transition">Purchase</button>
   </div>
-</div>
 
-<!-- Scripts -->
-<script>
-  feather.replace();
-  window.addEventListener("load", () => { setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500); });
+  <!-- Scripts -->
+  <script>
+    feather.replace();
+    window.addEventListener("load", () => { 
+      setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500); 
+    });
 
-  // Cart logic
-  const cartButton = document.getElementById('cartButton');
-  const cartFrame = document.getElementById('cartFrame');
-  const cartItemsContainer = document.getElementById('cartItems');
-  const cartTotalEl = document.getElementById('cartTotal');
-  const cartCountEl = document.getElementById('cartCount');
-  const addToCartBtns = document.querySelectorAll('.addToCartBtn');
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
-  let cartCount = cart.reduce((acc, i) => acc + 1, 0);
+    // Cart logic with localStorage
+    const cartButton = document.getElementById('cartButton');
+    const cartFrame = document.getElementById('cartFrame');
+    const cartItemsContainer = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const cartCountEl = document.getElementById('cartCount');
+    const addToCartBtns = document.querySelectorAll('.addToCart');
 
-  function updateCartBubble() { cartCountEl.textContent = cartCount; }
-  function updateCartFrame() {
-    cartItemsContainer.innerHTML = '';
-    let total = 0;
-    cart.forEach((item, index) => {
-      total += item.price;
-      const itemEl = document.createElement('div');
-      itemEl.className = "flex justify-between items-center bg-gray-100 p-2 rounded-xl shadow-sm";
-      itemEl.innerHTML = `<span>${item.name} (€${item.price.toFixed(2)})</span>
-        <button class="removeItem bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-full font-bold text-xs">X</button>`;
-      itemEl.querySelector('.removeItem').addEventListener('click', () => {
-        cart.splice(index, 1); cartCount--; updateCartBubble(); updateCartFrame();
-        localStorage.setItem('cart', JSON.stringify(cart));
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    let cartCount = cart.length;
+
+    function updateCartBubble() { cartCountEl.textContent = cartCount; }
+    function updateCartFrame() {
+      cartItemsContainer.innerHTML = '';
+      let total = 0;
+      cart.forEach((item, index) => {
+        total += item.price;
+        const itemEl = document.createElement('div');
+        itemEl.className = "flex justify-between items-center bg-gray-100 p-2 rounded-xl shadow-sm";
+        itemEl.innerHTML = `<span>${item.name} (€${item.price.toFixed(2)})</span>
+          <button class="removeItem bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-full font-bold text-xs">X</button>`;
+        itemEl.querySelector('.removeItem').addEventListener('click', () => {
+          cart.splice(index, 1); cartCount--; updateCartBubble(); updateCartFrame(); saveCart();
+        });
+        cartItemsContainer.appendChild(itemEl);
       });
-      cartItemsContainer.appendChild(itemEl);
+      cartTotalEl.textContent = total.toFixed(2);
+    }
+    function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
+
+    addToCartBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const productDiv = btn.closest('div');
+        const name = productDiv.querySelector('h2') ? productDiv.querySelector('h2').textContent : 'Unknown';
+        const priceEl = productDiv.querySelector('p');
+        const price = priceEl ? parseFloat(priceEl.textContent.replace('€','')) : 0;
+        cart.push({ name, price });
+        cartCount++; updateCartBubble(); updateCartFrame(); saveCart();
+        alert('Item added to cart!');
+      });
     });
-    cartTotalEl.textContent = total.toFixed(2);
-    localStorage.setItem('cart', JSON.stringify(cart));
-  }
 
-  addToCartBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const productEl = btn.closest('.product-item');
-      const name = productEl.dataset.name;
-      const price = parseFloat(productEl.querySelector('p').textContent.replace('€',''));
-      cart.push({name, price});
-      cartCount++;
-      updateCartBubble();
-      updateCartFrame();
-      alert('Item added to cart!');
+    let cartOpen = false;
+    cartButton.addEventListener('click', () => {
+      cartOpen = !cartOpen;
+      cartFrame.style.opacity = cartOpen ? '1' : '0';
+      cartFrame.style.transform = cartOpen ? 'scale(1)' : 'scale(0.95)';
     });
-  });
 
-  let cartOpen = false;
-  cartButton.addEventListener('click', () => {
-    cartOpen = !cartOpen;
-    cartFrame.style.opacity = cartOpen ? '1' : '0';
-    cartFrame.style.transform = cartOpen ? 'scale(1)' : 'scale(0.95)';
-  });
-
-  document.getElementById('purchaseButton').addEventListener('click', () => {
-    if(cart.length === 0){ alert('Your cart is empty!'); return; }
-    alert('Purchased ' + cart.length + ' item(s) for €' + cart.reduce((acc,i)=>acc+i.price,0).toFixed(2));
-    cart=[]; cartCount=0; updateCartBubble(); updateCartFrame();
-    cartFrame.style.opacity='0'; cartFrame.style.transform='scale(0.95)'; cartOpen=false;
-  });
-
-  // Search logic
-  const searchInput = document.getElementById('searchInput');
-  const searchBtn = document.getElementById('searchBtn');
-  searchBtn.addEventListener('click', () => {
-    const query = searchInput.value.toLowerCase();
-    document.querySelectorAll('.product-item').forEach(item => {
-      const name = item.dataset.name.toLowerCase();
-      item.style.display = name.includes(query) ? 'grid' : 'none';
+    document.getElementById('purchaseButton').addEventListener('click', () => {
+      if(cart.length === 0){ alert('Your cart is empty!'); return; }
+      alert('Purchased ' + cart.length + ' item(s) for €' + cart.reduce((acc,i)=>acc+i.price,0).toFixed(2));
+      cart = []; cartCount = 0; updateCartBubble(); updateCartFrame(); saveCart();
+      cartFrame.style.opacity = '0'; cartFrame.style.transform = 'scale(0.95)'; cartOpen = false;
     });
-  });
 
-  // Initial update
-  updateCartBubble();
-  updateCartFrame();
-</script>
+    // Search
+    const searchInput = document.getElementById('searchInput');
+    const searchBtn = document.getElementById('searchBtn');
+    searchBtn.addEventListener('click', () => {
+      const query = searchInput.value.toLowerCase();
+      const products = document.querySelectorAll('#product, #product div');
+      products.forEach(prod => {
+        if(prod.textContent.toLowerCase().includes(query)) { prod.style.display = ''; }
+        else { prod.style.display = 'none'; }
+      });
+    });
+
+    // Initial update
+    updateCartBubble();
+    updateCartFrame();
+  </script>
 </body>
 </html>
-
