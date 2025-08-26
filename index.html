@@ -1,21 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="icon" href="Scriptsell.png" type="image/png">
+  <link rel="icon" href="favicon.PNG" type="image/png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>&lt;/> Scriptsell</title>
-
-  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
-
-  <!-- Feather Icons -->
   <script src="https://unpkg.com/feather-icons"></script>
-
   <style>
     body { font-family: 'Nunito', sans-serif; font-weight: 800; }
     .wavy-bg {
@@ -24,45 +19,57 @@
                         radial-gradient(circle at 0 0, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px);
       background-size: 40px 40px;
     }
-    #loader {position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 1s ease;}
-    #loader.fade-out {opacity:0;pointer-events:none;}
-    button:active span { animation: ripple 0.6s ease-out; opacity: 1; }
-    @keyframes ripple { 0%{transform:scale(0);opacity:0.5;}100%{transform:scale(4);opacity:0;} }
+    #loader { position: fixed; inset:0; background:#fff; display:flex; align-items:center; justify-content:center; z-index:9999; transition:opacity 1s ease; }
+    #loader.fade-out { opacity:0; pointer-events:none; }
     @keyframes bounceSlow { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
     .animate-bounce-slow { animation: bounceSlow 2s infinite; }
+    @keyframes ripple { 0%{transform:scale(0);opacity:0.5;}100%{transform:scale(4);opacity:0;} }
+    .animate-ripple { animation: ripple 0.6s ease-out; }
+    button:active span { animation: ripple 0.6s ease-out; opacity: 1; }
   </style>
 </head>
 <body class="wavy-bg">
 
   <!-- Loader -->
   <div id="loader">
-    <h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Welcome To Scriptsell</h1>
+    <h1 class="text-3xl md:text-4xl font-black text-white animate-pulse">&lt;/> Welcome To Scriptsell</h1>
   </div>
 
   <!-- Header -->
-  <header class="bg-sky-400 py-6 relative flex items-center justify-between px-4 md:px-12">
-    <!-- Search -->
-    <div class="flex items-center flex-1">
-      <input id="searchInput" type="text" placeholder="Search Products..." class="rounded-l-full px-4 py-2 w-full md:w-64 focus:outline-none">
-      <button id="searchBtn" class="bg-yellow-400 px-4 py-2 rounded-r-full font-bold text-white hover:bg-yellow-500 transition">Search</button>
-    </div>
+  <header class="bg-sky-400 py-6 flex flex-col md:flex-row items-center justify-between px-4 md:px-12">
 
     <!-- Logo -->
-    <div class="flex-1 text-center">
-      <h1 class="text-4xl md:text-5xl font-black tracking-wider">&lt;/> SCRIPTSELL</h1>
+    <div class="flex-1 text-center mb-4 md:mb-0">
+      <h1 class="text-3xl md:text-4xl font-black tracking-wider text-white">&lt;/> SCRIPTSELL</h1>
+      <p class="text-white font-bold text-sm md:text-base mt-1">BUY ROBLOX SCRIPTS & MODELS</p>
     </div>
 
-    <!-- Cart + All Products -->
-    <div class="flex items-center flex-1 justify-end space-x-4">
+    <!-- Navigation Buttons -->
+    <nav class="flex flex-wrap justify-center md:justify-end space-x-2 md:space-x-4 mb-2 md:mb-0">
+      <a href="index.html" class="bg-white text-sky-500 py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-gray-100 transition">HOME</a>
+      <a href="hot-deals.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-sky-600 transition">Hot Deals</a>
+      <a href="products.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-sky-600 transition">Products</a>
+      <a href="infos.html" class="bg-sky-500 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-sky-600 transition">Infos</a>
+    </nav>
+
+    <!-- Cart & All Products Buttons -->
+    <div class="flex items-center justify-center md:justify-end space-x-4 mb-2 md:mb-0 relative top-[-5px]">
       <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg hover:bg-yellow-500 transition">All Products</a>
       <button id="cartButton" class="bg-green-500 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-green-600 transition relative">
         <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 flex justify-center items-center text-xs rounded-full bg-white text-black">0</span>
         Cart
       </button>
     </div>
+
+    <!-- Search -->
+    <div class="flex items-center justify-center w-full md:w-auto mt-2 md:mt-0">
+      <input id="searchInput" type="text" placeholder="Search Products..." class="rounded-l-full px-4 py-2 w-full md:w-64 focus:outline-none">
+      <button id="searchBtn" class="bg-yellow-400 px-4 py-2 rounded-r-full font-bold text-white hover:bg-yellow-500 transition">Search</button>
+    </div>
+
   </header>
 
-  <!-- Main -->
+  <!-- Main Content -->
   <main class="container mx-auto px-4 py-10">
 
     <!-- Why Choose Us Section -->
@@ -83,8 +90,8 @@
           <img src="https://placehold.co/600x350/1f2937/ffffff?text=Script+Interface" alt="Universal Aimbot Script Interface" class="rounded-xl shadow-lg w-full">
         </div>
         <div class="text-gray-800">
-          <h2 class="text-3xl md:text-4xl font-black">Global Admin</h2>
-          <p class="text-green-500 text-4xl md:text-5xl font-black my-4">29.99€</p>
+          <h2 class="text-4xl font-black">Global Admin</h2>
+          <p class="text-green-500 text-5xl font-black my-4">29.99€</p>
           <ul class="space-y-2 mb-4">
             <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> No Delay</li>
             <li class="flex items-center"><i data-feather="check" class="text-green-500 mr-2"></i> 250+ Commands</li>
@@ -94,36 +101,33 @@
           </ul>
           <div class="flex space-x-2">
             <a href="#" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
-            <button class="addToCart bg-blue-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Add to Cart</button>
+            <button id="addToCart" class="bg-blue-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Add to Cart</button>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Reviews Section -->
-    <section id="reviews" class="mb-12">
-      <h2 class="text-3xl font-black mb-6">Reviews</h2>
-      <div class="space-y-6">
-        <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-          <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-          <div>
-            <h4 class="font-black text-lg text-gray-800">Email</h4>
-            <p class="text-gray-700">Legend.Sidado@gmail.com</p>
-          </div>
+    <section id="testimonials" class="space-y-8 mb-12">
+      <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+        <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+        <div>
+          <h4 class="font-black text-lg text-gray-800">Email</h4>
+          <p class="text-gray-700">Legend.Sidado@gmail.com</p>
         </div>
-        <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-          <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-          <div>
-            <h4 class="font-black text-lg text-gray-800">Infos</h4>
-            <p class="text-gray-700">Just Message Me by Email When u need Help or Tips!</p>
-          </div>
+      </div>
+      <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+        <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+        <div>
+          <h4 class="font-black text-lg text-gray-800">Infos</h4>
+          <p class="text-gray-700">Just Message Me by Email When u need Help or Tips!</p>
         </div>
-        <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-          <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-          <div>
-            <h4 class="font-black text-lg text-gray-800">Products</h4>
-            <p class="text-gray-700">Before Selling We Test them And let People rate them, so only The best comes to sale.</p>
-          </div>
+      </div>
+      <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
+        <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
+        <div>
+          <h4 class="font-black text-lg text-gray-800">Products</h4>
+          <p class="text-gray-700">Before Selling We Test them And let People rate them, so only The best comes to sale.</p>
         </div>
       </div>
     </section>
@@ -148,20 +152,26 @@
   <!-- Scripts -->
   <script>
     feather.replace();
-    window.addEventListener("load", () => { 
-      setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500); 
+
+    // Loader fade
+    window.addEventListener("load", () => {
+      setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500);
     });
 
-    // Cart logic with localStorage
+    // Cart logic
     const cartButton = document.getElementById('cartButton');
     const cartFrame = document.getElementById('cartFrame');
     const cartItemsContainer = document.getElementById('cartItems');
     const cartTotalEl = document.getElementById('cartTotal');
+    const addToCartBtn = document.getElementById('addToCart');
     const cartCountEl = document.getElementById('cartCount');
-    const addToCartBtns = document.querySelectorAll('.addToCart');
+    const searchBtn = document.getElementById('searchBtn');
+    const searchInput = document.getElementById('searchInput');
 
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
-    let cartCount = cart.length;
+    let cartCount = JSON.parse(localStorage.getItem('cartCount')) || cart.length;
+    updateCartBubble();
+    updateCartFrame();
 
     function updateCartBubble() { cartCountEl.textContent = cartCount; }
     function updateCartFrame() {
@@ -174,24 +184,21 @@
         itemEl.innerHTML = `<span>${item.name} (€${item.price.toFixed(2)})</span>
           <button class="removeItem bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-full font-bold text-xs">X</button>`;
         itemEl.querySelector('.removeItem').addEventListener('click', () => {
-          cart.splice(index, 1); cartCount--; updateCartBubble(); updateCartFrame(); saveCart();
+          cart.splice(index, 1); cartCount--; updateCartBubble(); updateCartFrame();
+          localStorage.setItem('cart', JSON.stringify(cart));
+          localStorage.setItem('cartCount', JSON.stringify(cartCount));
         });
         cartItemsContainer.appendChild(itemEl);
       });
       cartTotalEl.textContent = total.toFixed(2);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem('cartCount', JSON.stringify(cartCount));
     }
-    function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
 
-    addToCartBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const productDiv = btn.closest('div');
-        const name = productDiv.querySelector('h2') ? productDiv.querySelector('h2').textContent : 'Unknown';
-        const priceEl = productDiv.querySelector('p');
-        const price = priceEl ? parseFloat(priceEl.textContent.replace('€','')) : 0;
-        cart.push({ name, price });
-        cartCount++; updateCartBubble(); updateCartFrame(); saveCart();
-        alert('Item added to cart!');
-      });
+    addToCartBtn.addEventListener('click', () => {
+      const product = { name: 'Global Admin', price: 29.99 };
+      cart.push(product); cartCount++; updateCartBubble(); updateCartFrame();
+      alert('Item added to cart!');
     });
 
     let cartOpen = false;
@@ -204,25 +211,16 @@
     document.getElementById('purchaseButton').addEventListener('click', () => {
       if(cart.length === 0){ alert('Your cart is empty!'); return; }
       alert('Purchased ' + cart.length + ' item(s) for €' + cart.reduce((acc,i)=>acc+i.price,0).toFixed(2));
-      cart = []; cartCount = 0; updateCartBubble(); updateCartFrame(); saveCart();
-      cartFrame.style.opacity = '0'; cartFrame.style.transform = 'scale(0.95)'; cartOpen = false;
+      cart = []; cartCount = 0; updateCartBubble(); updateCartFrame(); cartFrame.style.opacity='0'; cartFrame.style.transform='scale(0.95)'; cartOpen=false;
     });
 
-    // Search
-    const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
+    // Search functionality
     searchBtn.addEventListener('click', () => {
       const query = searchInput.value.toLowerCase();
-      const products = document.querySelectorAll('#product, #product div');
-      products.forEach(prod => {
-        if(prod.textContent.toLowerCase().includes(query)) { prod.style.display = ''; }
-        else { prod.style.display = 'none'; }
-      });
+      if(!query) return;
+      alert('Search for: ' + query + '\n(This can be extended to filter products dynamically)');
     });
-
-    // Initial update
-    updateCartBubble();
-    updateCartFrame();
   </script>
+
 </body>
 </html>
