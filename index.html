@@ -15,14 +15,12 @@
     body { font-family: 'Nunito', sans-serif; font-weight: 800; }
     .wavy-bg {
       background-color: #7dd3fc;
-      background-image:
-        radial-gradient(circle at 100% 100%, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px),
-        radial-gradient(circle at 0 0, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px);
+      background-image: radial-gradient(circle at 100% 100%, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px),
+                        radial-gradient(circle at 0 0, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px);
       background-size: 40px 40px;
     }
     #loader{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 1s ease;}
     #loader.fade-out{opacity:0;pointer-events:none;}
-    /* Cookie popup animations */
     @keyframes bounceSlow { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
     .animate-bounce-slow { animation: bounceSlow 2s infinite; }
     @keyframes ripple { 0%{transform:scale(0);opacity:0.5;}100%{transform:scale(4);opacity:0;} }
@@ -38,32 +36,36 @@
 </div>
 
 <!-- Header Section -->
-<header class="bg-sky-400 py-6 relative flex items-center justify-between px-6">
-  
-  <!-- Left: Search -->
-  <div class="flex items-center space-x-2">
-    <input type="text" id="searchInput" placeholder="Search Products..." class="px-4 py-2 rounded-full text-gray-800 font-bold focus:outline-none">
-    <button id="searchBtn" class="bg-blue-500 text-white px-4 py-2 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Search</button>
-  </div>
+<header class="bg-sky-400 py-6 relative">
+  <div class="container mx-auto flex justify-between items-center">
+    
+    <!-- Search bar left -->
+    <div class="flex items-center space-x-2">
+      <input type="text" id="searchInput" placeholder="Search products..." class="rounded-full px-4 py-2 text-gray-800 focus:outline-none">
+      <button id="searchBtn" class="bg-blue-500 text-white px-4 py-2 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Search</button>
+    </div>
 
-  <!-- Center: Logo -->
-  <div class="text-center text-white">
-    <h1 class="text-4xl md:text-5xl font-black tracking-wider">&lt;/> SCRIPTSELL</h1>
-    <p class="text-xl font-bold mt-1">BUY ROBLOX SCRIPTS & MODELS</p>
-  </div>
+    <!-- Logo center -->
+    <div class="text-center flex-1">
+      <h1 class="text-4xl md:text-5xl font-black tracking-wider text-white">&lt;/> SCRIPTSELL</h1>
+      <p class="text-xl font-bold mt-1 text-white">BUY ROBLOX SCRIPTS & MODELS</p>
+    </div>
 
-  <!-- Right: Cart + All Products -->
-  <div class="flex items-center space-x-4">
-    <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-yellow-500">All Products</a>
-    <button id="cartButton" class="bg-green-500 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-green-600 transition relative">
-      <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 flex justify-center items-center text-xs rounded-full bg-white text-black">0</span>
-      Cart
-    </button>
+    <!-- Cart & All Products right -->
+    <div class="flex space-x-4">
+      <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-yellow-500">All Products</a>
+      <button id="cartButton" class="bg-green-500 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-green-600 transition relative">
+        <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 flex justify-center items-center text-xs rounded-full bg-white text-black">0</span>
+        Cart
+      </button>
+    </div>
+
   </div>
 </header>
 
 <!-- Main Content -->
 <main class="container mx-auto px-4 py-10">
+
   <!-- Why Choose Us Section -->
   <section id="why-us" class="bg-red-500 text-white rounded-2xl p-6 shadow-2xl mb-12">
     <h2 class="text-3xl font-black text-center mb-6">WHY CHOOSE US?</h2>
@@ -76,8 +78,8 @@
   </section>
 
   <!-- Product Showcase Section -->
-  <section id="product" class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl mb-12">
-    <div class="grid md:grid-cols-2 gap-8 items-center">
+  <section id="productShowcase" class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl mb-12">
+    <div class="grid md:grid-cols-2 gap-8 items-center product-item" data-name="Global Admin">
       <div>
         <img src="https://placehold.co/600x350/1f2937/ffffff?text=Script+Interface" alt="Universal Aimbot Script Interface" class="rounded-xl shadow-lg w-full">
       </div>
@@ -93,27 +95,13 @@
         </ul>
         <div class="flex space-x-2">
           <a href="#" class="inline-block bg-green-500 text-white px-8 py-3 rounded-full text-xl font-bold shadow-lg hover:bg-green-600 transition">Buy Now</a>
-          <button id="addToCart" class="bg-blue-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Add to Cart</button>
+          <button class="addToCartBtn bg-blue-500 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-blue-600 transition">Add to Cart</button>
         </div>
       </div>
     </div>
+
   </section>
 
-  <!-- Testimonials Section -->
-  <section id="testimonials" class="space-y-8 mb-12">
-    <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-      <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-      <div><h4 class="font-black text-lg text-gray-800">Email</h4><p class="text-gray-700">Legend.Sidado@gmail.com</p></div>
-    </div>
-    <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-      <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-      <div><h4 class="font-black text-lg text-gray-800">Infos</h4><p class="text-gray-700">Just Message Me by Email When u need Help or Tips!</p></div>
-    </div>
-    <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-      <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-      <div><h4 class="font-black text-lg text-gray-800">Products</h4><p class="text-gray-700">Before Selling We Test them And let People rate them, so only The best comes to sale.</p></div>
-    </div>
-  </section>
 </main>
 
 <!-- Footer -->
@@ -133,101 +121,81 @@
 
 <!-- Scripts -->
 <script>
-feather.replace();
+  feather.replace();
+  window.addEventListener("load", () => { setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500); });
 
-window.addEventListener("load", () => {
-  setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500);
-});
+  // Cart logic
+  const cartButton = document.getElementById('cartButton');
+  const cartFrame = document.getElementById('cartFrame');
+  const cartItemsContainer = document.getElementById('cartItems');
+  const cartTotalEl = document.getElementById('cartTotal');
+  const cartCountEl = document.getElementById('cartCount');
+  const addToCartBtns = document.querySelectorAll('.addToCartBtn');
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+  let cartCount = cart.reduce((acc, i) => acc + 1, 0);
 
-// Cart logic
-const cartButton = document.getElementById('cartButton');
-const cartFrame = document.getElementById('cartFrame');
-const cartItemsContainer = document.getElementById('cartItems');
-const cartTotalEl = document.getElementById('cartTotal');
-const addToCartBtn = document.getElementById('addToCart');
-const cartCountEl = document.getElementById('cartCount');
+  function updateCartBubble() { cartCountEl.textContent = cartCount; }
+  function updateCartFrame() {
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
+    cart.forEach((item, index) => {
+      total += item.price;
+      const itemEl = document.createElement('div');
+      itemEl.className = "flex justify-between items-center bg-gray-100 p-2 rounded-xl shadow-sm";
+      itemEl.innerHTML = `<span>${item.name} (€${item.price.toFixed(2)})</span>
+        <button class="removeItem bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-full font-bold text-xs">X</button>`;
+      itemEl.querySelector('.removeItem').addEventListener('click', () => {
+        cart.splice(index, 1); cartCount--; updateCartBubble(); updateCartFrame();
+        localStorage.setItem('cart', JSON.stringify(cart));
+      });
+      cartItemsContainer.appendChild(itemEl);
+    });
+    cartTotalEl.textContent = total.toFixed(2);
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
 
-let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-let cartCount = JSON.parse(localStorage.getItem('cartCount')) || cart.length;
-
-function updateCartBubble() {
-  cartCountEl.textContent = cartCount;
-}
-
-function updateCartFrame() {
-  cartItemsContainer.innerHTML = '';
-  let total = 0;
-  cart.forEach((item, index) => {
-    total += item.price;
-    const itemEl = document.createElement('div');
-    itemEl.className = "flex justify-between items-center bg-gray-100 p-2 rounded-xl shadow-sm";
-    itemEl.innerHTML = `<span>${item.name} (€${item.price.toFixed(2)})</span>
-      <button class="removeItem bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded-full font-bold text-xs">X</button>`;
-    itemEl.querySelector('.removeItem').addEventListener('click', () => {
-      cart.splice(index, 1);
-      cartCount--;
-      localStorage.setItem('cartItems', JSON.stringify(cart));
-      localStorage.setItem('cartCount', JSON.stringify(cartCount));
+  addToCartBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const productEl = btn.closest('.product-item');
+      const name = productEl.dataset.name;
+      const price = parseFloat(productEl.querySelector('p').textContent.replace('€',''));
+      cart.push({name, price});
+      cartCount++;
       updateCartBubble();
       updateCartFrame();
+      alert('Item added to cart!');
     });
-    cartItemsContainer.appendChild(itemEl);
   });
-  cartTotalEl.textContent = total.toFixed(2);
-  localStorage.setItem('cartItems', JSON.stringify(cart));
-  localStorage.setItem('cartCount', JSON.stringify(cartCount));
-}
 
-// Add to Cart
-addToCartBtn.addEventListener('click', () => {
-  const product = { name: 'Global Admin', price: 29.99 };
-  cart.push(product);
-  cartCount++;
+  let cartOpen = false;
+  cartButton.addEventListener('click', () => {
+    cartOpen = !cartOpen;
+    cartFrame.style.opacity = cartOpen ? '1' : '0';
+    cartFrame.style.transform = cartOpen ? 'scale(1)' : 'scale(0.95)';
+  });
+
+  document.getElementById('purchaseButton').addEventListener('click', () => {
+    if(cart.length === 0){ alert('Your cart is empty!'); return; }
+    alert('Purchased ' + cart.length + ' item(s) for €' + cart.reduce((acc,i)=>acc+i.price,0).toFixed(2));
+    cart=[]; cartCount=0; updateCartBubble(); updateCartFrame();
+    cartFrame.style.opacity='0'; cartFrame.style.transform='scale(0.95)'; cartOpen=false;
+  });
+
+  // Search logic
+  const searchInput = document.getElementById('searchInput');
+  const searchBtn = document.getElementById('searchBtn');
+  searchBtn.addEventListener('click', () => {
+    const query = searchInput.value.toLowerCase();
+    document.querySelectorAll('.product-item').forEach(item => {
+      const name = item.dataset.name.toLowerCase();
+      item.style.display = name.includes(query) ? 'grid' : 'none';
+    });
+  });
+
+  // Initial update
   updateCartBubble();
   updateCartFrame();
-  alert('Item added to cart!');
-});
-
-// Toggle cart frame
-let cartOpen = false;
-cartButton.addEventListener('click', () => {
-  cartOpen = !cartOpen;
-  if(cartOpen){
-    cartFrame.style.opacity='1';
-    cartFrame.style.transform='scale(1)';
-  } else {
-    cartFrame.style.opacity='0';
-    cartFrame.style.transform='scale(0.95)';
-  }
-});
-
-// Purchase
-document.getElementById('purchaseButton').addEventListener('click', () => {
-  if(cart.length === 0){ alert('Your cart is empty!'); return; }
-  alert('Purchased ' + cart.length + ' item(s) for €' + cart.reduce((acc,i)=>acc+i.price,0).toFixed(2));
-  cart=[];
-  cartCount=0;
-  updateCartBubble();
-  updateCartFrame();
-  cartFrame.style.opacity='0';
-  cartFrame.style.transform='scale(0.95)';
-  cartOpen=false;
-});
-
-// Search
-document.getElementById('searchBtn').addEventListener('click', () => {
-  const query = document.getElementById('searchInput').value.toLowerCase();
-  if(query.includes('global admin')) {
-    alert('Product found: Global Admin - 29.99€');
-  } else {
-    alert('No product found.');
-  }
-});
-
-// Initialize cart on page load
-updateCartBubble();
-updateCartFrame();
 </script>
-
 </body>
 </html>
+
