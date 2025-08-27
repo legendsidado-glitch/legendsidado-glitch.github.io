@@ -13,11 +13,7 @@
 
   <style>
     /* General Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: Arial, sans-serif;
@@ -52,6 +48,39 @@
       z-index: 0;
     }
 
+    /* Loading Screen */
+    #loading-screen {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #222;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 2000;
+    }
+    #loading-screen h1 {
+      font-family: 'Luckiest Guy', cursive;
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+    .loading-bar-bg {
+      width: 300px;
+      height: 20px;
+      background: #555;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .loading-bar-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      border-radius: 10px;
+      animation: loadBar 2s forwards;
+    }
+    @keyframes loadBar { from {width:0%;} to {width:100%;} }
+
     /* Header */
     header {
       background: linear-gradient(to right, #0072ff, #00c6ff);
@@ -66,186 +95,82 @@
       z-index: 10;
     }
 
-    .logo {
-      font-family: 'Luckiest Guy', cursive;
-      font-size: 26px;
-      line-height: 1.2;
-    }
+    .logo { font-family: 'Luckiest Guy', cursive; font-size: 26px; line-height: 1.2; }
 
-    nav {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      z-index: 10;
-    }
+    nav { display: flex; gap: 15px; align-items: center; z-index: 10; }
 
     /* Main Header Buttons */
     nav button {
-      border: 2px solid black; /* black outline */
-      padding: 8px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-      color: white;
-      font-weight: bold;
+      border: 2px solid black; padding: 8px 14px; border-radius: 8px;
+      cursor: pointer; font-size: 14px; color: white; font-weight: bold;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
-      transition: 0.3s;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3); transition: 0.3s;
       font-family: 'Luckiest Guy', cursive;
     }
+    nav button:nth-child(1) { background: linear-gradient(45deg, #FF5733, #FF8F33); } 
+    nav button:nth-child(2) { background: linear-gradient(45deg, #33C1FF, #3385FF); } 
+    nav button:nth-child(3) { background: linear-gradient(45deg, #33FF57, #28A745); } 
+    nav button:nth-child(4) { background: linear-gradient(45deg, #FF33A8, #C7007A); } 
+    nav button:nth-child(5) { background: linear-gradient(45deg, #FFA833, #FF5733); } 
+    nav button:hover { filter: brightness(110%); box-shadow:0 0 8px rgba(0,0,0,0.6),0 0 10px rgba(255,255,255,0.3); transform: translateY(-2px); }
 
-    /* Gradient colors for each button */
-    nav button:nth-child(1) { background: linear-gradient(45deg, #FF5733, #FF8F33); } /* All Products */
-    nav button:nth-child(2) { background: linear-gradient(45deg, #33C1FF, #3385FF); } /* Cart */
-    nav button:nth-child(3) { background: linear-gradient(45deg, #33FF57, #28A745); } /* Login */
-    nav button:nth-child(4) { background: linear-gradient(45deg, #FF33A8, #C7007A); } /* Sign Up */
-    nav button:nth-child(5) { background: linear-gradient(45deg, #FFA833, #FF5733); } /* Admin Panel */
-
-    nav button:hover {
-      filter: brightness(110%);
-      box-shadow: 0 0 8px rgba(0,0,0,0.6), 0 0 10px rgba(255,255,255,0.3);
-      transform: translateY(-2px);
-    }
-
-    /* Sub-header for homepage buttons */
+    /* Sub-header */
     .sub-header {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      padding: 10px 0;
-      background: #333;
-      position: relative;
-      z-index: 10;
+      display: flex; justify-content: center; gap: 20px;
+      padding: 10px 0; background: #333; position: relative; z-index: 10;
     }
-
     .sub-header a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-family: 'Luckiest Guy', cursive;
+      color: white; text-decoration: none; padding: 8px 16px; border-radius: 8px;
+      font-weight: bold; font-family: 'Luckiest Guy', cursive;
       background: linear-gradient(45deg, #0072ff, #00c6ff);
-      transition: 0.3s;
-      border: 2px solid black;
-      text-align: center;
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      transition: 0.3s; border: 2px solid black; text-align: center; box-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
+    .sub-header a:hover { filter: brightness(110%); box-shadow:0 0 8px rgba(0,0,0,0.6),0 0 10px rgba(255,255,255,0.3); transform: translateY(-2px); }
 
-    .sub-header a:hover {
-      filter: brightness(110%);
-      box-shadow: 0 0 8px rgba(0,0,0,0.6), 0 0 10px rgba(255,255,255,0.3);
-      transform: translateY(-2px);
-    }
-
-    /* Main */
-    main {
-      flex: 1;
-      padding: 20px;
-      position: relative;
-      z-index: 5;
-    }
-
+    /* Main Content */
+    main { flex: 1; padding: 20px; position: relative; z-index: 5; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
     .product {
-      background: white;
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      background: white; padding: 15px; border-radius: 12px; width: 220px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; text-align: center;
     }
-
-    .product button {
-      margin-top: 8px;
-      padding: 6px 10px;
-      border: none;
-      border-radius: 6px;
-      background: #00c6ff;
-      color: white;
-      cursor: pointer;
-    }
-
-    .product button:hover {
-      background: #0099cc;
-    }
+    .product-icon { width: 80px; height: 80px; object-fit: contain; margin-bottom: 10px; }
+    .product-price { font-weight: bold; color: #0072ff; margin-bottom: 6px; }
+    .product-offers { font-size: 14px; color: #333; margin-bottom: 10px; }
+    .product button { margin-top: 8px; padding: 6px 10px; border: none; border-radius: 6px; background: #00c6ff; color: white; cursor: pointer; transition:0.3s; }
+    .product button:hover { background: #0099cc; }
 
     /* Footer */
-    footer {
-      background: #222;
-      color: #fff;
-      text-align: center;
-      padding: 12px;
-      position: relative;
-      z-index: 5;
-    }
+    footer { background: #222; color: #fff; text-align: center; padding: 12px; position: relative; z-index: 5; }
 
     /* Modals */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-
-    .modal-content {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      width: 300px;
-      text-align: center;
-      animation: fadeIn 0.3s ease-out;
-    }
-
-    .modal-content input {
-      width: 90%;
-      padding: 8px;
-      margin: 6px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    .modal-content button {
-      margin-top: 8px;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 8px;
-      background: #0072ff;
-      color: white;
-      cursor: pointer;
-    }
+    .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000; }
+    .modal-content { background: white; padding:20px; border-radius:12px; width:300px; text-align:center; animation: fadeIn 0.3s ease-out; }
+    .modal-content input { width:90%; padding:8px; margin:6px 0; border:1px solid #ccc; border-radius:6px; }
+    .modal-content button { margin-top:8px; padding:8px 12px; border:none; border-radius:8px; background:#0072ff; color:white; cursor:pointer; }
 
     /* Notification popup */
     #notification {
-      display: none;
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: #0072ff;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      z-index: 1100;
-      font-weight: bold;
-      animation: slideIn 0.3s ease-out;
+      display:none; position:fixed; top:20px; right:20px; background:#0072ff;
+      color:white; padding:12px 20px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.3);
+      z-index:1100; font-weight:bold; animation: slideIn 0.3s ease-out;
     }
 
-    @keyframes fadeIn {
-      from {opacity: 0; transform: scale(0.8);}
-      to {opacity: 1; transform: scale(1);}
-    }
-
-    @keyframes slideIn {
-      from {opacity: 0; transform: translateX(50px);}
-      to {opacity: 1; transform: translateX(0);}
-    }
+    @keyframes fadeIn { from {opacity:0; transform:scale(0.8);} to {opacity:1; transform:scale(1);} }
+    @keyframes slideIn { from {opacity:0; transform:translateX(50px);} to {opacity:1; transform:translateX(0);} }
 
   </style>
 </head>
 <body>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="loading-content">
+      <h1>TITANIC &lt;\&gt; Loading...</h1>
+      <div class="loading-bar-bg">
+        <div class="loading-bar-fill"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- Main Header -->
   <header>
@@ -273,13 +198,17 @@
   <!-- Main Content -->
   <main id="content">
     <div class="product">
+      <img src="example1.png" alt="Example Script 1" class="product-icon">
       <h3>Example Script 1</h3>
-      <p>$10</p>
+      <p class="product-price">$10</p>
+      <p class="product-offers">Includes basic script features for automation.</p>
       <button onclick="addToCart('Example Script 1')">Add to Cart</button>
     </div>
     <div class="product">
+      <img src="example2.png" alt="Example Script 2" class="product-icon">
       <h3>Example Script 2</h3>
-      <p>$15</p>
+      <p class="product-price">$15</p>
+      <p class="product-offers">Advanced script with customization options.</p>
       <button onclick="addToCart('Example Script 2')">Add to Cart</button>
     </div>
   </main>
@@ -323,15 +252,23 @@
 
   <!-- Scripts -->
   <script>
-    let cart = [];
-
-    function showNotification(message, duration = 2000) {
-      const notif = document.getElementById("notification");
-      notif.innerText = message;
-      notif.style.display = "block";
+    // Loading Screen
+    window.addEventListener("load", () => {
       setTimeout(() => {
-        notif.style.display = "none";
-      }, duration);
+        const loadingScreen = document.getElementById("loading-screen");
+        loadingScreen.style.opacity = "0";
+        loadingScreen.style.transition = "opacity 0.5s ease";
+        setTimeout(() => loadingScreen.style.display = "none", 500);
+      }, 2000);
+    });
+
+    // Cart & Notifications
+    let cart = [];
+    function showNotification(msg) {
+      const notif = document.getElementById("notification");
+      notif.innerText = msg;
+      notif.style.display = "block";
+      setTimeout(() => { notif.style.display = "none"; }, 2000);
     }
 
     function addToCart(item) {
@@ -341,27 +278,20 @@
     }
 
     function showCart() {
-      const message = cart.length ? "Cart Items: " + cart.join(", ") : "Cart is empty";
-      showNotification(message, 3000);
+      showNotification("Cart Items: " + (cart.length ? cart.join(", ") : "Empty"));
     }
 
-    function showProducts() {
-      showNotification("Showing all products...", 2000);
-    }
+    function showProducts() { showNotification("Showing all products..."); }
 
-    function openModal(id) {
-      document.getElementById(id).style.display = "flex";
-    }
+    // Modals
+    function openModal(id) { document.getElementById(id).style.display = "flex"; }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
 
-    function closeModal(id) {
-      document.getElementById(id).style.display = "none";
-    }
-
+    // Admin
     function runAdminCommand() {
       const cmd = document.getElementById("admin-command").value;
       const output = document.getElementById("admin-output");
       output.innerText = "Executed: " + cmd;
-      showNotification("Admin command executed: " + cmd, 2500);
     }
   </script>
 
