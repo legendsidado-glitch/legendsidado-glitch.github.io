@@ -3,7 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <title>Scriptsell — Buy Scripts and Models</title>
+  
+  <!-- Favicon and Browser Icon -->
+  <link rel="icon" href="favicon.png" type="image/png">
+  <link rel="shortcut icon" href="Scriptsell.png" type="image/png">
+  
+  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+
   <style>
     /* General Reset */
     * {
@@ -14,11 +21,35 @@
 
     body {
       font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #f0f0f0 25%, #e3e3e3 25%, #e3e3e3 50%, #f0f0f0 50%, #f0f0f0 75%, #e3e3e3 75%);
-      background-size: 40px 40px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      position: relative;
+      overflow: hidden;
+
+      /* Base curvy zig-zag background */
+      background: repeating-linear-gradient(
+        135deg,
+        #f0f0f0 0 20px,
+        #e3e3e3 20px 40px
+      );
+      background-size: 80px 80px;
+    }
+
+    /* SVG overlay for smooth curves */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80">\
+<path d="M0 20 Q20 0 40 20 T80 20 V80 H0 Z" fill="rgba(227,227,227,0.5)"/>\
+</svg>');
+      background-repeat: repeat;
+      pointer-events: none;
+      z-index: 0;
     }
 
     /* Header */
@@ -31,6 +62,8 @@
       justify-content: space-between;
       align-items: center;
       color: white;
+      position: relative;
+      z-index: 10;
     }
 
     .logo {
@@ -43,42 +76,74 @@
       display: flex;
       gap: 15px;
       align-items: center;
+      z-index: 10;
     }
 
+    /* Main Header Buttons */
     nav button {
-      background: white;
-      border: none;
+      border: 2px solid black; /* black outline */
       padding: 8px 14px;
       border-radius: 8px;
       cursor: pointer;
       font-size: 14px;
+      color: white;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
       transition: 0.3s;
+      font-family: 'Luckiest Guy', cursive;
     }
+
+    /* Gradient colors for each button */
+    nav button:nth-child(1) { background: linear-gradient(45deg, #FF5733, #FF8F33); } /* All Products */
+    nav button:nth-child(2) { background: linear-gradient(45deg, #33C1FF, #3385FF); } /* Cart */
+    nav button:nth-child(3) { background: linear-gradient(45deg, #33FF57, #28A745); } /* Login */
+    nav button:nth-child(4) { background: linear-gradient(45deg, #FF33A8, #C7007A); } /* Sign Up */
+    nav button:nth-child(5) { background: linear-gradient(45deg, #FFA833, #FF5733); } /* Admin Panel */
 
     nav button:hover {
-      background: #ddd;
+      filter: brightness(110%);
+      box-shadow: 0 0 8px rgba(0,0,0,0.6), 0 0 10px rgba(255,255,255,0.3);
+      transform: translateY(-2px);
     }
 
-    /* Cart */
-    .cart {
+    /* Sub-header for homepage buttons */
+    .sub-header {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 10px 0;
+      background: #333;
       position: relative;
+      z-index: 10;
     }
 
-    .cart span {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      background: red;
+    .sub-header a {
       color: white;
-      font-size: 12px;
-      padding: 2px 6px;
-      border-radius: 50%;
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-family: 'Luckiest Guy', cursive;
+      background: linear-gradient(45deg, #0072ff, #00c6ff);
+      transition: 0.3s;
+      border: 2px solid black;
+      text-align: center;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    }
+
+    .sub-header a:hover {
+      filter: brightness(110%);
+      box-shadow: 0 0 8px rgba(0,0,0,0.6), 0 0 10px rgba(255,255,255,0.3);
+      transform: translateY(-2px);
     }
 
     /* Main */
     main {
       flex: 1;
       padding: 20px;
+      position: relative;
+      z-index: 5;
     }
 
     .product {
@@ -109,6 +174,8 @@
       color: #fff;
       text-align: center;
       padding: 12px;
+      position: relative;
+      z-index: 5;
     }
 
     /* Modals */
@@ -120,6 +187,7 @@
       background: rgba(0,0,0,0.6);
       justify-content: center;
       align-items: center;
+      z-index: 1000;
     }
 
     .modal-content {
@@ -128,6 +196,7 @@
       border-radius: 12px;
       width: 300px;
       text-align: center;
+      animation: fadeIn 0.3s ease-out;
     }
 
     .modal-content input {
@@ -147,11 +216,38 @@
       color: white;
       cursor: pointer;
     }
+
+    /* Notification popup */
+    #notification {
+      display: none;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #0072ff;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      z-index: 1100;
+      font-weight: bold;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: scale(0.8);}
+      to {opacity: 1; transform: scale(1);}
+    }
+
+    @keyframes slideIn {
+      from {opacity: 0; transform: translateX(50px);}
+      to {opacity: 1; transform: translateX(0);}
+    }
+
   </style>
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Main Header -->
   <header>
     <div class="logo">Scriptsell <br> Buy Scripts and Models</div>
     <nav>
@@ -166,7 +262,15 @@
     </nav>
   </header>
 
-  <!-- Main -->
+  <!-- Sub-header -->
+  <div class="sub-header">
+    <a href="hot-deals.html">Hot-Deals</a>
+    <a href="Index.html">Home</a>
+    <a href="products.html">Products</a>
+    <a href="infos.html">Infos</a>
+  </div>
+
+  <!-- Main Content -->
   <main id="content">
     <div class="product">
       <h3>Example Script 1</h3>
@@ -214,21 +318,35 @@
     </div>
   </div>
 
+  <!-- Notification -->
+  <div id="notification"></div>
+
   <!-- Scripts -->
   <script>
     let cart = [];
+
+    function showNotification(message, duration = 2000) {
+      const notif = document.getElementById("notification");
+      notif.innerText = message;
+      notif.style.display = "block";
+      setTimeout(() => {
+        notif.style.display = "none";
+      }, duration);
+    }
+
     function addToCart(item) {
       cart.push(item);
       document.getElementById("cart-count").innerText = cart.length;
-      alert(item + " added to cart!");
+      showNotification(item + " added to cart!");
     }
 
     function showCart() {
-      alert("Cart Items: " + (cart.length ? cart.join(", ") : "Empty"));
+      const message = cart.length ? "Cart Items: " + cart.join(", ") : "Cart is empty";
+      showNotification(message, 3000);
     }
 
     function showProducts() {
-      alert("Showing all products...");
+      showNotification("Showing all products...", 2000);
     }
 
     function openModal(id) {
@@ -243,6 +361,7 @@
       const cmd = document.getElementById("admin-command").value;
       const output = document.getElementById("admin-output");
       output.innerText = "Executed: " + cmd;
+      showNotification("Admin command executed: " + cmd, 2500);
     }
   </script>
 
