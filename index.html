@@ -2,150 +2,249 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>&lt;/&gt; Scriptsell</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <title>Scriptsell — Buy Scripts and Models</title>
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
   <style>
-    body {
+    /* General Reset */
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #333;
+      background: linear-gradient(135deg, #f0f0f0 25%, #e3e3e3 25%, #e3e3e3 50%, #f0f0f0 50%, #f0f0f0 75%, #e3e3e3 75%);
+      background-size: 40px 40px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     /* Header */
     header {
+      background: linear-gradient(to right, #0072ff, #00c6ff);
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      padding: 15px 30px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-start;
-      padding: 15px 40px;
-      background: white;
-      border-bottom: 2px solid #eee;
+      align-items: center;
+      color: white;
     }
 
-    /* Left space for products */
-    .left-space {
-      flex: 1;
-    }
-
-    /* Center logo */
     .logo {
-      text-align: center;
-      flex: 1;
+      font-family: 'Luckiest Guy', cursive;
+      font-size: 26px;
+      line-height: 1.2;
     }
 
-    .logo h1 {
-      margin: 0;
-      font-size: 28px;
-      color: black;
-    }
-
-    .logo p {
-      margin: 0;
-      font-size: 14px;
-      color: gray;
-    }
-
-    /* Right actions */
-    .actions {
-      text-align: right;
-      flex: 1;
-    }
-
-    .actions button {
-      padding: 6px 12px;
-      margin: 3px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      background: white;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .actions button:hover {
-      background: #f2f2f2;
-    }
-
-    /* Search */
-    .search-container {
-      margin-top: 8px;
-    }
-
-    .search-container input {
-      padding: 6px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      width: 160px;
-    }
-
-    .search-container button {
-      padding: 6px 12px;
-      margin-left: 5px;
-    }
-
-    /* Nav bar under logo */
     nav {
-      text-align: center;
-      margin-top: 10px;
-      margin-bottom: 20px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
     }
 
     nav button {
-      padding: 8px 16px;
-      margin: 0 6px;
-      font-size: 15px;
-      border: 1px solid #ccc;
       background: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
       cursor: pointer;
-      border-radius: 6px;
+      font-size: 14px;
+      transition: 0.3s;
     }
 
     nav button:hover {
-      background: #f2f2f2;
+      background: #ddd;
     }
 
-    /* Content placeholder */
-    .content {
-      padding: 30px;
+    /* Cart */
+    .cart {
+      position: relative;
+    }
+
+    .cart span {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: red;
+      color: white;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 50%;
+    }
+
+    /* Main */
+    main {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .product {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .product button {
+      margin-top: 8px;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 6px;
+      background: #00c6ff;
+      color: white;
+      cursor: pointer;
+    }
+
+    .product button:hover {
+      background: #0099cc;
+    }
+
+    /* Footer */
+    footer {
+      background: #222;
+      color: #fff;
+      text-align: center;
+      padding: 12px;
+    }
+
+    /* Modals */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .modal-content input {
+      width: 90%;
+      padding: 8px;
+      margin: 6px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .modal-content button {
+      margin-top: 8px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 8px;
+      background: #0072ff;
+      color: white;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
+  <!-- Header -->
   <header>
-    <div class="left-space"><!-- empty, products go here --></div>
-
-    <div class="logo">
-      <h1>Scriptsell</h1>
-      <p>Buy Scripts and Models</p>
-    </div>
-
-    <div class="actions">
-      <div class="top-buttons">
-        <button>Sign In</button>
-        <button>Login</button>
-        <button>Cart</button>
-        <button>Search</button>
+    <div class="logo">Scriptsell <br> Buy Scripts and Models</div>
+    <nav>
+      <button onclick="showProducts()">All Products</button>
+      <div class="cart">
+        <button onclick="showCart()">Cart</button>
+        <span id="cart-count">0</span>
       </div>
-      <div class="search-container">
-        <input type="text" placeholder="Search products...">
-        <button>Go</button>
-      </div>
-    </div>
+      <button onclick="openModal('login')">Login</button>
+      <button onclick="openModal('signup')">Sign Up</button>
+      <button onclick="openModal('admin')">Admin Panel</button>
+    </nav>
   </header>
 
-  <nav>
-    <button>Home</button>
-    <button>Hot Deals</button>
-    <button>Info</button>
-    <button>Top Products</button>
-    <button>All Products</button>
-  </nav>
+  <!-- Main -->
+  <main id="content">
+    <div class="product">
+      <h3>Example Script 1</h3>
+      <p>$10</p>
+      <button onclick="addToCart('Example Script 1')">Add to Cart</button>
+    </div>
+    <div class="product">
+      <h3>Example Script 2</h3>
+      <p>$15</p>
+      <button onclick="addToCart('Example Script 2')">Add to Cart</button>
+    </div>
+  </main>
 
-  <div class="content">
-    <h2>Welcome to Scriptsell</h2>
-    <p>Here you can showcase your products...</p>
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Scriptsell. All rights reserved.</p>
+  </footer>
+
+  <!-- Modals -->
+  <div class="modal" id="login">
+    <div class="modal-content">
+      <h2>Login</h2>
+      <input type="text" placeholder="Username">
+      <input type="password" placeholder="Password">
+      <button onclick="closeModal('login')">Submit</button>
+    </div>
   </div>
+
+  <div class="modal" id="signup">
+    <div class="modal-content">
+      <h2>Sign Up</h2>
+      <input type="text" placeholder="Username">
+      <input type="email" placeholder="Email">
+      <input type="password" placeholder="Password">
+      <button onclick="closeModal('signup')">Register</button>
+    </div>
+  </div>
+
+  <div class="modal" id="admin">
+    <div class="modal-content">
+      <h2>Admin Panel</h2>
+      <input type="text" id="admin-command" placeholder="Enter command">
+      <button onclick="runAdminCommand()">Run</button>
+      <div id="admin-output" style="margin-top:10px; font-size:14px;"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    let cart = [];
+    function addToCart(item) {
+      cart.push(item);
+      document.getElementById("cart-count").innerText = cart.length;
+      alert(item + " added to cart!");
+    }
+
+    function showCart() {
+      alert("Cart Items: " + (cart.length ? cart.join(", ") : "Empty"));
+    }
+
+    function showProducts() {
+      alert("Showing all products...");
+    }
+
+    function openModal(id) {
+      document.getElementById(id).style.display = "flex";
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    function runAdminCommand() {
+      const cmd = document.getElementById("admin-command").value;
+      const output = document.getElementById("admin-output");
+      output.innerText = "Executed: " + cmd;
+    }
+  </script>
 
 </body>
 </html>
