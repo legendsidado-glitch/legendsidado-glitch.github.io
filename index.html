@@ -1,516 +1,417 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>&lt;/&gt; Scriptsell — Buy Scripts & Models</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>&lt;/&gt; Scriptsell — Buy Scripts & Models</title>
+<link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.png" type="image/png">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ---------- Variables & Base ---------- */
+:root {
+    --accent1: #0072ff;
+    --accent2: #00c6ff;
+    --muted: #e3e3e3;
+    --paper: #ffffff;
+    --card: #fbfdff;
+    --danger: #ef4444;
+    --success: #16a34a;
+    --warning: #f59e0b;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family:"Nunito", Arial, sans-serif; color:#111; background:#f0f0f0; overflow-x:hidden; }
 
-  <!-- Favicon -->
-  <link rel="icon" href="favicon.png" type="image/png">
+/* ---------- Detailed Background ---------- */
+body {
+    background: repeating-linear-gradient(135deg,#f0f0f0 0 20px,#e3e3e3 20px 40px);
+    background-size:80px 80px;
+    position:relative;
+}
+body::before {
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><path d="M0 20 Q20 0 40 20 T80 20 V80 H0 Z" fill="rgba(227,227,227,0.45)"/></svg>');
+    background-repeat:repeat;
+    pointer-events:none;
+    z-index:0;
+    opacity:1;
+}
 
-  <style>
-    /* ============================================================
-       Base Variables & Textures
-       ============================================================ */
-    :root{
-      --accent-1:#0072ff;
-      --accent-2:#00c6ff;
-      --accent-3:#ff6b6b;
-      --accent-4:#16a34a;
-      --muted:#e3e3e3;
-      --paper:#ffffff;
-      --card:#fbfdff;
-      --bg-gradient:linear-gradient(135deg,#f0f0f0,#e3e3e3);
-      --toast-bg:rgba(0,0,0,0.85);
-    }
-    html,body{height:100%; margin:0; font-family:"Nunito",Arial,sans-serif; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; color:#111;}
-    body{
-      background: repeating-linear-gradient(135deg, #f0f0f0 0 20px, #e3e3e3 20px 40px);
-      background-size:80px 80px;
-      position:relative;
-    }
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      background-image:url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80">\
-<path d="M0 20 Q20 0 40 20 T80 20 V80 H0 Z" fill="rgba(227,227,227,0.45)"/>\
-</svg>');
-      background-repeat:repeat;
-      pointer-events:none;
-      z-index:0;
-      opacity:1;
-    }
+/* ---------- Loading Screen ---------- */
+#loading-screen {
+    position: fixed; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; background:#0b1220; z-index:9999;
+}
+#loading-screen h1 { font-family:"Luckiest Guy", cursive; font-size:36px; color:#dff3ff; margin-bottom:20px; text-align:center; }
+.loading-bar { width:320px; height:12px; background:#1f2937; border-radius:12px; overflow:hidden; margin-top:18px; box-shadow:0 6px 18px rgba(0,0,0,0.5);}
+.loading-bar > i { display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent1),var(--accent2)); border-radius:12px; }
 
-    /* ============================================================
-       Loading Screen
-       ============================================================ */
-    #loading-screen{
-      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-      background:#0b1220; color:#dff3ff; z-index:9999; flex-direction:column;
-    }
-    #loading-screen h1{ font-family: "Luckiest Guy", cursive; font-size:36px; margin:0; }
-    .loading-bar{
-      width:320px; height:12px; background:#1f2937; border-radius:12px; overflow:hidden; margin-top:18px;
-      box-shadow:0 6px 18px rgba(0,0,0,0.5);
-    }
-    .loading-bar > i{
-      display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); border-radius:12px;
-      animation: loadAnim 2s forwards ease;
-    }
-    @keyframes loadAnim { to { width:100%; } }
-    .hidden-fade{ opacity:0; transition:opacity .5s ease; pointer-events:none; }
+.loading-step {
+    font-weight:900;
+    font-size:18px;
+    margin-top:10px;
+    color:#fff;
+    text-align:center;
+}
 
-    /* ============================================================
-       Site Layout
-       ============================================================ */
-    .site-wrap{ position:relative; z-index:5; min-height:100vh; display:flex; flex-direction:column; }
+/* ---------- Site Wrap ---------- */
+.site-wrap { position:relative; z-index:5; min-height:100vh; display:flex; flex-direction:column; }
 
-    /* Header */
-    header.main-header{
-      background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
-      padding:18px 22px;
-      color:white;
-      border-bottom-left-radius:22px;
-      border-bottom-right-radius:22px;
-      position:relative;
-      z-index:10;
-      box-shadow: 0 6px 20px rgba(2,6,23,0.08);
-    }
-    .header-inner{ max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+/* ---------- Header ---------- */
+header.main-header{
+    background: linear-gradient(90deg,var(--accent1),var(--accent2));
+    padding:18px 22px;
+    color:white;
+    border-bottom-left-radius:22px;
+    border-bottom-right-radius:22px;
+    position:relative;
+    z-index:10;
+    box-shadow: 0 6px 20px rgba(2,6,23,0.08);
+}
+.header-inner{ max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.hdr-left{ width:22%; display:flex; gap:8px; align-items:center; }
+.search-input{ width:100%; padding:10px 12px; border-radius:999px; border:2px solid rgba(255,255,255,0.9); font-weight:700; }
+.search-btn{ padding:10px 14px; border-radius:999px; background:rgba(255,255,255,0.12); color:white; border:2px solid rgba(255,255,255,0.12); cursor:pointer; font-weight:800; }
+.hdr-center{ width:56%; text-align:center; }
+.logo-main{ font-family:"Luckiest Guy", cursive; font-size:34px; line-height:1; margin-bottom:6px; }
+.logo-sub{ font-size:14px; font-weight:800; opacity:0.95; margin-bottom:10px; }
+.main-nav{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
+.main-nav a{ padding:8px 14px; border-radius:999px; background:white; color:var(--accent1); font-weight:900; text-decoration:none; box-shadow:0 6px 18px rgba(0,0,0,0.08); font-family:"Luckiest Guy", cursive; font-size:14px; }
+.hdr-right{ width:22%; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+.stack-row{ display:flex; gap:8px; align-items:center; }
+.btn-pill{ padding:8px 12px; border-radius:999px; border:2px solid black; font-weight:900; cursor:pointer; background:white; color:#111; box-shadow:0 6px 12px rgba(0,0,0,0.08); }
+.btn-accent{ background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:white; border:2px solid rgba(0,0,0,0.12); }
 
-    /* Header Left */
-    .hdr-left{ width:22%; display:flex; gap:8px; align-items:center; }
-    .search-input{ width:100%; padding:10px 12px; border-radius:999px; border:2px solid rgba(255,255,255,0.9); font-weight:700; }
-    .search-btn{ padding:10px 14px; border-radius:999px; background:rgba(255,255,255,0.12); color:white; border:2px solid rgba(255,255,255,0.12); cursor:pointer; font-weight:800; }
+/* ---------- Main Content ---------- */
+main.content{ max-width:1200px; margin:28px auto; padding:0 18px; z-index:5; display:flex; flex-direction:column; gap:18px; }
+.frame{ background:var(--card); border-radius:16px; padding:18px; border:3px dashed black; box-shadow:0 8px 30px rgba(0,0,0,0.06); }
 
-    /* Header Center */
-    .hdr-center{ width:56%; text-align:center; }
-    .logo-main{ font-family:"Luckiest Guy", cursive; font-size:34px; line-height:1; margin-bottom:6px; }
-    .logo-sub{ font-size:14px; font-weight:800; opacity:0.95; margin-bottom:10px; }
-    .main-nav{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
-    .main-nav a{ padding:8px 14px; border-radius:999px; background:white; color:var(--accent-1); font-weight:900; text-decoration:none; box-shadow:0 6px 18px rgba(0,0,0,0.08); font-family:"Luckiest Guy", cursive; font-size:14px; }
+/* ---------- Product Area ---------- */
+.product-area{ display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; }
+.product-left{ flex:1 1 420px; min-width:300px; }
+.product-right{ flex:1 1 420px; min-width:300px; display:flex; flex-direction:column; gap:12px; }
 
-    /* Header Right */
-    .hdr-right{ width:22%; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
-    .stack-row{ display:flex; gap:8px; align-items:center; }
-    .btn-pill{ padding:8px 12px; border-radius:999px; border:2px solid black; font-weight:900; cursor:pointer; background:white; color:#111; box-shadow:0 6px 12px rgba(0,0,0,0.08); }
-    .btn-accent{ background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:white; border:2px solid rgba(0,0,0,0.12); }
+/* Product card */
+.product-card{ display:flex; gap:16px; align-items:flex-start; padding:12px; border-radius:12px; background:linear-gradient(180deg,#fff,#f8fbff); border:2px solid rgba(0,0,0,0.06);}
+.product-icon{ width:160px; height:160px; border-radius:12px; background:#111; color:white; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px; border:3px dashed black;}
+.product-info h3{ margin:0 0 6px 0; font-size:20px; }
+.price{ color:#0a7d49; font-weight:900; font-size:26px; margin:6px 0; }
+.features{ margin:8px 0 12px 0; }
+.features li{ margin:6px 0; }
+.product-actions{ display:flex; gap:10px; margin-top:8px; }
+.btn-cta{ padding:10px 16px; border-radius:10px; font-weight:900; border:none; cursor:pointer; }
+.btn-add{ background:linear-gradient(90deg,#2bb673,#16a34a); color:white; }
+.btn-buy{ background:linear-gradient(90deg,#0f6db8,#0066ff); color:white; }
+.btn-disabled{ background:#999; color:#eee; cursor:not-allowed; }
+.countdown{ font-weight:900; color:#b91c1c; margin-top:8px; }
 
-    /* Main Content */
-    main.content{ max-width:1200px; margin:28px auto; padding:0 18px; z-index:5; display:flex; flex-direction:column; gap:18px; }
+/* Why choose us */
+.why-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:12px; }
+.why-item{ background:#ff6b6b33; padding:12px; border-radius:10px; text-align:center; font-weight:900; }
 
-    /* Frame Sections */
-    .frame{
-      background:var(--card);
-      border-radius:16px;
-      padding:18px;
-      border:3px dashed black;
-      box-shadow:0 8px 30px rgba(0,0,0,0.06);
-    }
+/* About grid */
+.about-grid{ display:grid; grid-template-columns:1fr; gap:12px; }
 
-    /* Product Area */
-    .product-area{ display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; }
-    .product-left{ flex:1 1 420px; min-width:300px; display:flex; flex-direction:column; gap:12px; }
-    .product-right{ flex:1 1 420px; min-width:300px; display:flex; flex-direction:column; gap:12px; }
+/* Recommendations */
+.rec-row{ display:flex; gap:12px; flex-wrap:wrap; }
+.rec-row div{ flex:1; background:#ffefcf; padding:10px; border-radius:10px; }
 
-    /* Product Card */
-    .product-card{
-      display:flex; gap:16px; align-items:flex-start; padding:12px;
-      border-radius:12px; background:linear-gradient(180deg,#fff,#f8fbff); border:2px solid rgba(0,0,0,0.06);
-    }
-    .product-icon{
-      width:160px; height:160px; border-radius:12px; background:#111; color:white; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px; border:3px dashed black;
-    }
-    .product-info h3{ margin:0 0 6px 0; font-size:20px; }
-    .price{ color:#0a7d49; font-weight:900; font-size:26px; margin:6px 0; }
-    .features{ margin:8px 0 12px 0; }
-    .features li{ margin:6px 0; }
-    .product-actions{ display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
-    .btn-cta{ padding:10px 16px; border-radius:10px; font-weight:900; border:none; cursor:pointer; }
-    .btn-add{ background:linear-gradient(90deg,#2bb673,#16a34a); color:white; }
-    .btn-buy{ background:linear-gradient(90deg,#0f6db8,#0066ff); color:white; }
-    .btn-disabled{ background:#999; color:#eee; cursor:not-allowed; }
-    .btn-buy-all{ background:linear-gradient(90deg,var(--accent-3),var(--accent-4)); color:white; }
+/* Footer */
+footer.sitefoot{ margin-top:auto; background:#111827; color:white; padding:22px 0; text-align:center; display:flex; flex-direction:column; gap:12px; align-items:center; }
+footer .icons{ display:flex; justify-content:center; gap:12px; }
+footer img.icon{ width:28px; height:28px; filter:brightness(10) invert(1); cursor:pointer; }
 
-    /* Countdown */
-    .countdown{ font-weight:900; color:#b91c1c; margin-top:8px; }
+/* Modals */
+.modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; padding:18px; }
+.modal .panel{ background:white; border-radius:12px; padding:16px; width:100%; max-width:520px; border:3px dashed black; box-shadow:0 12px 40px rgba(0,0,0,0.2); }
+.modal .close{ background:#ef4444; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
 
-    /* Why Choose Us Grid */
-    .why-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:12px; }
-    .why-item{ background:#ff6b6b33; padding:12px; border-radius:10px; text-align:center; font-weight:800; font-size:14px; }
+/* Responsive */
+@media (max-width:880px){
+    .header-inner{ flex-direction:column; gap:12px; align-items:stretch; }
+    .hdr-left, .hdr-right, .hdr-center{ width:100%; text-align:center; }
+    .hdr-right{ align-items:center; }
+    .product-area{ flex-direction:column; }
+    .why-grid{ grid-template-columns: repeat(2,1fr); }
+}
 
-    /* About Section */
-    .about-section{ font-size:15px; line-height:1.6; color:#111; }
-
-    /* Recommendations */
-    .recommendations{ display:flex; flex-direction:column; gap:12px; }
-    .rec-card{ display:flex; gap:12px; padding:12px; border:2px dashed #111; border-radius:12px; }
-    .rec-user{ width:60px; height:60px; background:#111; color:white; display:flex; align-items:center; justify-content:center; font-weight:900; border-radius:50%; }
-    .rec-content{ flex:1; display:flex; flex-direction:column; gap:4px; }
-
-    /* Info Section */
-    .info-section{ display:flex; flex-direction:column; gap:12px; background:#f8fafc; border-radius:16px; padding:16px; }
-    .info-section h2{ font-size:22px; margin:0 0 6px 0; }
-    .info-section p{ font-size:15px; line-height:1.6; }
-
-    /* Footer */
-    footer{ margin-top:28px; background:linear-gradient(90deg,var(--accent-2),var(--accent-1)); padding:18px; border-top-left-radius:22px; border-top-right-radius:22px; color:white; display:flex; flex-direction:column; gap:12px; }
-    .footer-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; }
-    .footer-left{ display:flex; flex-direction:column; gap:6px; font-size:14px; }
-    .footer-right{ display:flex; gap:12px; align-items:center; }
-    .social-icon{ width:34px; height:34px; background:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; color:#111; cursor:pointer; }
-
-    /* Toasts */
-    .toast{ position:fixed; bottom:18px; right:18px; background:var(--toast-bg); color:white; padding:12px 18px; border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.25); font-weight:700; opacity:0; pointer-events:none; transition:opacity .3s ease; z-index:999; }
-    .toast.show{ opacity:1; pointer-events:auto; }
-
-    /* Cookie Popup */
-    .cookie-popup{ position:fixed; bottom:0; left:50%; transform:translateX(-50%); background:white; padding:16px 22px; border-radius:16px 16px 0 0; box-shadow:0 -6px 18px rgba(0,0,0,0.25); display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between; align-items:center; z-index:999; }
-    .cookie-popup p{ margin:0; font-size:14px; }
-    .cookie-popup button{ padding:8px 12px; border-radius:999px; border:none; background:var(--accent-1); color:white; font-weight:900; cursor:pointer; }
-
-    /* Demo Section */
-    .demo-section{ display:flex; flex-direction:column; gap:12px; }
-    .demo-card{ border:2px dashed black; border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:6px; }
-    .demo-actions{ display:flex; gap:8px; flex-wrap:wrap; }
-    .demo-actions button{ padding:8px 12px; border-radius:999px; font-weight:900; border:none; cursor:pointer; background:linear-gradient(90deg,var(--accent-3),var(--accent-4)); color:white; }
-
-    /* Admin Panel */
-    .admin-panel{ position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; padding:22px; border-radius:18px; box-shadow:0 12px 30px rgba(0,0,0,0.4); z-index:9999; display:none; flex-direction:column; gap:12px; width:420px; max-width:95vw; }
-    .admin-panel input{ padding:10px 12px; border-radius:999px; border:2px solid #111; font-weight:700; }
-    .admin-panel button{ padding:10px 14px; border-radius:999px; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:white; font-weight:900; border:none; cursor:pointer; }
-
-    /* Responsive */
-    @media(max-width:1024px){ .hdr-left, .hdr-right{ width:100%; justify-content:center; } .hdr-center{ width:100%; margin:12px 0; } }
-    @media(max-width:768px){ .why-grid{ grid-template-columns:repeat(2,1fr); } }
-    @media(max-width:480px){ .why-grid{ grid-template-columns:1fr; } }
-
-  </style>
-</head>
+/* ---------- Animations ---------- */
+@keyframes loadAnim { to { width:100%; } }
+</style>
 <body>
 
-  <!-- Loading Screen -->
-  <div id="loading-screen">
-    <h1>&lt;/&gt; Scriptsell</h1>
+<!-- ---------- Loading Screen ---------- -->
+<div id="loading-screen">
+    <h1>Loading Scriptsell...</h1>
+    <div class="loading-step" id="loadingStepText">Initializing...</div>
     <div class="loading-bar"><i></i></div>
-  </div>
+</div>
 
-  <div class="site-wrap hidden-fade">
+<div class="site-wrap">
 
-    <!-- Header -->
-    <header class="main-header">
-      <div class="header-inner">
-        <div class="hdr-left">
-          <input type="text" class="search-input" placeholder="Search Products..." id="search-input">
-          <button class="search-btn" onclick="searchProducts()">Search</button>
-        </div>
-        <div class="hdr-center">
-          <div class="logo-main">&lt;/&gt; Scriptsell</div>
-          <div class="logo-sub">Buy Scripts & Models — Demo Site</div>
-          <nav class="main-nav">
-            <a href="#products">Products</a>
-            <a href="#info">Info</a>
-            <a href="#demo">Demo</a>
-            <a href="#about">About</a>
-          </nav>
-        </div>
-        <div class="hdr-right">
-          <div class="stack-row">
-            <button class="btn-pill btn-accent" onclick="toggleCart()">Cart 🛒</button>
-          </div>
-          <div class="stack-row">
-            <span id="countdown" class="countdown">Loading Timer...</span>
-          </div>
-        </div>
+  <!-- Header -->
+  <header class="main-header">
+    <div class="header-inner">
+      <div class="hdr-left">
+        <input id="searchBox" class="search-input" placeholder="Search Products..." />
+        <button id="searchBtn" class="search-btn">Search</button>
       </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="content">
-      <!-- Products Section -->
-      <section id="products" class="frame">
-        <h2>Available Products</h2>
-        <div class="product-area">
-          <div class="product-left" id="product-list-left">
-            <!-- Product Cards injected by JS -->
-          </div>
-          <div class="product-right" id="product-list-right">
-            <!-- Product Cards injected by JS -->
-          </div>
-        </div>
-        <button class="btn-cta btn-buy-all" onclick="buyAllCart()">Buy All in Cart</button>
-      </section>
-
-      <!-- Why Choose Us -->
-      <section id="why-choose" class="frame">
-        <h2>Why Choose Us</h2>
-        <div class="why-grid">
-          <div class="why-item">Fast Delivery</div>
-          <div class="why-item">Secure Payment</div>
-          <div class="why-item">Reliable Scripts</div>
-          <div class="why-item">24/7 Support</div>
-        </div>
-      </section>
-
-      <!-- About Section -->
-      <section id="about" class="frame about-section">
-        <h2>About Me</h2>
-        <p>Hello! I am a dedicated developer creating demo scripts and models for educational and entertainment purposes. My focus is to provide reliable, bug-free, and easy-to-use products. Every product has been carefully designed to meet the needs of users from beginners to advanced developers.</p>
-      </section>
-
-      <!-- Recommendations -->
-      <section id="recommendations" class="frame recommendations">
-        <h2>Customer Recommendations</h2>
-        <div class="rec-card">
-          <div class="rec-user">JS</div>
-          <div class="rec-content">
-            <strong>John Smith</strong>
-            <p>Great scripts! Easy to implement and well-documented.</p>
-          </div>
-        </div>
-        <div class="rec-card">
-          <div class="rec-user">AM</div>
-          <div class="rec-content">
-            <strong>Amanda M.</strong>
-            <p>Excellent support and very fast delivery. Highly recommended!</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Info Section -->
-      <section id="info" class="frame info-section">
-        <h2>Important Info</h2>
-        <p>This website uses cookies to improve user experience. By continuing to use this site, you agree to our cookie policy. All products are demo scripts and intended for learning purposes.</p>
-        <p>Search system automatically suggests best matching products even if the search term is slightly incorrect.</p>
-      </section>
-
-      <!-- Demo Section -->
-      <section id="demo" class="frame demo-section">
-        <h2>Demo Products</h2>
-        <div id="demo-cards">
-          <!-- JS injected demo cards -->
-        </div>
-      </section>
-
-    </main>
-
-    <!-- Footer -->
-    <footer>
-      <div class="footer-top">
-        <div class="footer-left">
-          <div>&copy; 2025 Scriptsell. All rights reserved.</div>
-          <div>Contact: support@scriptsell.com</div>
-          <div>Phone: +49 123 456 789</div>
-        </div>
-        <div class="footer-right">
-          <div class="social-icon">F</div>
-          <div class="social-icon">T</div>
-          <div class="social-icon">I</div>
-          <div class="social-icon">Y</div>
-        </div>
+      <div class="hdr-center">
+        <div class="logo-main">&lt;/&gt; Scriptsell</div>
+        <div class="logo-sub">Buy Scripts and Models</div>
+        <nav class="main-nav">
+          <a href="index.html">HOME</a>
+          <a href="hot-deals.html">HOT-DEALS</a>
+          <a href="products.html">PRODUCTS</a>
+          <a href="infos.html">INFOS</a>
+          <a href="all-products.html">ALL PRODUCTS</a>
+        </nav>
       </div>
-      <div>Built with ❤️ by Scriptsell Dev Team</div>
-    </footer>
-
-  </div>
-
-  <!-- Toasts -->
-  <div class="toast" id="toast"></div>
-
-  <!-- Cookie Popup -->
-  <div class="cookie-popup" id="cookie-popup">
-    <p>We use cookies to improve your experience.</p>
-    <button onclick="acceptCookies()">Accept</button>
-  </div>
-
-  <!-- Admin Panel -->
-  <div class="admin-panel" id="admin-panel">
-    <h2>Admin Panel</h2>
-    <input type="password" id="admin-password" placeholder="Enter Password">
-    <button onclick="loginAdmin()">Login</button>
-    <div id="admin-controls" style="display:none;">
-      <button onclick="clearCart()">Clear Cart</button>
-      <button onclick="listCart()">List Cart</button>
-      <button onclick="toggleRelease()">Toggle Release</button>
+      <div class="hdr-right">
+        <div class="stack-row"><button id="accountsBtn" class="btn-pill">Accounts</button></div>
+        <div class="stack-row"><button id="cartBtn" class="btn-pill">Cart <span id="cartBubble" style="display:inline-block; margin-left:9px; background:red; color:white; padding:2px 8px; border-radius:999px; font-weight:900;">0</span></button></div>
+        <div class="stack-row"><button id="adminBtn" class="btn-pill btn-accent">Admin</button></div>
+      </div>
     </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="content">
+
+    <!-- Product area -->
+    <section class="product-area">
+      <div class="product-left frame" id="productLeftArea">
+        <div class="product-card">
+          <div class="product-icon">ICON</div>
+          <div class="product-info">
+            <h3>Orbital Strike Cannon</h3>
+            <div class="price">$49.99</div>
+            <ul class="features">
+              <li>Feature 1</li>
+              <li>Feature 2</li>
+              <li>Feature 3</li>
+            </ul>
+            <div class="product-actions">
+              <button class="btn-cta btn-add" onclick="addToCart('Orbital Strike Cannon',49.99)">Add to Cart</button>
+              <button class="btn-cta btn-buy" onclick="buyNow('Orbital Strike Cannon',49.99)">Buy Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-right frame" id="productRightArea">
+        <!-- Recommendations will populate here -->
+      </div>
+    </section>
+
+    <!-- Countdown -->
+    <div class="frame countdown" id="countdownTimer">Loading timer...</div>
+
+    <!-- Why choose us -->
+    <section class="frame why-grid">
+      <div class="why-item">Fast Delivery</div>
+      <div class="why-item">Safe Payment</div>
+      <div class="why-item">Quality Products</div>
+      <div class="why-item">24/7 Support</div>
+    </section>
+
+    <!-- About Me -->
+    <section class="frame about-grid">
+      <h2>About Scriptsell</h2>
+      <p>We provide the best scripts, models, and assets for developers. Our store ensures high quality and secure products.</p>
+    </section>
+
+    <!-- Recommendations -->
+    <section class="frame rec-row" id="recommendationSection">
+      <!-- recommendations generated via JS -->
+    </section>
+
+    <!-- Info Section -->
+    <section class="frame" id="infoSection">
+      <h2>Important Info</h2>
+      <p>All products come with secure licensing. Ensure you read all terms before purchasing. Our anti-hack system protects all accounts and transactions.</p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="sitefoot">
+    <p>&copy; 2025 Scriptsell. All rights reserved.</p>
+    <div class="icons">
+      <img class="icon" src="twitter.png" />
+      <img class="icon" src="facebook.png" />
+      <img class="icon" src="instagram.png" />
+      <img class="icon" src="discord.png" />
+    </div>
+    <p>Contact: support@scriptsell.com | Terms & Conditions | Privacy Policy</p>
+  </footer>
+
+</div>
+
+<!-- Cart Modal -->
+<div class="modal" id="cartModal">
+  <div class="panel">
+    <button class="close" onclick="closeModal('cartModal')">X</button>
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <button class="btn-cta btn-buy" onclick="checkoutCart()">Checkout</button>
   </div>
+</div>
 
-  <script>
-    /* ============================================================
-       Loading Screen Handling
-       ============================================================ */
-    window.addEventListener('load', () => {
-      const loadScreen = document.getElementById('loading-screen');
-      setTimeout(() => { loadScreen.classList.add('hidden-fade'); }, 2200);
-    });
+<!-- Admin Modal -->
+<div class="modal" id="adminModal">
+  <div class="panel">
+    <button class="close" onclick="closeModal('adminModal')">X</button>
+    <h2>Admin Panel Demo</h2>
+    <p>Fully functional demo panel with product management.</p>
+    <button class="btn-cta btn-add" onclick="demoAddProduct()">Add Sample Product</button>
+  </div>
+</div>
 
-    /* ============================================================
-       Countdown Timer
-       ============================================================ */
-    const countdownEl = document.getElementById('countdown');
-    function updateCountdown(){
-      const target = new Date("2026-01-01T00:00:00");
-      const now = new Date();
-      const diff = target-now;
-      if(diff <=0){ countdownEl.textContent="Happy 2026!"; return; }
-      const d = Math.floor(diff/1000/60/60/24);
-      const h = Math.floor(diff/1000/60/60)%24;
-      const m = Math.floor(diff/1000/60)%60;
-      const s = Math.floor(diff/1000)%60;
-      countdownEl.textContent=`${d}d ${h}h ${m}m ${s}s`;
+<script>
+/* ---------- Loading Screen Logic ---------- */
+const loadingSteps=["Loading Website","Loading Products","Loading Cart","Loading Safety Systems","Loading Cookies","Loading Timer"];
+let stepIndex=0;
+const stepText=document.getElementById("loadingStepText");
+const loadingBar=document.querySelector(".loading-bar i");
+
+function runLoadingStep(){
+    if(stepIndex<loadingSteps.length){
+        stepText.textContent=loadingSteps[stepIndex];
+        let progress=0;
+        let duration=Math.random()*1000+500;
+        let interval=duration/100;
+        let anim=setInterval(()=>{
+            progress+=1;
+            loadingBar.style.width=progress+"%";
+            if(progress>=100){
+                clearInterval(anim);
+                stepIndex++;
+                loadingBar.style.width="0%";
+                setTimeout(runLoadingStep,200);
+            }
+        },interval);
+    } else { 
+        document.getElementById("loading-screen").style.display="none";
     }
-    setInterval(updateCountdown,1000);
-    updateCountdown();
+}
+window.onload=()=>{ runLoadingStep(); initTimer(); initProducts(); initRecommendations(); loadCartFromStorage(); };
 
-    /* ============================================================
-       Toast Function
-       ============================================================ */
-    function showToast(msg){
-      const t=document.getElementById('toast');
-      t.textContent=msg;
-      t.classList.add('show');
-      setTimeout(()=>{ t.classList.remove('show'); },3000);
-    }
+/* ---------- Products ---------- */
+let products=[
+  {name:"Orbital Strike Cannon",price:49.99,features:["Feature 1","Feature 2","Feature 3"]},
+  {name:"SkyBot Drone",price:19.99,features:["Fast","Stealth","Camera"]},
+  {name:"Ultimate Hack Tool",price:99.99,features:["Safe","Secure","Reliable"]},
+  {name:"AI Script Pack",price:29.99,features:["Easy","Efficient","Optimized"]},
+  {name:"Pixel Art Pack",price:14.99,features:["High Quality","Colorful","Ready to Use"]}
+];
 
-    /* ============================================================
-       Cookie Handling
-       ============================================================ */
-    const cookiePopup = document.getElementById('cookie-popup');
-    if(localStorage.getItem('cookiesAccepted')) cookiePopup.style.display='none';
-    function acceptCookies(){ localStorage.setItem('cookiesAccepted','true'); cookiePopup.style.display='none'; showToast("Cookies accepted!"); }
-
-    /* ============================================================
-       Product & Cart System
-       ============================================================ */
-    let products = [
-      {id:1,name:"Script A",price:25,desc:"Demo Script A",icon:"A"},
-      {id:2,name:"Script B",price:30,desc:"Demo Script B",icon:"B"},
-      {id:3,name:"Script C",price:50,desc:"Demo Script C",icon:"C"},
-      {id:4,name:"Model X",price:60,desc:"Demo Model X",icon:"X"},
-      {id:5,name:"Model Y",price:80,desc:"Demo Model Y",icon:"Y"},
-      {id:6,name:"Model Z",price:100,desc:"Demo Model Z",icon:"Z"},
-    ];
-    let cart = [];
-
-    function renderProducts(){
-      const left = document.getElementById('product-list-left');
-      const right = document.getElementById('product-list-right');
-      left.innerHTML=''; right.innerHTML='';
-      products.forEach((p,i)=>{
-        const html = document.createElement('div');
-        html.className='product-card';
-        html.innerHTML=`<div class="product-icon">${p.icon}</div>
-        <div class="product-info">
-          <h3>${p.name}</h3>
-          <div class="price">$${p.price}</div>
-          <ul class="features"><li>${p.desc}</li></ul>
-          <div class="product-actions">
-            <button class="btn-cta btn-add" onclick="addToCart(${p.id})">Add to Cart</button>
-            <button class="btn-cta btn-buy" onclick="buyNow(${p.id})">Buy Now</button>
-          </div>
-        </div>`;
-        if(i%2==0) left.appendChild(html); else right.appendChild(html);
-      });
-    }
-    renderProducts();
-
-    function addToCart(id){
-      const prod = products.find(p=>p.id===id);
-      if(!cart.includes(prod)) cart.push(prod);
-      showToast(`${prod.name} added to cart!`);
-    }
-    function buyNow(id){
-      const prod = products.find(p=>p.id===id);
-      showToast(`Purchased ${prod.name} for $${prod.price}!`);
-    }
-    function buyAllCart(){
-      if(cart.length==0){ showToast("Cart is empty!"); return; }
-      let total = cart.reduce((a,c)=>a+c.price,0);
-      showToast(`Purchased all items for $${total}!`);
-      cart=[];
-    }
-    function toggleCart(){ showToast(`Cart contains ${cart.length} item(s).`); }
-
-    /* ============================================================
-       Search System with Suggestions
-       ============================================================ */
-    function searchProducts(){
-      const val = document.getElementById('search-input').value.toLowerCase();
-      if(!val){ showToast("Type something!"); return; }
-      let found = products.filter(p=>p.name.toLowerCase().includes(val));
-      if(found.length==0){
-        // Fuzzy search based on Levenshtein distance
-        found = products.map(p=>({prod:p,dist:levenshtein(val,p.name.toLowerCase())})).sort((a,b)=>a.dist-b.dist).slice(0,3).map(x=>x.prod);
-        showToast(`No exact matches. Showing best ${found.length} matches.`);
-      }
-      document.getElementById('product-list-left').innerHTML='';
-      document.getElementById('product-list-right').innerHTML='';
-      found.forEach((p,i)=>{
-        const html = document.createElement('div');
-        html.className='product-card';
-        html.innerHTML=`<div class="product-icon">${p.icon}</div>
-        <div class="product-info">
-          <h3>${p.name}</h3>
-          <div class="price">$${p.price}</div>
-          <ul class="features"><li>${p.desc}</li></ul>
-          <div class="product-actions">
-            <button class="btn-cta btn-add" onclick="addToCart(${p.id})">Add to Cart</button>
-            <button class="btn-cta btn-buy" onclick="buyNow(${p.id})">Buy Now</button>
-          </div>
-        </div>`;
-        if(i%2==0) document.getElementById('product-list-left').appendChild(html);
-        else document.getElementById('product-list-right').appendChild(html);
-      });
-    }
-
-    function levenshtein(a,b){
-      const dp = Array.from({length:a.length+1},()=>Array(b.length+1).fill(0));
-      for(let i=0;i<=a.length;i++) dp[i][0]=i;
-      for(let j=0;j<=b.length;j++) dp[0][j]=j;
-      for(let i=1;i<=a.length;i++){
-        for(let j=1;j<=b.length;j++){
-          if(a[i-1]===b[j-1]) dp[i][j]=dp[i-1][j-1];
-          else dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+1);
-        }
-      }
-      return dp[a.length][b.length];
-    }
-
-    /* ============================================================
-       Demo Cards
-       ============================================================ */
-    const demoSection = document.getElementById('demo-cards');
+function initProducts(){
+    let leftArea=document.getElementById("productLeftArea");
+    leftArea.innerHTML="";
     products.forEach(p=>{
-      const div = document.createElement('div');
-      div.className='demo-card';
-      div.innerHTML=`<strong>${p.name}</strong><p>${p.desc}</p>
-      <div class="demo-actions">
-        <button onclick="addToCart(${p.id})">Add to Cart</button>
-        <button onclick="buyNow(${p.id})">Buy Now</button>
-      </div>`;
-      demoSection.appendChild(div);
+        let div=document.createElement("div");
+        div.className="product-card";
+        div.innerHTML=`<div class="product-icon">ICON</div>
+        <div class="product-info">
+        <h3>${p.name}</h3>
+        <div class="price">$${p.price}</div>
+        <ul class="features">${p.features.map(f=>"<li>"+f+"</li>").join("")}</ul>
+        <div class="product-actions">
+          <button class="btn-cta btn-add" onclick="addToCart('${p.name}',${p.price})">Add to Cart</button>
+          <button class="btn-cta btn-buy" onclick="buyNow('${p.name}',${p.price})">Buy Now</button>
+        </div>
+        </div>`;
+        leftArea.appendChild(div);
     });
+}
 
-    /* ============================================================
-       Admin Panel
-       ============================================================ */
-    const adminPanel = document.getElementById('admin-panel');
-    const adminControls = document.getElementById('admin-controls');
-    function loginAdmin(){
-      const val = document.getElementById('admin-password').value;
-      if(val==='admin123'){ adminControls.style.display='flex'; showToast("Admin logged in!"); }
-      else showToast("Wrong password!");
+/* ---------- Cart ---------- */
+let cart=[];
+function addToCart(name,price){
+    cart.push({name,price});
+    saveCart();
+    updateCartUI();
+}
+function buyNow(name,price){ alert("Purchased "+name+" for $"+price.toFixed(2)); }
+function updateCartUI(){
+    let bubble=document.getElementById("cartBubble");
+    bubble.textContent=cart.length;
+    let items=document.getElementById("cartItems");
+    items.innerHTML="";
+    cart.forEach((item,i)=>{
+        let div=document.createElement("div");
+        div.innerHTML=`${item.name} - $${item.price.toFixed(2)} <button onclick="removeCartItem(${i})">Remove</button>`;
+        items.appendChild(div);
+    });
+}
+function removeCartItem(index){ cart.splice(index,1); saveCart(); updateCartUI(); }
+function checkoutCart(){ alert("Checked out "+cart.length+" items!"); cart=[]; saveCart(); updateCartUI(); }
+function saveCart(){ localStorage.setItem("scriptsellCart",JSON.stringify(cart)); }
+function loadCartFromStorage(){ let stored=localStorage.getItem("scriptsellCart"); if(stored){ cart=JSON.parse(stored); updateCartUI(); } }
+
+/* ---------- Recommendations ---------- */
+function initRecommendations(){
+    let recSec=document.getElementById("recommendationSection");
+    products.forEach(p=>{
+        let div=document.createElement("div");
+        div.textContent=p.name+" - $"+p.price.toFixed(2);
+        recSec.appendChild(div);
+    });
+}
+
+/* ---------- Search ---------- */
+document.getElementById("searchBtn").onclick=()=>{ runSearch(); }
+function runSearch(){
+    let query=document.getElementById("searchBox").value.toLowerCase();
+    let results=products.filter(p=>p.name.toLowerCase().includes(query));
+    if(results.length===0){
+        // fuzzy match
+        results=products.filter(p=>{
+            return p.name.toLowerCase().split(" ").some(w=>w.includes(query[0]||""));
+        });
     }
-    function clearCart(){ cart=[]; showToast("Cart cleared!"); }
-    function listCart(){ showToast(`Cart: ${cart.map(p=>p.name).join(', ')}`); }
-    function toggleRelease(){ showToast("Demo release toggled!"); }
+    if(results.length===0) alert("No results found!"); 
+    else alert("Results: "+results.map(r=>r.name).join(", "));
+}
 
-  </script>
+/* ---------- Admin Panel ---------- */
+document.getElementById("adminBtn").onclick=()=>{ openModal("adminModal"); }
+function demoAddProduct(){ let n=prompt("Enter Product Name"); let p=parseFloat(prompt("Enter Price")); if(n && p){ products.push({name:n,price:p,features:[]}); initProducts(); initRecommendations(); alert("Product added!"); }}
+
+/* ---------- Modals ---------- */
+function openModal(id){ document.getElementById(id).style.display="flex"; }
+function closeModal(id){ document.getElementById(id).style.display="none"; }
+
+/* ---------- Countdown Timer ---------- */
+function initTimer(){
+    const timerEl=document.getElementById("countdownTimer");
+    const target=new Date("Jan 1, 2026 00:00:00").getTime();
+    function tick(){
+        const now=new Date().getTime();
+        let diff=target-now;
+        if(diff<0){ timerEl.textContent="🎉 Happy New Year 2026! 🎉"; return; }
+        let days=Math.floor(diff/(1000*60*60*24));
+        let hours=Math.floor(diff/(1000*60*60)%24);
+        let mins=Math.floor(diff/(1000*60)%60);
+        let secs=Math.floor(diff/1000%60);
+        timerEl.textContent=`Countdown: ${days}d ${hours}h ${mins}m ${secs}s`;
+        requestAnimationFrame(tick);
+    }
+    tick();
+}
+
+/* ---------- Cookies ---------- */
+if(!localStorage.getItem("scriptsellCookiesAccepted")){
+    if(confirm("This site uses cookies for better experience. Accept?")) localStorage.setItem("scriptsellCookiesAccepted","yes");
+}
+
+/* ---------- Anti-bug/Anti-hack ---------- */
+window.onerror=function(msg,url,line,col,error){ console.warn("Error caught:",msg,url,line,col,error); return true; }
+window.addEventListener("contextmenu",e=>{ e.preventDefault(); alert("Right-click disabled!"); });
+document.addEventListener("keydown",e=>{ if(e.key==="F12") e.preventDefault(); });
+
+</script>
 
 </body>
 </html>
