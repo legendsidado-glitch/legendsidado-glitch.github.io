@@ -1,421 +1,730 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>&lt;/&gt; Scriptsell — Buy Scripts & Models</title>
+
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
 <!-- Favicon -->
 <link rel="icon" href="favicon.png" type="image/png">
+
 <style>
-/* ---------- Base & texture ---------- */
+/* ------------------- Base & body ------------------- */
 :root{
   --accent-1:#0072ff;
   --accent-2:#00c6ff;
   --muted:#e3e3e3;
   --paper:#ffffff;
   --card:#fbfdff;
+  --scroll-arrow:#0072ff;
 }
-html,body{height:100%;margin:0;font-family: "Nunito", Arial, sans-serif;position:relative;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;color:#111;overflow-x:hidden;}
-body{
-  background: repeating-linear-gradient(135deg, #f0f0f0 0 20px, #e3e3e3 20px 40px);
-  background-size:80px 80px;
-  animation: moveBG 60s linear infinite;
-}
-@keyframes moveBG{0%{background-position:0 0;}100%{background-position:800px 800px;}}
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background-image:url('data:image/svg+xml;utf8,\
-<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80">\
-<path d="M0 20 Q20 0 40 20 T80 20 V80 H0 Z" fill="rgba(227,227,227,0.45)"/>\
-</svg>');
-  background-repeat:repeat;
-  pointer-events:none;
-  z-index:0;
-  opacity:1;
-}
-/* ---------- Advanced Loading Screen ---------- */
+html,body{height:100%; margin:0; font-family:"Nunito",Arial,sans-serif; background:#f0f0f0; overflow-x:hidden; color:#111; scroll-behavior:smooth;}
+body::-webkit-scrollbar{width:16px;}
+body::-webkit-scrollbar-track{background:#e3e3e3;}
+body::-webkit-scrollbar-thumb{background:linear-gradient(180deg,var(--accent-1),var(--accent-2)); border-radius:8px; position:relative;}
+body::-webkit-scrollbar-thumb::before{content:'⇵'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); color:white; font-weight:bold; font-size:12px;}
+
+/* ------------------- Loading screen ------------------- */
 #loading-screen{
-  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-  background:#0b1220; color:#dff3ff; z-index:99999; flex-direction:column; overflow:hidden;
+  position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background:linear-gradient(135deg,#0b1220,#1a1f38); color:#dff3ff; z-index:9999; font-family:"Luckiest Guy",cursive; overflow:hidden;
 }
-#loading-screen h1{ font-family: "Luckiest Guy", cursive; font-size:36px; margin:0; text-align:center;}
-#loading-screen .loading-step{margin-top:12px; font-weight:900; color:white; font-size:18px;}
-#loading-screen .loading-bar{width:320px;height:12px;background:#1f2937;border-radius:12px;overflow:hidden;margin-top:18px;box-shadow:0 6px 18px rgba(0,0,0,0.5);}
-#loading-screen .loading-bar > i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent-1),var(--accent-2));border-radius:12px;}
-#loading-screen .fade-white{position:absolute;inset:0;background:white;opacity:0;pointer-events:none;transition:opacity 1.2s;}
-.hidden-fade{opacity:0;transition:opacity .5s ease;pointer-events:none;}
-/* ---------- Site Layout ---------- */
-.site-wrap{position:relative;z-index:5;min-height:100vh;display:flex;flex-direction:column;}
+#loading-screen h1{ font-size:28px; margin-bottom:24px; text-align:center; }
+.loading-bar{
+  width:320px; height:16px; background:#1f2937; border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.5);
+}
+.loading-bar > i{
+  display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); border-radius:12px;
+}
+
+/* Animated background shapes */
+.loading-bg{position:absolute; inset:0; overflow:hidden;}
+.loading-bg div{
+  position:absolute; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,0.05);
+  animation:moveBg 6s infinite linear;
+}
+@keyframes moveBg{
+  0%{transform:translate(0,0) rotate(0deg);}
+  25%{transform:translate(200px,100px) rotate(90deg);}
+  50%{transform:translate(-150px,200px) rotate(180deg);}
+  75%{transform:translate(100px,-150px) rotate(270deg);}
+  100%{transform:translate(0,0) rotate(360deg);}
+}
+
+/* ------------------- Header ------------------- */
 header.main-header{
   background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
-  padding:18px 22px;
-  color:white;
-  border-bottom-left-radius:22px;
-  border-bottom-right-radius:22px;
-  position:relative;
-  z-index:10;
-  box-shadow: 0 6px 20px rgba(2,6,23,0.08);
+  padding:18px 22px; color:white; border-bottom-left-radius:22px; border-bottom-right-radius:22px;
+  position:relative; z-index:10; box-shadow:0 6px 20px rgba(2,6,23,0.08);
 }
-.header-inner{ max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
-.hdr-left{ width:22%; display:flex; gap:8px; align-items:center; }
-.search-input{ width:100%; padding:10px 12px; border-radius:999px; border:2px solid rgba(255,255,255,0.9); font-weight:700; }
-.search-btn{ padding:10px 14px; border-radius:999px; background:rgba(255,255,255,0.12); color:white; border:2px solid rgba(255,255,255,0.12); cursor:pointer; font-weight:800; }
-.hdr-center{ width:56%; text-align:center; }
-.logo-main{ font-family:"Luckiest Guy", cursive; font-size:34px; line-height:1; margin-bottom:6px; }
-.logo-sub{ font-size:14px; font-weight:800; opacity:0.95; margin-bottom:10px; }
-.main-nav{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
-.main-nav a{ padding:8px 14px; border-radius:999px; background:white; color:var(--accent-1); font-weight:900; text-decoration:none; box-shadow:0 6px 18px rgba(0,0,0,0.08); font-family:"Luckiest Guy", cursive; font-size:14px; }
-.hdr-right{ width:22%; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
-.stack-row{ display:flex; gap:8px; align-items:center; }
-.btn-pill{ padding:8px 12px; border-radius:999px; border:2px solid black; font-weight:900; cursor:pointer; background:white; color:#111; box-shadow:0 6px 12px rgba(0,0,0,0.08); }
-.btn-accent{ background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:white; border:2px solid rgba(0,0,0,0.12); }
-/* ---------- Main content ---------- */
-main.content{ max-width:1200px; margin:28px auto; padding:0 18px; z-index:5; }
-.frame{ background:var(--card); border-radius:16px; padding:18px; border:3px dashed black; margin-bottom:18px; box-shadow:0 8px 30px rgba(0,0,0,0.06); }
-.product-area{ display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; }
-.product-left{ flex:1 1 420px; min-width:300px; }
-.product-right{ flex:1 1 420px; min-width:300px; }
-.product-card{ display:flex; gap:16px; align-items:flex-start; padding:12px; border-radius:12px; background:linear-gradient(180deg,#fff,#f8fbff); border:2px solid rgba(0,0,0,0.06);}
-.product-icon{ width:160px; height:160px; border-radius:12px; background:#111; color:white; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px; border:3px dashed black; }
-.product-info h3{ margin:0 0 6px 0; font-size:20px; }
-.price{ color:#0a7d49; font-weight:900; font-size:26px; margin:6px 0; }
-.features{ margin:8px 0 12px 0; }
-.features li{ margin:6px 0; }
-.product-actions{ display:flex; gap:10px; margin-top:8px; }
-.btn-cta{ padding:10px 16px; border-radius:10px; font-weight:900; border:none; cursor:pointer; }
-.btn-add{ background:linear-gradient(90deg,#2bb673,#16a34a); color:white; }
-.btn-buy{ background:linear-gradient(90deg,#0f6db8,#0066ff); color:white; }
-.btn-disabled{ background:#999; color:#eee; cursor:not-allowed; }
-.countdown{ font-weight:900; color:#b91c1c; margin-top:8px; }
-/* Why choose us grid */
-.why-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:12px; }
-.why-item{ background:#ff6b6b33; padding:12px; border-radius:10px; text-align:center; font-weight:900; }
-/* About/Infos layout */
-.about-grid{ display:grid; grid-template-columns:1fr; gap:12px; }
-/* recommendations */
-.rec-row{ display:flex; gap:12px; flex-wrap:wrap; }
-/* footer */
-footer.sitefoot{ margin-top:auto; background:#111827; color:white; padding:22px 0; text-align:center; }
-footer .icons{ display:flex; justify-content:center; gap:12px; margin-top:8px; }
-footer img.icon{ width:28px; height:28px; filter:brightness(10) invert(1); }
-/* modal (generic) */
-.modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; padding:18px; }
-.modal .panel{ background:white; border-radius:12px; padding:16px; width:100%; max-width:520px; border:3px dashed black; box-shadow:0 12px 40px rgba(0,0,0,0.2); }
-.modal .close{ background:#ef4444; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
-/* small screens */
-@media (max-width:880px){
-.header-inner{ flex-direction:column; gap:12px; align-items:stretch; }
-.hdr-left,.hdr-right,.hdr-center{ width:100%; text-align:center; }
-.product-area{ flex-direction:column; }
-.why-grid{ grid-template-columns:1fr 1fr; }
+.header-inner{max-width:1200px;margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px;}
+.hdr-left{width:22%; display:flex; gap:8px; align-items:center;}
+.search-input{width:100%; padding:10px 12px; border-radius:999px; border:2px solid rgba(255,255,255,0.9); font-weight:700;}
+.search-btn{padding:10px 14px; border-radius:999px; background:rgba(255,255,255,0.12); color:white; border:2px solid rgba(255,255,255,0.12); cursor:pointer; font-weight:800; transition:0.3s;}
+.search-btn:hover{background:rgba(255,255,255,0.25);}
+.hdr-center{width:56%; text-align:center;}
+.logo-main{font-family:"Luckiest Guy",cursive; font-size:34px; line-height:1; margin-bottom:6px;}
+.logo-sub{font-size:14px; font-weight:800; opacity:0.95; margin-bottom:10px;}
+.main-nav{display:flex; justify-content:center; gap:12px; flex-wrap:wrap;}
+.main-nav a{padding:8px 14px; border-radius:999px; background:white; color:var(--accent-1); font-weight:900; text-decoration:none; box-shadow:0 6px 18px rgba(0,0,0,0.08); font-family:"Luckiest Guy",cursive; font-size:14px; transition:0.3s;}
+.main-nav a:hover{transform:scale(1.1);}
+
+/* HDR RIGHT */
+.hdr-right{width:22%; display:flex; flex-direction:column; align-items:flex-end; gap:8px;}
+.stack-row{display:flex; gap:8px; align-items:center;}
+.btn-pill{padding:8px 12px; border-radius:999px; border:2px solid black; font-weight:900; cursor:pointer; background:white; color:#111; box-shadow:0 6px 12px rgba(0,0,0,0.08); transition:0.3s;}
+.btn-pill:hover{transform:translateY(-3px);}
+.btn-accent{background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:white; border:2px solid rgba(0,0,0,0.12);}
+
+/* ------------------- Main content ------------------- */
+main.content{max-width:1200px; margin:28px auto; padding:0 18px; display:flex; flex-direction:column; gap:18px; z-index:5;}
+
+/* Frames */
+.frame{background:var(--card); border-radius:16px; padding:18px; border:2px dashed black; box-shadow:0 8px 30px rgba(0,0,0,0.06);}
+
+/* Product area */
+.product-area{display:flex; gap:18px; flex-wrap:wrap;}
+.product-left{flex:1 1 420px; min-width:300px;}
+.product-right{flex:1 1 420px; min-width:300px;}
+.product-card{display:flex; gap:16px; align-items:flex-start; padding:12px; border-radius:12px; background:linear-gradient(180deg,#fff,#f8fbff); border:2px solid rgba(0,0,0,0.06);}
+.product-icon{width:160px; height:160px; border-radius:12px; background:#111; color:white; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px; border:3px dashed black;}
+.product-info h3{margin:0 0 6px 0; font-size:20px;}
+.price{color:#0a7d49; font-weight:900; font-size:26px; margin:6px 0;}
+.features{margin:8px 0 12px 0;}
+.features li{margin:6px 0;}
+.product-actions{display:flex; gap:10px; margin-top:8px;}
+.btn-cta{padding:10px 16px; border-radius:10px; font-weight:900; border:none; cursor:pointer; transition:0.3s;}
+.btn-add{background:linear-gradient(90deg,#2bb673
+,#00c6ff); color:white;}
+.btn-add:hover{transform:scale(1.05);}
+.btn-remove{background:#ff4c4c; color:white;}
+.btn-remove:hover{transform:scale(1.05);}
+
+/* ------------------- Cart ------------------- */
+#cart{position:fixed; top:80px; right:20px; width:320px; max-height:80%; overflow-y:auto; background:var(--card); border-radius:16px; padding:18px; box-shadow:0 8px 30px rgba(0,0,0,0.1); display:flex; flex-direction:column; gap:12px; z-index:999;}
+.cart-header{display:flex; justify-content:space-between; align-items:center; font-weight:900; font-size:18px;}
+.cart-items{display:flex; flex-direction:column; gap:10px;}
+.cart-item{display:flex; justify-content:space-between; align-items:center; padding:8px; border-radius:12px; background:#f0f4ff; border:2px solid rgba(0,0,0,0.05);}
+.cart-item-name{font-weight:700;}
+.cart-item-price{font-weight:900; color:#0a7d49;}
+.checkout-btn{padding:10px 16px; border-radius:12px; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:white; font-weight:900; cursor:pointer; transition:0.3s;}
+.checkout-btn:hover{transform:scale(1.05);}
+
+/* ------------------- Countdown ------------------- */
+.countdown{display:flex; gap:6px; font-weight:900; font-size:18px; color:#111; margin:12px 0;}
+.countdown div{background:#f8faff; border-radius:6px; padding:6px 10px; border:2px solid rgba(0,0,0,0.06);}
+
+/* ------------------- Why Us Section ------------------- */
+.why-us{display:flex; flex-direction:column; gap:14px; padding:24px; background:linear-gradient(135deg,#00c6ff,#0072ff); border-radius:22px; color:white; text-align:center;}
+.why-us h2{font-family:"Luckiest Guy",cursive; font-size:28px; margin-bottom:12px;}
+.why-us-items{display:flex; flex-wrap:wrap; gap:16px; justify-content:center;}
+.why-us-item{flex:1 1 200px; background:rgba(255,255,255,0.12); padding:16px; border-radius:14px; box-shadow:0 6px 20px rgba(0,0,0,0.06); transition:0.3s;}
+.why-us-item:hover{transform:translateY(-4px);}
+
+/* ------------------- Admin Frame ------------------- */
+#admin-frame{position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--card); padding:24px; border-radius:18px; box-shadow:0 10px 40px rgba(0,0,0,0.2); z-index:9999; display:none; flex-direction:column; gap:14px; max-width:420px; width:95%;}
+.admin-title{font-weight:900; font-size:22px; margin-bottom:12px; text-align:center;}
+.admin-input{padding:10px 12px; border-radius:12px; border:2px solid rgba(0,0,0,0.12); font-weight:700;}
+.admin-btn{padding:10px 16px; border-radius:12px; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:white; font-weight:900; cursor:pointer; transition:0.3s;}
+.admin-btn:hover{transform:scale(1.05);}
+
+/* ------------------- Footer ------------------- */
+footer.main-footer{padding:28px; background:#1f1f1f; color:white; display:flex; flex-direction:column; gap:16px; border-top-left-radius:22px; border-top-right-radius:22px;}
+footer .footer-top{display:flex; justify-content:space-between; flex-wrap:wrap;}
+footer .footer-section{flex:1 1 220px; display:flex; flex-direction:column; gap:8px;}
+footer h4{font-weight:900; font-size:18px; margin-bottom:6px;}
+footer a{color:white; text-decoration:none; transition:0.3s;}
+footer a:hover{text-decoration:underline;}
+footer .social-icons{display:flex; gap:12px;}
+footer .social-icons a{width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); border-radius:50%; color:white; font-weight:900; transition:0.3s;}
+footer .social-icons a:hover{transform:scale(1.1);}
+
+/* ------------------- Animations ------------------- */
+@keyframes blinkText{
+  0%,50%,100%{opacity:1;}
+  25%,75%{opacity:0.3;}
 }
 </style>
 </head>
+
 <body>
-<!-- ---------- Loading ---------- -->
+
+<!-- ------------------- Loading Screen ------------------- -->
 <div id="loading-screen">
-<h1>Loading Scriptsell</h1>
-<div class="loading-step" id="loading-step-text">Loading Website...</div>
-<div class="loading-bar"><i></i></div>
-<div class="fade-white"></div>
+  <div class="loading-bg">
+    <div style="top:10%;left:15%;"></div>
+    <div style="top:40%;left:65%;"></div>
+    <div style="top:70%;left:30%;"></div>
+    <div style="top:25%;left:80%;"></div>
+    <div style="top:60%;left:10%;"></div>
+  </div>
+  <h1 id="loading-text">Loading Website</h1>
+  <div class="loading-bar"><i id="loading-bar-inner"></i></div>
 </div>
 
-<div class="site-wrap hidden-fade">
+<!-- ------------------- Header ------------------- -->
 <header class="main-header">
-<div class="header-inner">
-<div class="hdr-left">
-<input type="text" class="search-input" placeholder="Search Products...">
-<button class="search-btn">Search</button>
-</div>
-<div class="hdr-center">
-<div class="logo-main">&lt;/&gt; Scriptsell</div>
-<div class="logo-sub">Scripts & Models Marketplace</div>
-<div class="main-nav">
-<a href="#products">Products</a>
-<a href="#why">Why Choose Us</a>
-<a href="#about">About</a>
-<a href="#rec">Recommendations</a>
-<a href="#info">Info</a>
-</div>
-</div>
-<div class="hdr-right">
-<div class="stack-row">
-<button class="btn-pill btn-accent" id="admin-btn">Admin</button>
-<button class="btn-pill">Cart</button>
-</div>
-<div class="stack-row">
-<div id="countdown-timer" class="countdown">Countdown to 2026: --d --h --m --s</div>
-</div>
-</div>
-</div>
+  <div class="header-inner">
+    <div class="hdr-left">
+      <input class="search-input" type="text" placeholder="Search products..." id="search-field">
+      <button class="search-btn" id="search-btn">Search</button>
+    </div>
+    <div class="hdr-center">
+      <div class="logo-main">Scriptsell</div>
+      <div class="logo-sub">Your Script Marketplace</div>
+      <nav class="main-nav">
+        <a href="index.html">Home</a>
+        <a href="#hot-deals">Hot Deals</a>
+        <a href="#products">Products</a>
+        <a href="#all-products">All Products</a>
+      </nav>
+    </div>
+    <div class="hdr-right">
+      <div class="stack-row">
+        <button class="btn-pill btn-accent" id="cart-toggle">Cart 🛒</button>
+        <button class="btn-pill" id="admin-toggle">Admin</button>
+      </div>
+    </div>
+  </div>
 </header>
+
+<!-- ------------------- Main Content ------------------- -->
 <main class="content">
-<!-- Why choose us -->
-<section id="why" class="frame">
-<h2>Why Choose Us</h2>
-<div class="why-grid">
-<div class="why-item">Fast Delivery</div>
-<div class="why-item">Secure Checkout</div>
-<div class="why-item">Lifetime Updates</div>
-<div class="why-item">24/7 Support</div>
-</div>
-</section>
-<!-- About -->
-<section id="about" class="frame">
-<h2>About Scriptsell</h2>
-<div class="about-grid">
-<p>We provide the best scripts and models for your projects with advanced support and secure checkout.</p>
-<p>Our system ensures safety, lifetime access, and instant product release once purchased.</p>
-</div>
-</section>
-<!-- Products -->
-<section id="products" class="frame">
-<h2>Products</h2>
-<div class="product-area" id="product-list">
-<!-- product cards will be injected dynamically -->
-</div>
-</section>
-<!-- Recommendations -->
-<section id="rec" class="frame">
-<h2>Recommendations</h2>
-<div class="rec-row">
-<div class="why-item">"Awesome marketplace!" - User A</div>
-<div class="why-item">"Fast and secure!" - User B</div>
-<div class="why-item">"Loved the products!" - User C</div>
-</div>
-</section>
-<!-- Info -->
-<section id="info" class="frame">
-<h2>Information</h2>
-<p>All purchases are protected, and our security systems ensure no unauthorized access. Countdown timer must reach 0 before any purchases.</p>
-</section>
+  <!-- Why Us Section -->
+  <section class="why-us">
+    <h2>Why Choose Us</h2>
+    <div class="why-us-items">
+      <div class="why-us-item">Fast Delivery</div>
+      <div class="why-us-item">Secure Payments</div>
+      <div class="why-us-item">Trusted Scripts</div>
+      <div class="why-us-item">24/7 Support</div>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section id="products" class="frame product-area">
+    <div class="product-card">
+      <div class="product-icon">🎮</div>
+      <div class="product-info">
+        <h3>Cool Script 1</h3>
+        <div class="price">$15</div>
+        <ul class="features">
+          <li>Feature A</li>
+          <li>Feature B</li>
+        </ul>
+        <div class="product-actions">
+          <button class="btn-cta btn-add" data-name="Cool Script 1" data-price="15">Add to Cart</button>
+          <button class="btn-cta btn-remove" data-name="Cool Script 1">Remove</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Admin Frame -->
+  <div id="admin-frame">
+    <div class="admin-title">Admin Panel</div>
+    <input type="password" class="admin-input" id="admin-pass" placeholder="Enter password">
+    <button class="admin-btn" id="admin-login">Login</button>
+    <div id="admin-ops" style="display:none; flex-direction:column; gap:12px;">
+      <button class="admin-btn" id="add-product">Add Product</button>
+      <button class="admin-btn" id="edit-product">Edit Product</button>
+      <button class="admin-btn" id="delete-product">Delete Product</button>
+    </div>
+  </div>
+
+  <!-- Cart -->
+  <div id="cart" style="display:none;">
+    <div class="cart-header">Cart</div>
+    <div class="cart-items"></div>
+    <button class="checkout-btn" id="checkout-btn">Checkout</button>
+  </div>
 </main>
-<footer class="sitefoot">
-<p>&copy; 2025 Scriptsell Marketplace. All rights reserved.</p>
-<div class="icons">
-<img src="facebook.svg" class="icon"/>
-<img src="twitter.svg" class="icon"/>
-<img src="instagram.svg" class="icon"/>
-<img src="discord.svg" class="icon"/>
-</div>
+
+<!-- ------------------- Footer ------------------- -->
+<footer class="main-footer">
+  <div class="footer-top">
+    <div class="footer-section">
+      <h4>About Scriptsell</h4>
+      <p>Your marketplace for the best scripts and models. Safe, fast, and reliable.</p>
+    </div>
+    <div class="footer-section">
+      <h4>Links</h4>
+      <a href="index.html">Home</a>
+      <a href="#products">Products</a>
+      <a href="#all-products">All Products</a>
+    </div>
+    <div class="footer-section">
+      <h4>Follow Us</h4>
+      <div class="social-icons">
+        <a href="#">🐦</a>
+        <a href="#">📘</a>
+        <a href="#">📸</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 Scriptsell — All Rights Reserved</p>
+  </div>
 </footer>
 
-<!-- ---------- Modals ---------- -->
-<div class="modal" id="admin-modal">
-<div class="panel">
-<h3>Admin Login</h3>
-<input type="password" id="admin-pass" placeholder="Enter Password" style="width:100%;padding:10px;margin:8px 0;border-radius:8px;border:2px solid #111;">
-<button class="btn-pill btn-accent" id="admin-login-btn">Login</button>
-<button class="close" onclick="closeModal('admin-modal')">Close</button>
-<p id="admin-msg" style="color:red;font-weight:900;margin-top:8px;"></p>
-</div>
-</div>
-
-<div class="modal" id="admin-panel">
-<div class="panel">
-<h3>Admin Panel</h3>
-<button class="btn-pill btn-add" onclick="openAddProduct()">Add Product</button>
-<button class="btn-pill btn-disabled" id="edit-prod-btn">Edit Product</button>
-<button class="btn-pill btn-disabled" id="del-prod-btn">Delete Product</button>
-<button class="close" onclick="closeModal('admin-panel')">Close</button>
-<div id="admin-tools"></div>
-</div>
-</div>
-
-<div class="modal" id="add-prod-modal">
-<div class="panel">
-<h3>Add Product</h3>
-<input type="text" placeholder="Product Name" id="add-prod-name" style="width:100%;padding:10px;margin:6px 0;border-radius:8px;border:2px solid #111;">
-<input type="number" placeholder="Price ($)" id="add-prod-price" style="width:100%;padding:10px;margin:6px 0;border-radius:8px;border:2px solid #111;">
-<input type="datetime-local" id="add-prod-timer" style="width:100%;padding:10px;margin:6px 0;border-radius:8px;border:2px solid #111;">
-<button class="btn-pill btn-accent" onclick="submitAddProduct()">Add</button>
-<button class="close" onclick="closeModal('add-prod-modal')">Close</button>
-</div>
-</div>
-
-<div class="modal" id="edit-prod-modal">
-<div class="panel">
-<h3>Edit Product</h3>
-<select id="edit-prod-select" style="width:100%;padding:10px;margin:6px 0;border-radius:8px;border:2px solid #111;"></select>
-<input type="number" placeholder="New Price" id="edit-prod-price" style="width:100%;padding:10px;margin:6px 0;border-radius:8px;border:2px solid #111;">
-<input type="datetime-local" id="edit-prod-timer" style="width:100%;padding:10px;margin:6px 0;border-radius:8px;border:2px solid #111;">
-<button class="btn-pill btn-accent" onclick="submitEditProduct()">Submit</button>
-<button class="btn-pill btn-disabled" onclick="deleteProdTimer()">Delete Timer</button>
-<button class="close" onclick="closeModal('edit-prod-modal')">Close</button>
-</div>
-</div>
-
-<div class="modal" id="delete-prod-modal">
-<div class="panel">
-<h3>Delete Product</h3>
-<select id="delete-prod-select" style="width:100%;padding:10px;margin:6px 0;border-radius:8px;border:2px solid #111;"></select>
-<button class="btn-pill btn-accent" onclick="submitDeleteProduct()">Delete</button>
-<button class="close" onclick="closeModal('delete-prod-modal')">Close</button>
-</div>
-</div>
-
 <script>
-/* ---------- Loading System ---------- */
-const loadingSteps = ["Loading Website","Loading Products","Loading Cart","Loading Safety Systems","Loading Cookies","Loading Timer"];
+// ------------------- Loading Screen -------------------
+let loadSteps=["Loading Website","Loading Cookies","Loading Products","Loading Cart","Loading Scripts","Loading Payment"];
 let stepIndex=0;
-const stepText = document.getElementById("loading-step-text");
-const loadBar = document.querySelector("#loading-screen .loading-bar i");
-function doLoadingStep(){
-  if(stepIndex>=loadingSteps.length){
+let loadBar=document.getElementById("loading-bar-inner");
+let loadText=document.getElementById("loading-text");
+let progress=0;
+
+let loadingInterval=setInterval(()=>{
+  progress+=Math.random()*2;
+  loadBar.style.width=Math.min(progress,100)+"%";
+  if(progress>=100){
+    clearInterval(loadingInterval);
     document.getElementById("loading-screen").style.display="none";
-    document.querySelector(".site-wrap").classList.remove("hidden-fade");
+  }
+},50);
+
+setInterval(()=>{
+  loadText.innerText=loadSteps[stepIndex];
+  stepIndex=(stepIndex+1)%loadSteps.length;
+},1000);
+
+// ------------------- Cart System -------------------
+const cartBtn=document.getElementById("cart-toggle");
+const cart=document.getElementById("cart");
+const cartItems=document.querySelector(".cart-items");
+const checkoutBtn=document.getElementById("checkout-btn");
+let cartData=[];
+
+cartBtn.addEventListener("click",()=>{cart.style.display=(cart.style.display==="none")?"flex":"none";});
+document.querySelectorAll(".btn-add").forEach(btn=>{
+  btn.addEventListener("click",()=>{cartData.push({name:btn.dataset.name,price:btn.dataset.price}); updateCart();});
+});
+document.querySelectorAll(".btn-remove").forEach(btn=>{
+  btn.addEventListener("click",()=>{cartData=cartData.filter(item=>item.name!==btn.dataset.name); updateCart();});
+});
+
+function updateCart(){
+  cartItems.innerHTML="";
+  cartData.forEach(item=>{
+    const div=document.createElement("div");
+    div.className="cart-item";
+    div.innerHTML=`<span class="cart-item-name">${item.name}</span><span class="cart-item-price">$${item.price}</span>`;
+    cartItems.appendChild(div);
+  });
+}
+
+// ------------------- Admin System -------------------
+const adminToggle=document.getElementById("admin-toggle");
+const adminFrame=document.getElementById("admin-frame");
+const adminLogin=document.getElementById("admin-login");
+const adminOps=document.getElementById("admin-ops");
+let wrongAttempts=0;
+const blockedKey="adminBlocked";
+
+adminToggle.addEventListener("click",()=>{adminFrame.style.display="flex";});
+
+adminLogin.addEventListener("click",()=>{
+  const pass=document.getElementById("admin-pass").value;
+  if(localStorage.getItem(blockedKey) && Date.now()<Number(localStorage.getItem(blockedKey))){
+    alert("You are blocked from entering the admin for 1 day.");
     return;
   }
-  stepText.textContent=loadingSteps[stepIndex];
-  let width=0;
-  let interval = setInterval(()=>{
-    width+=Math.random()*10;
-    if(width>=100){ width=100; clearInterval(interval); stepIndex++; setTimeout(doLoadingStep, 500+Math.random()*1000); }
-    loadBar.style.width=width+"%";
-  },50);
-}
-doLoadingStep();
+  if(pass==="Legend.AymanGaming2024"){
+    adminOps.style.display="flex";
+    alert("Welcome, admin!");
+  }else{
+    wrongAttempts++;
+    if(wrongAttempts>=3){
+      localStorage.setItem(blockedKey,Date.now()+86400000);
+      alert("Blocked for 1 day due to 3 wrong attempts.");
+    }else{
+      alert("Wrong password!");
+    }
+  }
+});
+</script>
+<script>
+// ------------------- Countdown Timer -------------------
+const targetDate=new Date("2026-01-01T00:00:00").getTime();
+const countdownDiv=document.createElement("div");
+countdownDiv.className="countdown";
+document.body.prepend(countdownDiv);
 
-/* ---------- Countdown ---------- */
-const countdownEl=document.getElementById("countdown-timer");
-const targetDate=new Date("2026-01-01T00:00:00Z");
-let countdownFinished=false;
 function updateCountdown(){
-  const now=new Date();
-  let diff=Math.max(0,targetDate-now);
-  const d=Math.floor(diff/1000/60/60/24);
-  const h=Math.floor((diff/1000/60/60)%24);
-  const m=Math.floor((diff/1000/60)%60);
-  const s=Math.floor((diff/1000)%60);
-  countdownEl.textContent=`Countdown to 2026: ${d}d ${h}h ${m}m ${s}s`;
-  countdownFinished=diff<=0;
+  const now=new Date().getTime();
+  const distance=targetDate-now;
+  if(distance<0){
+    countdownDiv.innerHTML="EXPIRED";
+    return;
+  }
+  const days=Math.floor(distance/(1000*60*60*24));
+  const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+  const minutes=Math.floor((distance%(1000*60*60))/(1000*60));
+  const seconds=Math.floor((distance%(1000*60))/1000);
+  countdownDiv.innerHTML=`
+    <div>${days}d</div>
+    <div>${hours}h</div>
+    <div>${minutes}m</div>
+    <div>${seconds}s</div>`;
 }
 setInterval(updateCountdown,1000);
 updateCountdown();
 
-/* ---------- Admin Password System ---------- */
-const adminBtn=document.getElementById("admin-btn");
-const adminModal=document.getElementById("admin-modal");
-const adminPassInput=document.getElementById("admin-pass");
-const adminLoginBtn=document.getElementById("admin-login-btn");
-const adminMsg=document.getElementById("admin-msg");
-const adminPanel=document.getElementById("admin-panel");
-
-const ADMIN_PASSWORD="Legend.AymanGaming2024";
-const BLOCK_KEY="blocked_users";
-let blockedUsers=JSON.parse(localStorage.getItem(BLOCK_KEY)||"{}");
-
-adminBtn.addEventListener("click",()=>{ openModal('admin-modal'); });
-adminLoginBtn.addEventListener("click",()=>{ adminLogin(); });
-
-function adminLogin(){
-  const now = new Date().getTime();
-  const user = "main"; // can enhance with actual user id
-  if(blockedUsers[user] && blockedUsers[user]>now){ adminMsg.textContent="Blocked! Try later."; return;}
-  if(adminPassInput.value===ADMIN_PASSWORD){
-    closeModal("admin-modal");
-    openModal("admin-panel");
-    adminPassInput.value="";
-    adminMsg.textContent="";
-    blockedUsers[user]=null;
-    localStorage.setItem(BLOCK_KEY,JSON.stringify(blockedUsers));
-    refreshAdminProducts();
-  }else{
-    adminMsg.textContent="Wrong Password!";
-    blockedUsers[user] = now + 24*60*60*1000;
-    localStorage.setItem(BLOCK_KEY,JSON.stringify(blockedUsers));
+// ------------------- Cart Purchase Blocked Until Countdown Ends -------------------
+checkoutBtn.addEventListener("click",(e)=>{
+  const now=new Date().getTime();
+  if(now<targetDate){
+    alert("You cannot checkout until the countdown ends!");
+    return;
   }
-}
-function openModal(id){document.getElementById(id).style.display="flex";}
-function closeModal(id){document.getElementById(id).style.display="none";}
+  alert("Purchase successful!");
+  cartData=[];
+  updateCart();
+});
 
-/* ---------- Product System ---------- */
-let products=JSON.parse(localStorage.getItem("products")||"[]");
-const productList=document.getElementById("product-list");
+// ------------------- Product Management -------------------
+let products=[{name:"Cool Script 1",price:15,timer:null}];
+const addBtn=document.getElementById("add-product");
+const editBtn=document.getElementById("edit-product");
+const deleteBtn=document.getElementById("delete-product");
 
 function renderProducts(){
-  productList.innerHTML="";
-  products.forEach((p,i)=>{
-    let card=document.createElement("div");
+  const productArea=document.getElementById("products");
+  productArea.innerHTML="";
+  products.forEach(prod=>{
+    const card=document.createElement("div");
     card.className="product-card";
-    let icon=document.createElement("div"); icon.className="product-icon"; icon.textContent=p.name.charAt(0).toUpperCase();
-    let info=document.createElement("div"); info.className="product-info";
-    let h3=document.createElement("h3"); h3.textContent=p.name;
-    let price=document.createElement("div"); price.className="price"; price.textContent="$"+p.price;
-    let features=document.createElement("ul"); features.className="features";
-    features.innerHTML=p.features?p.features.map(f=>`<li>${f}</li>`).join(""):"";
-    let actions=document.createElement("div"); actions.className="product-actions";
-    let btn=document.createElement("button"); btn.className="btn-cta btn-buy";
-    btn.textContent="Buy";
-    if(!countdownFinished) btn.classList.add("btn-disabled");
-    btn.onclick=()=>{ if(countdownFinished) alert("Purchased "+p.name); else alert("Cannot buy before 2026!"); };
-    actions.appendChild(btn);
-    info.appendChild(h3); info.appendChild(price); info.appendChild(features); info.appendChild(actions);
-    card.appendChild(icon); card.appendChild(info);
-    productList.appendChild(card);
+    card.innerHTML=`
+      <div class="product-icon">🎮</div>
+      <div class="product-info">
+        <h3>${prod.name}</h3>
+        <div class="price">$${prod.price}</div>
+        <ul class="features">
+          <li>Feature A</li>
+          <li>Feature B</li>
+        </ul>
+        <div class="product-actions">
+          <button class="btn-cta btn-add" data-name="${prod.name}" data-price="${prod.price}">Add to Cart</button>
+          <button class="btn-cta btn-remove" data-name="${prod.name}">Remove</button>
+        </div>
+      </div>`;
+    productArea.appendChild(card);
+  });
+  attachCartEvents();
+}
+function attachCartEvents(){
+  document.querySelectorAll(".btn-add").forEach(btn=>{
+    btn.addEventListener("click",()=>{cartData.push({name:btn.dataset.name,price:btn.dataset.price}); updateCart();});
+  });
+  document.querySelectorAll(".btn-remove").forEach(btn=>{
+    btn.addEventListener("click",()=>{cartData=cartData.filter(item=>item.name!==btn.dataset.name); updateCart();});
   });
 }
-renderProducts();
 
-/* ---------- Admin Product Tools ---------- */
-function refreshAdminProducts(){
-  const editSelect=document.getElementById("edit-prod-select");
-  const delSelect=document.getElementById("delete-prod-select");
-  [editSelect,delSelect].forEach(s=>{ s.innerHTML=""; products.forEach((p,i)=>{ let opt=document.createElement("option"); opt.value=i; opt.textContent=p.name; s.appendChild(opt); });});
-  document.getElementById("edit-prod-btn").classList.remove("btn-disabled");
-  document.getElementById("del-prod-btn").classList.remove("btn-disabled");
-}
-function openAddProduct(){ openModal("add-prod-modal"); }
-function submitAddProduct(){
-  const name=document.getElementById("add-prod-name").value.trim();
-  const price=parseFloat(document.getElementById("add-prod-price").value);
-  const timer=document.getElementById("add-prod-timer").value;
-  if(!name||isNaN(price)){alert("Invalid");return;}
-  products.push({name,price,timer:timer||null,features:[]});
-  localStorage.setItem("products",JSON.stringify(products));
-  renderProducts(); closeModal("add-prod-modal"); refreshAdminProducts();
-}
-function submitEditProduct(){
-  const idx=parseInt(document.getElementById("edit-prod-select").value);
-  const price=parseFloat(document.getElementById("edit-prod-price").value);
-  const timer=document.getElementById("edit-prod-timer").value;
-  if(isNaN(price)){alert("Invalid");return;}
-  if(products[idx]){
-    products[idx].price=price;
-    if(timer) products[idx].timer=timer;
-    localStorage.setItem("products",JSON.stringify(products));
-    renderProducts(); closeModal("edit-prod-modal"); refreshAdminProducts();
+addBtn.addEventListener("click",()=>{
+  const name=prompt("Enter product name:");
+  const price=prompt("Enter product price:");
+  const timerInput=prompt("Optional: Release timer in YYYY-MM-DD HH:MM format (leave empty for none)");
+  let timer=null;
+  if(timerInput){
+    timer=new Date(timerInput).getTime();
   }
-}
-function deleteProdTimer(){
-  const idx=parseInt(document.getElementById("edit-prod-select").value);
-  if(products[idx]){ products[idx].timer=null; localStorage.setItem("products",JSON.stringify(products)); renderProducts(); refreshAdminProducts();}
-}
-function submitDeleteProduct(){
-  const idx=parseInt(document.getElementById("delete-prod-select").value);
-  if(products[idx]){ products.splice(idx,1); localStorage.setItem("products",JSON.stringify(products)); renderProducts(); closeModal("delete-prod-modal"); refreshAdminProducts();}
-}
-
-/* ---------- Fuzzy Search ---------- */
-document.querySelector(".search-btn").addEventListener("click",()=>{
-  const query=document.querySelector(".search-input").value.trim().toLowerCase();
-  if(!query) return;
-  const results=products.filter(p=>p.name.toLowerCase().includes(query));
-  if(results.length===0){
-    const closest=products.sort((a,b)=>{
-      const diffA=Math.abs(a.name.length-query.length);
-      const diffB=Math.abs(b.name.length-query.length);
-      return diffA-diffB;
-    }).slice(0,3);
-    alert("No exact matches. Closest: "+closest.map(c=>c.name).join(", "));
-  }else{
-    alert("Found: "+results.map(r=>r.name).join(", "));
-  }
+  products.push({name,price,timer});
+  renderProducts();
 });
+
+editBtn.addEventListener("click",()=>{
+  const name=prompt("Enter the name of the product to edit:");
+  const prod=products.find(p=>p.name===name);
+  if(!prod){alert("Product not found!"); return;}
+  const newPrice=prompt("Enter new price:",prod.price);
+  if(newPrice) prod.price=newPrice;
+  if(prod.timer){
+    const action=prompt("Timer exists. Type 'edit' to change or 'delete' to remove:");
+    if(action==="edit"){
+      const newTimer=prompt("Enter new timer YYYY-MM-DD HH:MM:");
+      if(newTimer) prod.timer=new Date(newTimer).getTime();
+    }else if(action==="delete"){prod.timer=null;}
+  }else{
+    const newTimer=prompt("Optional: Add timer YYYY-MM-DD HH:MM:");
+    if(newTimer) prod.timer=new Date(newTimer).getTime();
+  }
+  renderProducts();
+});
+
+deleteBtn.addEventListener("click",()=>{
+  const name=prompt("Enter product name to delete:");
+  products=products.filter(p=>p.name!==name);
+  renderProducts();
+});
+
+// ------------------- Advanced Background Animation -------------------
+const bgDiv=document.createElement("div");
+bgDiv.style.position="fixed";
+bgDiv.style.top="0";
+bgDiv.style.left="0";
+bgDiv.style.width="100%";
+bgDiv.style.height="100%";
+bgDiv.style.zIndex="-1";
+bgDiv.style.background="linear-gradient(270deg,#ff8c00,#1e3c72,#00c6ff)";
+bgDiv.style.backgroundSize="600% 600%";
+document.body.appendChild(bgDiv);
+
+let bgStep=0;
+setInterval(()=>{
+  bgStep+=0.5;
+  bgDiv.style.backgroundPosition=`${bgStep}% 50%`;
+},50);
+
+// ------------------- Scrollbar Arrow -------------------
+const styleSheet=document.createElement("style");
+styleSheet.innerText=`
+::-webkit-scrollbar {width:12px;}
+::-webkit-scrollbar-track {background:#e0e0e0; border-radius:6px;}
+::-webkit-scrollbar-thumb {background:#0072ff; border-radius:6px; position:relative;}
+::-webkit-scrollbar-thumb::after {content:"↑"; position:absolute; top:2px; left:2px; color:white; font-weight:900; font-size:12px;}
+`;
+document.head.appendChild(styleSheet);
+
+// ------------------- Search with Fuzzy Matching -------------------
+document.getElementById("search-btn").addEventListener("click",()=>{
+  const query=document.getElementById("search-field").value.toLowerCase();
+  if(!query) return;
+  let bestMatch="";
+  let bestScore=0;
+  products.forEach(p=>{
+    let score=0;
+    p.name.toLowerCase().split(" ").forEach(word=>{
+      if(query.includes(word) || word.includes(query)) score++;
+    });
+    if(score>bestScore){bestScore=score; bestMatch=p.name;}
+  });
+  if(bestMatch) alert(`Best match found: ${bestMatch}`);
+  else alert("No product found!");
+});
+
+// ------------------- Fade & Go Up/Down Bar for Loading -------------------
+const fadeDiv=document.createElement("div");
+fadeDiv.style.position="fixed";
+fadeDiv.style.top="0";
+fadeDiv.style.left="0";
+fadeDiv.style.width="100%";
+fadeDiv.style.height="100%";
+fadeDiv.style.background="white";
+fadeDiv.style.opacity="0.5";
+fadeDiv.style.transition="opacity 3s";
+document.body.appendChild(fadeDiv);
+setTimeout(()=>{fadeDiv.style.opacity="0";},2000);
+
+// Initial Render
+renderProducts();
 </script>
-</body>
-</html>
+<script>
+// ------------------- Mega Loading Screen Animation -------------------
+const loadingOverlay=document.createElement("div");
+loadingOverlay.id="loadingOverlay";
+loadingOverlay.style.position="fixed";
+loadingOverlay.style.top="0";
+loadingOverlay.style.left="0";
+loadingOverlay.style.width="100%";
+loadingOverlay.style.height="100%";
+loadingOverlay.style.background="#111";
+loadingOverlay.style.display="flex";
+loadingOverlay.style.alignItems="center";
+loadingOverlay.style.justifyContent="center";
+loadingOverlay.style.flexDirection="column";
+loadingOverlay.style.zIndex="9999";
+document.body.appendChild(loadingOverlay);
+
+const loadText=document.createElement("div");
+loadText.id="loadText";
+loadText.style.color="white";
+loadText.style.fontSize="24px";
+loadText.style.marginBottom="20px";
+loadingOverlay.appendChild(loadText);
+
+const loadBarContainer=document.createElement("div");
+loadBarContainer.style.width="400px";
+loadBarContainer.style.height="20px";
+loadBarContainer.style.background="#333";
+loadBarContainer.style.borderRadius="10px";
+loadBarContainer.style.overflow="hidden";
+loadingOverlay.appendChild(loadBarContainer);
+
+const loadBar=document.createElement("div");
+loadBar.style.height="100%";
+loadBar.style.width="0%";
+loadBar.style.background="#0072ff";
+loadBar.style.transition="width 0.1s linear";
+loadBarContainer.appendChild(loadBar);
+
+const loadingSteps=[
+  "Loading Website",
+  "Loading Cookies",
+  "Loading Products",
+  "Loading Cart",
+  "Loading Scripts",
+  "Loading Payment"
+];
+
+let progress=0;
+let stepIndex=0;
+
+const loadingInterval=setInterval(()=>{
+  if(progress>=100){
+    clearInterval(loadingInterval);
+    loadingOverlay.style.opacity="1";
+    loadingOverlay.style.transition="opacity 1.5s";
+    setTimeout(()=>{loadingOverlay.remove();},1500);
+    return;
+  }
+  progress+=Math.random()*3; // random speed 0.5-1.5s per step
+  if(progress>100) progress=100;
+  loadBar.style.width=progress+"%";
+  if(progress>stepIndex*16){ // roughly 6 steps for 100%
+    loadText.innerText=loadingSteps[stepIndex]||"Finishing...";
+    stepIndex++;
+  }
+},100);
+
+// ------------------- Phone → PC → TV → Console Animation Background -------------------
+const deviceAnimDiv=document.createElement("div");
+deviceAnimDiv.style.position="fixed";
+deviceAnimDiv.style.top="50%";
+deviceAnimDiv.style.left="50%";
+deviceAnimDiv.style.transform="translate(-50%,-50%)";
+deviceAnimDiv.style.width="200px";
+deviceAnimDiv.style.height="200px";
+deviceAnimDiv.style.background="url('https://cdn-icons-png.flaticon.com/512/869/869636.png') no-repeat center/contain";
+deviceAnimDiv.style.zIndex="9998";
+document.body.appendChild(deviceAnimDiv);
+
+const deviceImages=[
+  'https://cdn-icons-png.flaticon.com/512/869/869636.png', // phone
+  'https://cdn-icons-png.flaticon.com/512/414/414974.png', // PC
+  'https://cdn-icons-png.flaticon.com/512/126/126477.png', // TV
+  'https://cdn-icons-png.flaticon.com/512/860/860790.png'  // console
+];
+let deviceStep=0;
+setInterval(()=>{
+  deviceStep=(deviceStep+1)%deviceImages.length;
+  deviceAnimDiv.style.background=`url('${deviceImages[deviceStep]}') no-repeat center/contain`;
+},1200);
+
+// ------------------- Admin Password System -------------------
+const adminPassword="Legend.AymanGaming2024";
+let attempts=JSON.parse(localStorage.getItem("adminAttempts"))||0;
+let blockedUntil=JSON.parse(localStorage.getItem("blockedUntil"))||0;
+
+function requestAdminAccess(){
+  const now=Date.now();
+  if(blockedUntil>now){
+    alert("You are blocked from admin access for 1 day.");
+    return;
+  }
+  const input=prompt("Enter admin password:").replace(/./g,"•");
+  if(input==="•".repeat(adminPassword.length)){
+    // correct password
+    alert("Access granted!");
+    attempts=0;
+    localStorage.setItem("adminAttempts",attempts);
+    showAdminPanel();
+  }else{
+    attempts++;
+    localStorage.setItem("adminAttempts",attempts);
+    if(attempts>=3){
+      blockedUntil=now+24*60*60*1000;
+      localStorage.setItem("blockedUntil",blockedUntil);
+      alert("Too many wrong attempts! Blocked for 1 day.");
+    }else{
+      alert("Wrong password. Attempts left: "+(3-attempts));
+      requestAdminAccess();
+    }
+  }
+}
+
+function showAdminPanel(){
+  const adminDiv=document.createElement("div");
+  adminDiv.id="adminPanel";
+  adminDiv.style.position="fixed";
+  adminDiv.style.top="10%";
+  adminDiv.style.right="10%";
+  adminDiv.style.width="400px";
+  adminDiv.style.height="600px";
+  adminDiv.style.background="#222";
+  adminDiv.style.color="white";
+  adminDiv.style.border="2px solid #0072ff";
+  adminDiv.style.borderRadius="10px";
+  adminDiv.style.padding="20px";
+  adminDiv.style.zIndex="9999";
+  adminDiv.style.overflowY="scroll";
+  adminDiv.innerHTML=`
+    <h2>Admin Panel</h2>
+    <button id="adminAddProduct" class="btn-cta">Add Product</button>
+    <button id="adminEditProduct" class="btn-cta">Edit Product</button>
+    <button id="adminDeleteProduct" class="btn-cta">Delete Product</button>
+    <div id="adminLogs"></div>
+  `;
+  document.body.appendChild(adminDiv);
+
+  document.getElementById("adminAddProduct").addEventListener("click",()=>{addBtn.click();});
+  document.getElementById("adminEditProduct").addEventListener("click",()=>{editBtn.click();});
+  document.getElementById("adminDeleteProduct").addEventListener("click",()=>{deleteBtn.click();});
+}
+
+// ------------------- Anti-Hack / Anti-Bug -------------------
+window.addEventListener("contextmenu",(e)=>{e.preventDefault();});
+window.addEventListener("keydown",(e)=>{if(e.key==="F12"||e.ctrlKey||e.shiftKey)e.preventDefault();});
+document.addEventListener("visibilitychange",()=>{if(document.hidden){console.log("Tab hidden - security check");}});
+
+// ------------------- Footer with Icons & Info -------------------
+const footer=document.createElement("footer");
+footer.style.width="100%";
+footer.style.background="#111";
+footer.style.color="white";
+footer.style.padding="40px";
+footer.style.display="flex";
+footer.style.flexDirection="column";
+footer.style.alignItems="center";
+footer.style.justifyContent="center";
+footer.style.borderTop="2px solid #0072ff";
+footer.innerHTML=`
+  <div style="margin-bottom:20px;font-size:18px;">Contact Us:</div>
+  <div style="display:flex;gap:20px;">
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" style="width:30px;height:30px;"></a>
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" style="width:30px;height:30px;"></a>
+    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733609.png" style="width:30px;height:30px;"></a>
+  </div>
+  <div style="margin-top:20px;">&copy; 2025 LegendSidado Gaming</div>
+`;
+document.body.appendChild(footer);
+
+// ------------------- Smooth Button Animations -------------------
+document.querySelectorAll(".btn-cta").forEach(btn=>{
+  btn.style.transition="0.3s";
+  btn.addEventListener("mouseover",()=>{btn.style.transform="scale(1.1)"; btn.style.background="#00c6ff";});
+  btn.addEventListener("mouseout",()=>{btn.style.transform="scale(1)"; btn.style.background="#0072ff";});
+});
+
+// ------------------- Mouse Direction Indicator -------------------
+const cursorDir=document.createElement("div");
+cursorDir.style.position="fixed";
+cursorDir.style.width="20px";
+cursorDir.style.height="20px";
+cursorDir.style.background="white";
+cursorDir.style.borderRadius="50%";
+cursorDir.style.pointerEvents="none";
+cursorDir.style.zIndex="9999";
+document.body.appendChild(cursorDir);
+
+document.addEventListener("mousemove",(e)=>{
+  cursorDir.style.top=e.clientY-10+"px";
+  cursorDir.style.left=e.clientX-10+"px";
+});
+
+// ------------------- Demo Mode & Fake Buttons Removed -------------------
+document.querySelectorAll(".fake-btn").forEach(btn=>btn.remove());
