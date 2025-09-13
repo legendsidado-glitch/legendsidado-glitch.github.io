@@ -1,180 +1,660 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="Scriptsell.png" type="image/png">
-  <link rel="icon" href="favicon.PNG" type="image/png">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>&lt;/> Scriptsell</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Luckiest+Guy&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/feather-icons"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>&lt;/&gt; Scriptsell — Buy Scripts & Models</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.png" type="image/png">
+
   <style>
-    body { font-family: 'Nunito', sans-serif; font-weight: 800; }
-    .wavy-bg {
-      background-color: #7dd3fc;
-      background-image: radial-gradient(circle at 100% 100%, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px),
-                        radial-gradient(circle at 0 0, transparent 10px, #38bdf8 10px, #38bdf8 11px, transparent 11px);
-      background-size: 40px 40px;
+    /* ---------- Base & texture (curvy zig-zag) ---------- */
+    :root{
+      --accent-1:#0072ff;
+      --accent-2:#00c6ff;
+      --muted:#e3e3e3;
+      --paper:#ffffff;
+      --card:#fbfdff;
     }
-    #loader{position:fixed;inset:0;background:#fff;display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 1s ease;}
-    #loader.fade-out{opacity:0;pointer-events:none;}
-    @keyframes bounceSlow { 0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);} }
-    .animate-bounce-slow { animation: bounceSlow 2s infinite; }
-    @keyframes ripple { 0%{transform:scale(0);opacity:0.5;}100%{transform:scale(4);opacity:0;} }
-    .animate-ripple { animation: ripple 0.6s ease-out; }
-    button:active span { animation: ripple 0.6s ease-out; opacity: 1; }
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family: "Nunito", Arial, sans-serif;
+      background: repeating-linear-gradient(135deg, #f0f0f0 0 20px, #e3e3e3 20px 40px);
+      background-size:80px 80px;
+      position:relative;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      color:#111;
+    }
+    /* svg overlay for curvy effect */
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      background-image:url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80">\
+<path d="M0 20 Q20 0 40 20 T80 20 V80 H0 Z" fill="rgba(227,227,227,0.45)"/>\
+</svg>');
+      background-repeat:repeat;
+      pointer-events:none;
+      z-index:0;
+      opacity:1;
+    }
+
+    /* ---------- Loading screen ---------- */
+    #loading-screen{
+      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+      background:#0b1220; color:#dff3ff; z-index:9999; flex-direction:column;
+    }
+    #loading-screen h1{ font-family: "Luckiest Guy", cursive; font-size:36px; margin:0; }
+    .loading-bar{
+      width:320px; height:12px; background:#1f2937; border-radius:12px; overflow:hidden; margin-top:18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    }
+    .loading-bar > i{
+      display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); border-radius:12px;
+      animation: loadAnim 2s forwards ease;
+    }
+    @keyframes loadAnim { to { width:100%; } }
+
+    /* fade out */
+    .hidden-fade{ opacity:0; transition:opacity .5s ease; pointer-events:none; }
+
+    /* ---------- Layout ---------- */
+    .site-wrap{ position:relative; z-index:5; min-height:100vh; display:flex; flex-direction:column; }
+
+    /* Header with left search, center logo & nav, right vertical stack */
+    header.main-header{
+      background: linear-gradient(90deg,var(--accent-1),var(--accent-2));
+      padding:18px 22px;
+      color:white;
+      border-bottom-left-radius:22px;
+      border-bottom-right-radius:22px;
+      position:relative;
+      z-index:10;
+      box-shadow: 0 6px 20px rgba(2,6,23,0.08);
+    }
+    .header-inner{ max-width:1200px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+
+    /* left search */
+    .hdr-left{ width:22%; display:flex; gap:8px; align-items:center; }
+    .search-input{ width:100%; padding:10px 12px; border-radius:999px; border:2px solid rgba(255,255,255,0.9); font-weight:700; }
+    .search-btn{ padding:10px 14px; border-radius:999px; background:rgba(255,255,255,0.12); color:white; border:2px solid rgba(255,255,255,0.12); cursor:pointer; font-weight:800; }
+
+    /* center */
+    .hdr-center{ width:56%; text-align:center; }
+    .logo-main{ font-family:"Luckiest Guy", cursive; font-size:34px; line-height:1; margin-bottom:6px; }
+    .logo-sub{ font-size:14px; font-weight:800; opacity:0.95; margin-bottom:10px; }
+    /* main nav under center */
+    .main-nav{ display:flex; justify-content:center; gap:12px; flex-wrap:wrap; }
+    .main-nav a{ padding:8px 14px; border-radius:999px; background:white; color:var(--accent-1); font-weight:900; text-decoration:none; box-shadow:0 6px 18px rgba(0,0,0,0.08); font-family:"Luckiest Guy", cursive; font-size:14px; }
+
+    /* right column: vertical stack */
+    .hdr-right{ width:22%; display:flex; flex-direction:column; align-items:flex-end; gap:8px; }
+    .stack-row{ display:flex; gap:8px; align-items:center; }
+    .btn-pill{ padding:8px 12px; border-radius:999px; border:2px solid black; font-weight:900; cursor:pointer; background:white; color:#111; box-shadow:0 6px 12px rgba(0,0,0,0.08); }
+    .btn-accent{ background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); color:white; border:2px solid rgba(0,0,0,0.12); }
+
+    /* subhead - expansion of header */
+    .subhead{ max-width:1200px; margin:12px auto 0; display:flex; justify-content:center; gap:14px; z-index:10; position:relative; }
+    .sub-btn{ padding:10px 18px; border-radius:12px; font-family:"Luckiest Guy", cursive; font-weight:900; color:white; border:2px solid black; box-shadow:0 6px 18px rgba(0,0,0,0.08); text-decoration:none; }
+    .sub-btn.hot{ background:linear-gradient(45deg,#ff6b6b,#ff9a6b); }
+    .sub-btn.home{ background:linear-gradient(45deg,#6bff9a,#2ec98a); }
+    .sub-btn.products{ background:linear-gradient(45deg,#ffd76b,#ffb86b); color:#111; }
+    .sub-btn.infos{ background:linear-gradient(45deg,#6bb0ff,#6b8bff); }
+
+    /* ---------- Main content layout ---------- */
+    main.content{ max-width:1200px; margin:28px auto; padding:0 18px; z-index:5; }
+
+    /* section frames */
+    .frame{
+      background:var(--card);
+      border-radius:16px;
+      padding:18px;
+      border:3px dashed black;
+      margin-bottom:18px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.06);
+    }
+
+    /* two-column product area */
+    .product-area{ display:flex; gap:18px; flex-wrap:wrap; align-items:flex-start; }
+    .product-left{ flex:1 1 420px; min-width:300px; }
+    .product-right{ flex:1 1 420px; min-width:300px; }
+
+    /* product card */
+    .product-card{
+      display:flex; gap:16px; align-items:flex-start; padding:12px;
+      border-radius:12px; background:linear-gradient(180deg,#fff,#f8fbff); border:2px solid rgba(0,0,0,0.06);
+    }
+    .product-icon{
+      width:160px; height:160px; border-radius:12px; background:#111; color:white; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:18px; border:3px dashed black;
+    }
+    .product-info h3{ margin:0 0 6px 0; font-size:20px; }
+    .price{ color:#0a7d49; font-weight:900; font-size:26px; margin:6px 0; }
+
+    .features{ margin:8px 0 12px 0; }
+    .features li{ margin:6px 0; }
+
+    .product-actions{ display:flex; gap:10px; margin-top:8px; }
+    .btn-cta{ padding:10px 16px; border-radius:10px; font-weight:900; border:none; cursor:pointer; }
+    .btn-add{ background:linear-gradient(90deg,#2bb673,#16a34a); color:white; }
+    .btn-buy{ background:linear-gradient(90deg,#0f6db8,#0066ff); color:white; }
+    .btn-disabled{ background:#999; color:#eee; cursor:not-allowed; }
+
+    /* countdown */
+    .countdown{ font-weight:900; color:#b91c1c; margin-top:8px; }
+
+    /* Why choose us grid */
+    .why-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:12px; }
+    .why-item{ background:#ff6b6b33; padding:12px; border-radius:10px; text-align:center; font-weight:900; }
+
+    /* About/Infos layout */
+    .about-grid{ display:grid; grid-template-columns:1fr; gap:12px; }
+
+    /* recommendations */
+    .rec-row{ display:flex; gap:12px; flex-wrap:wrap; }
+
+    /* footer */
+    footer.sitefoot{ margin-top:auto; background:#111827; color:white; padding:22px 0; text-align:center; }
+    footer .icons{ display:flex; justify-content:center; gap:12px; margin-top:8px; }
+    footer img.icon{ width:28px; height:28px; filter:brightness(10) invert(1); }
+
+    /* modal (generic) */
+    .modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:2000; align-items:center; justify-content:center; padding:18px; }
+    .modal .panel{ background:white; border-radius:12px; padding:16px; width:100%; max-width:520px; border:3px dashed black; box-shadow:0 12px 40px rgba(0,0,0,0.2); }
+    .modal .close{ background:#ef4444; color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+    /* small screens */
+    @media (max-width:880px){
+      .header-inner{ flex-direction:column; gap:12px; align-items:stretch; }
+      .hdr-left, .hdr-right, .hdr-center{ width:100%; text-align:center; }
+      .hdr-right{ align-items:center; }
+      .product-area{ flex-direction:column; }
+      .why-grid{ grid-template-columns: repeat(2,1fr); }
+    }
   </style>
 </head>
-<body class="wavy-bg">
+<body>
 
-<!-- Loader -->
-<div id="loader">
-  <h1 class="text-4xl font-black text-sky-500 animate-pulse">&lt;/> Loading...</h1>
-</div>
+  <!-- Loading Screen (2s) -->
+  <div id="loading-screen">
+    <h1>&lt;/&gt; Scriptsell — Loading...</h1>
+    <div class="loading-bar"><i></i></div>
+  </div>
 
-<!-- Main Header -->
-<header class="bg-sky-400 py-6 relative">
-  <div class="container mx-auto flex items-center justify-between text-white">
-    <!-- Left side empty -->
-    <div class="header-left w-1/4"></div>
+  <div class="site-wrap">
 
-    <!-- Center Logo -->
-    <div class="header-center text-center w-1/2">
-      <h1 class="text-4xl font-black tracking-wider text-white">&lt;/&gt; Scriptsell</h1>
-      <p class="text-lg font-bold mt-1">Buy Scripts and Models</p>
-    </div>
+    <!-- Header -->
+    <header class="main-header">
+      <div class="header-inner">
 
-    <!-- Right Side -->
-    <div class="header-right w-1/4 text-right space-y-2">
-      <div class="flex justify-end space-x-2">
-        <a href="all-products.html" class="bg-yellow-400 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-yellow-500">ALL PRODUCTS</a>
-        <button id="cartButton" class="bg-green-500 text-white py-2 px-4 rounded-full font-bold shadow-lg hover:bg-green-600 transition relative">
-          <span id="cartCount" class="absolute -top-1 -right-1 w-5 h-5 flex justify-center items-center text-xs rounded-full bg-white text-black">0</span>
-          Cart
-        </button>
+        <!-- LEFT: Search -->
+        <div class="hdr-left">
+          <input id="searchBox" class="search-input" placeholder="Search Products..." />
+          <button id="searchBtn" class="search-btn">Search</button>
+        </div>
+
+        <!-- CENTER: Logo & Main nav -->
+        <div class="hdr-center">
+          <div class="logo-main">&lt;/&gt; Scriptsell</div>
+          <div class="logo-sub">Buy Scripts and Models</div>
+          <nav class="main-nav" aria-label="Primary">
+            <a class="main-nav-link" href="index.html">HOME</a>
+            <a class="main-nav-link" href="hot-deals.html">HOT-DEALS</a>
+            <a class="main-nav-link" href="products.html">PRODUCTS</a>
+            <a class="main-nav-link" href="infos.html">INFOS</a>
+            <a class="main-nav-link" href="all-products.html">ALL PRODUCTS</a>
+          </nav>
+        </div>
+
+        <!-- RIGHT: accounts / cart / admin vertical -->
+        <div class="hdr-right">
+          <div class="stack-row">
+            <button id="accountsBtn" class="btn-pill">Accounts</button>
+          </div>
+          <div class="stack-row">
+            <button id="cartBtn" class="btn-pill">Cart
+              <span id="cartBubble" style="display:inline-block; margin-left:9px; background:red; color:white; padding:2px 8px; border-radius:999px; font-weight:900;" >0</span>
+            </button>
+          </div>
+          <div class="stack-row">
+            <button id="adminBtn" class="btn-pill btn-accent">Admin</button>
+          </div>
+        </div>
       </div>
-      <div class="mt-2 flex justify-end space-x-2">
-        <a href="#" class="bg-purple-500 text-white py-2 px-6 rounded-full font-bold shadow-lg hover:bg-purple-600 transition">Accounts</a>
-        <a href="#" class="bg-red-500 text-white py-2 px-6 rounded-full font-bold shadow-lg hover:bg-red-600 transition">Admin</a>
+
+      <!-- SUBHEAD (expansion of main header) -->
+      <div class="subhead" role="navigation" aria-label="Secondary">
+        <a class="sub-btn hot" href="hot-deals.html">HOT DEALS</a>
+        <a class="sub-btn home" href="index.html">HOME</a>
+        <a class="sub-btn products" href="products.html">PRODUCTS</a>
+        <a class="sub-btn infos" href="infos.html">INFOS</a>
       </div>
-      <div class="mt-2">
-        <input type="text" id="searchInput" placeholder="Search Products..." class="rounded-full px-4 py-2 w-48 text-black">
-        <button id="searchButton" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full font-bold">Search</button>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+      <!-- ABOUT & PRODUCT AREA -->
+      <section class="frame product-area">
+
+        <!-- PRODUCT LEFT (image/icon) -->
+        <div class="product-left frame" style="padding:14px;">
+          <div class="product-card">
+            <div class="product-icon">ICON</div>
+            <div class="product-info">
+              <h3>Orbital Strike Cannon</h3>
+              <div class="price">€29.99</div>
+              <ul class="features">
+                <li>✔ No Delay</li>
+                <li>✔ 250+ Commands</li>
+                <li>✔ Global Chat</li>
+                <li>✔ Customisable</li>
+                <li>✔ Anti Cheat</li>
+              </ul>
+
+              <div class="countdown" id="countdownText">Releases in ...</div>
+
+              <div class="product-actions">
+                <button id="addToCartBtn" class="btn-cta btn-add">Add to Cart</button>
+                <button id="buyNowBtn" class="btn-cta btn-buy btn-disabled" disabled>Buy Now</button>
+                <button id="detailsBtn" class="btn-cta" style="background:#f3f4f6; border:2px solid #ddd;">Top Product</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- small product description frame -->
+          <div style="margin-top:12px; border:2px dashed black; padding:10px; border-radius:10px; background:#fff;">
+            <strong>Searched Product:</strong>
+            <div style="margin-top:8px;">
+              <div style="display:flex; gap:12px; align-items:center;">
+                <div style="width:72px;height:72px;border:3px dashed black;border-radius:8px;display:flex;align-items:center;justify-content:center;background:#111;color:#fff;font-weight:900;">ICON</div>
+                <div style="flex:1;">
+                  <div style="font-weight:900;">Orbital Strike Cannon</div>
+                  <div style="color:#0a7d49;font-weight:900;">€29.99</div>
+                  <ul style="margin:8px 0 0 18px;">
+                    <li>✔ [Text I Will Add Soon]</li>
+                    <li>✔ [Text I Will Add Soon]</li>
+                    <li>✔ [Text I Will Add Soon]</li>
+                    <li>✔ [Text I Will Add Soon]</li>
+                    <li>✔ [Text I Will Add Soon]</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PRODUCT RIGHT (About / Info / Recs) -->
+        <div class="product-right">
+          <div class="frame">
+            <h3 style="margin-top:0;">About Me…</h3>
+            <p id="aboutText">[Write your about me content here]</p>
+          </div>
+
+          <div class="frame" style="margin-top:12px;">
+            <h3 style="margin-top:0;">Why Choose Us</h3>
+            <div class="why-grid">
+              <div class="why-item">TOP DEALS</div>
+              <div class="why-item">SAFE PRODUCTS</div>
+              <div class="why-item">HIGH QUALITY</div>
+              <div class="why-item">EASY HELP</div>
+            </div>
+          </div>
+
+          <div class="frame" style="margin-top:12px;">
+            <h3 style="margin-top:0;">Recommendations</h3>
+            <div class="rec-row">
+              <div style="flex:1; background:#ffefcf; padding:10px; border-radius:10px;">Email<br><small>Legend.Sidado@gmail.com</small></div>
+              <div style="flex:1; background:#ffefcf; padding:10px; border-radius:10px;">Infos<br><small>Message me by email for help</small></div>
+              <div style="flex:1; background:#ffefcf; padding:10px; border-radius:10px;">Products<br><small>Only tested items go live</small></div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- The Rest (full width) -->
+      <section class="frame">
+        <h3 style="margin-top:0;">More Info</h3>
+        <p><strong>Infos:</strong> Email: <a href="mailto:Legend.Sidado@gmail.com">Legend.Sidado@gmail.com</a></p>
+        <p>More Products Getting Added Soon</p>
+        <p>Shoutout to My Friends And Family Keeping Me Motivated ❤️</p>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="sitefoot">
+      <div>© 2025 Scriptsell</div>
+      <div class="icons" style="margin-top:10px;">
+        <!-- use local icons (place icon files in same folder) or leave as text links -->
+        <a href="#" title="GitHub"><img src="github.png" class="icon" alt="GitHub" /></a>
+        <a href="#" title="Twitter"><img src="twitter.png" class="icon" alt="Twitter" /></a>
+        <a href="mailto:Legend.Sidado@gmail.com" title="Email"><img src="email.png" class="icon" alt="Email" /></a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ---------- Modals & Panels ---------- -->
+  <!-- Cart Panel -->
+  <div id="cartModal" class="modal" aria-hidden="true">
+    <div class="panel">
+      <h3>Your Cart</h3>
+      <div id="cartPanelList" style="min-height:50px; margin:12px 0;"></div>
+      <div style="display:flex; gap:8px; justify-content:flex-end;">
+        <button id="clearCartBtn" class="close" style="background:#f59e0b;">Clear Cart</button>
+        <button onclick="closeModal('cartModal')" class="close">Close</button>
       </div>
     </div>
   </div>
 
-  <!-- Subhead -->
-  <div class="subhead container mx-auto mt-4 flex justify-center space-x-6">
-    <a href="hot-deals.html" class="bg-red-1000 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-red-600 font-Luckiest-Guy">HOT DEALS</a>
-    <a href="index.html" class="bg-green-1000 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-green-600 font-Luckiest-Guy">HOME</a>
-    <a href="products.html" class="bg-yellow-1000 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-yellow-600 font-Luckiest-Guy">PRODUCTS</a>
-    <a href="infos.html" class="bg-blue-1000 text-white py-2 px-6 rounded-full text-lg font-bold shadow-lg transition hover:bg-blue-600 font-Luckiest-Guy">INFOS</a>
+  <!-- Accounts Panel -->
+  <div id="accountsModal" class="modal" aria-hidden="true">
+    <div class="panel">
+      <h3>Accounts</h3>
+      <p>Account panel placeholder — your account tools will appear here.</p>
+      <div style="text-align:right;"><button onclick="closeModal('accountsModal')" class="close">Close</button></div>
+    </div>
   </div>
-</header>
 
- <!-- Why Choose Us Section -->
-  <section id="why-us" class="bg-red-500 text-white rounded-2xl p-6 shadow-2xl mb-12">
-    <h2 class="text-3xl font-black text-center mb-6">WHY CHOOSE US?</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-      <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">TOP DEALS</h3></div>
-      <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">SAFE PRODUCTS</h3></div>
-      <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">HIGH QUALITY</h3></div>
-      <div class="bg-red-400 p-3 rounded-lg"><h3 class="font-bold">EASY HELP</h3></div>
-    </div>
-  </section> 
-
-<!-- Main Content -->
-<main class="container mx-auto px-4 py-10">
-  <!-- About Me -->
-  <section class="mb-12">
-    <h2 class="text-3xl font-black mb-4">About Me…</h2>
-    <p class="text-gray-800 mb-8">[Write your about me content here]</p>
-  </section>
-
-  <!-- Products Frame -->
-  <section id="products-frame" class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl mb-12">
-    <h2 class="text-3xl font-black mb-4">Products</h2>
-    <div class="grid md:grid-cols-2 gap-8">
-      <!-- Product Example -->
-      <div class="bg-gray-100 p-4 rounded-xl shadow-lg">
-        <div class="bg-black h-40 rounded-lg mb-3 flex items-center justify-center text-white font-bold">ICON</div>
-        <h3 class="text-xl font-bold mb-1">Global Admin</h3>
-        <p class="text-green-500 text-lg font-black mb-2">€29.99</p>
-        <ul class="list-disc list-inside mb-2 text-gray-800">
-          <li>No Delay</li>
-          <li>250+ Commands</li>
-          <li>Global Chat</li>
-          <li>Customisable</li>
-          <li>Anti Cheat</li>
-        </ul>
+  <!-- Admin Panel (password required) -->
+  <div id="adminModal" class="modal" aria-hidden="true">
+    <div class="panel">
+      <h3>Admin Login</h3>
+      <p>Enter admin password to access the admin console.</p>
+      <input id="adminPass" type="password" placeholder="Password" style="width:100%; padding:10px; border-radius:8px; border:1px solid #ddd;" />
+      <div style="margin-top:12px; display:flex; gap:8px; justify-content:flex-end;">
+        <button id="adminSubmit" class="btn-pill" style="background:linear-gradient(90deg,#111,#333); color:#fff;">Enter</button>
+        <button onclick="closeModal('adminModal')" class="close">Close</button>
       </div>
-      <!-- Top Product -->
-      <div class="bg-gray-100 p-4 rounded-xl shadow-lg">
-        <div class="bg-black h-40 rounded-lg mb-3 flex items-center justify-center text-white font-bold">TOP</div>
-        <h3 class="text-xl font-bold mb-1">Global Admin</h3>
-        <p class="text-green-500 text-lg font-black mb-2">€29.99</p>
-        <ul class="list-disc list-inside mb-2 text-gray-800">
-          <li>No Delay</li>
-          <li>250+ Commands</li>
-          <li>Global Chat</li>
-          <li>Customisable</li>
-          <li>Anti Cheat</li>
-        </ul>
+
+      <div id="adminConsole" style="margin-top:12px; display:none;">
+        <h4>Admin Console</h4>
+        <textarea id="adminCmd" style="width:100%; min-height:80px; padding:8px; border-radius:8px;"></textarea>
+        <div style="margin-top:8px; text-align:right;">
+          <button id="runAdmin" class="btn-pill" style="background:#0ea5e9;color:white;">Run</button>
+        </div>
+        <pre id="adminOutput" style="background:#111; color:#dff3ff; padding:10px; border-radius:8px; margin-top:8px; display:block; min-height:60px;"></pre>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Cookies popup -->
+  <div id="cookiePopup" style="position:fixed; bottom:18px; left:18px; background:#111; color:white; padding:12px 14px; border-radius:10px; z-index:2500; display:none;">
+    <div style="max-width:300px;">
+      <div style="font-weight:800; margin-bottom:6px;">Cookies</div>
+      <div style="font-size:13px; opacity:0.95; margin-bottom:10px;">We use cookies/localStorage to save your cart and preferences. Accept to continue.</div>
+      <div style="text-align:right;">
+        <button id="cookieAccept" class="btn-pill" style="background:linear-gradient(90deg,#16a34a,#059669); color:white;">Accept</button>
       </div>
     </div>
-  </section>
+  </div>
 
-  <!-- Recommendations Section -->
-  <section id="recommendations" class="space-y-8 mb-12">
-    <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-      <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-      <div><h4 class="font-black text-lg text-gray-800">Email</h4><p class="text-gray-700">Legend.Sidado@gmail.com</p></div>
+  <!-- Tiny checkout modal -->
+  <div id="checkoutModal" class="modal" aria-hidden="true">
+    <div class="panel">
+      <h3>Checkout</h3>
+      <div id="checkoutContent"></div>
+      <div style="text-align:right; margin-top:12px;">
+        <button onclick="closeModal('checkoutModal')" class="close">Close</button>
+      </div>
     </div>
-    <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-      <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-      <div><h4 class="font-black text-lg text-gray-800">Infos</h4><p class="text-gray-700">Just Message Me by Email When u need Help or Tips!</p></div>
-    </div>
-    <div class="bg-amber-300 p-5 rounded-2xl shadow-lg flex items-center space-x-4">
-      <img src="https://placehold.co/80x80/ffffff/333333?text=<\>" class="w-16 h-16 rounded-full border-4 border-white">
-      <div><h4 class="font-black text-lg text-gray-800">Products</h4><p class="text-gray-700">Before Selling We Test them And let People rate them, so only The best comes to sale.</p></div>
-    </div>
-  </section>
-</main>
+  </div>
 
-<!-- Footer -->
-<footer class="text-center py-8 text-white/70">
-  <p>Copyright © 2024 &lt;/> Scriptsell - All Rights Reserved.</p>
-</footer>
+  <!-- ---------- Scripts (behavior) ---------- -->
+  <script>
+    /* ---------- Loading screen hide after 2s ---------- */
+    window.addEventListener('load', () => {
+      setTimeout(()=> {
+        const ls = document.getElementById('loading-screen');
+        ls.classList.add('hidden-fade');
+        setTimeout(()=> ls.style.display='none', 600);
+      }, 2000);
+    });
 
-<!-- Scripts -->
-<script>
-  feather.replace();
-  window.addEventListener("load", () => {
-    setTimeout(() => document.getElementById("loader").classList.add("fade-out"), 1500);
-  });
+    /* ---------- modal open/close ---------- */
+    function openModal(id){
+      document.getElementById(id).style.display = 'flex';
+      document.getElementById(id).setAttribute('aria-hidden','false');
+    }
+    function closeModal(id){
+      document.getElementById(id).style.display = 'none';
+      document.getElementById(id).setAttribute('aria-hidden','true');
+    }
 
-  // Cart Logic
-  const cartButton = document.getElementById('cartButton');
-  let cart = JSON.parse(localStorage.getItem('cartItems')) || [];
-  let cartCount = cart.length;
-  const cartCountEl = document.getElementById('cartCount');
+    // link header buttons to modals
+    document.getElementById('cartBtn').addEventListener('click', ()=> openModal('cartModal'));
+    document.getElementById('accountsBtn').addEventListener('click', ()=> openModal('accountsModal'));
+    document.getElementById('adminBtn').addEventListener('click', ()=> openModal('adminModal'));
 
-  function updateCartBubble() { cartCountEl.textContent = cart.length; }
+    /* ---------- Cart system (localStorage) ---------- */
+    const CART_KEY = 'scriptsell_cart_v1';
+    let cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
 
-  cartButton.addEventListener('click', () => {
-    alert('Cart: ' + (cart.length ? cart.map(i => i.name).join(', ') : 'Empty'));
-  });
+    const cartBubble = document.getElementById('cartBubble');
+    const cartPanelList = document.getElementById('cartPanelList');
+    const addToCartBtn = document.getElementById('addToCartBtn');
+    const clearCartBtn = document.getElementById('clearCartBtn');
 
-  document.getElementById('searchButton').addEventListener('click', () => {
-    const query = document.getElementById('searchInput').value.toLowerCase();
-    alert('Searched for: ' + query);
-  });
+    function saveCart(){
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+      updateCartUI();
+    }
+    function updateCartUI(){
+      cartBubble.innerText = cart.length;
+      // panel list
+      if(cart.length === 0){
+        cartPanelList.innerHTML = '<div style="opacity:0.8;">Your cart is empty.</div>';
+      } else {
+        cartPanelList.innerHTML = '';
+        cart.forEach((it, idx) => {
+          const row = document.createElement('div');
+          row.style.display='flex'; row.style.justifyContent='space-between'; row.style.alignItems='center'; row.style.marginBottom='8px';
+          row.innerHTML = `<div><strong>${it.name}</strong><div style="font-size:13px;color:#444;">€${it.price.toFixed(2)}</div></div>
+            <div style="display:flex;gap:6px">
+              <button data-idx="${idx}" class="removeItem" style="background:#ef4444;color:white;padding:6px 8px;border-radius:8px;border:none;cursor:pointer;">Remove</button>
+            </div>`;
+          cartPanelList.appendChild(row);
+        });
+        // attach remove handlers
+        Array.from(document.querySelectorAll('.removeItem')).forEach(btn => {
+          btn.addEventListener('click', (e)=>{
+            const i = Number(e.currentTarget.getAttribute('data-idx'));
+            cart.splice(i,1);
+            saveCart();
+          });
+        });
+      }
+    }
 
-  updateCartBubble();
-</script>
+    // init cart UI on load
+    updateCartUI();
+
+    // add to cart action
+    addToCartBtn.addEventListener('click', () => {
+      const product = { id:'orbital-001', name:'Orbital Strike Cannon', price:29.99 };
+      cart.push(product);
+      saveCart();
+      // tiny popup confirmation
+      showToast(`${product.name} added to cart`);
+    });
+
+    // clear cart
+    clearCartBtn.addEventListener('click', ()=>{
+      if(confirm('Clear cart?')){
+        cart = [];
+        saveCart();
+      }
+    });
+
+    /* ---------- small toast function ---------- */
+    function showToast(msg, duration=1800){
+      const t = document.createElement('div');
+      t.innerText = msg;
+      t.style.position='fixed';
+      t.style.right='20px';
+      t.style.top='20px';
+      t.style.background='rgba(0,0,0,0.85)';
+      t.style.color='white';
+      t.style.padding='10px 14px';
+      t.style.borderRadius='10px';
+      t.style.zIndex=3000;
+      document.body.appendChild(t);
+      setTimeout(()=> { t.style.transition='opacity .3s'; t.style.opacity='0'; setTimeout(()=> t.remove(),300); }, duration);
+    }
+
+    /* ---------- Search behavior (shows Searched Product modal-like area) ---------- */
+    document.getElementById('searchBtn').addEventListener('click', ()=> {
+      const q = document.getElementById('searchBox').value.trim().toLowerCase();
+      if(!q){ showToast('Type something to search'); return; }
+      // if matches product name (simple demo)
+      if(q.includes('orbital') || q.includes('strike') || q.includes('cannon')){
+        showToast('Found: Orbital Strike Cannon');
+        // scroll product into view
+        document.querySelector('.product-left').scrollIntoView({behavior:'smooth', block:'center'});
+      } else {
+        showToast('No products found');
+      }
+    });
+
+    /* ---------- Countdown timer to Jan 1, 2026 ---------- */
+    (function countdown(){
+      const target = new Date('2026-01-01T00:00:00Z').getTime(); // UTC midnight
+      const el = document.getElementById('countdownText');
+      const buyBtn = document.getElementById('buyNowBtn');
+
+      function update(){
+        const now = Date.now();
+        let diff = target - now;
+        if(diff <= 0){
+          el.innerText = 'Released!';
+          buyBtn.disabled = false;
+          buyBtn.classList.remove('btn-disabled');
+          buyBtn.classList.add('btn-buy');
+          buyBtn.style.cursor = 'pointer';
+          return; // leave it released
+        }
+        const days = Math.floor(diff / (1000*60*60*24));
+        const hrs = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const secs = Math.floor((diff % (1000*60)) / 1000);
+        el.innerText = `Releases in ${days}d ${hrs}h ${mins}m ${secs}s`;
+      }
+      update(); setInterval(update, 1000);
+    })();
+
+    /* ---------- Buy Now behavior (checkout modal) ---------- */
+    document.getElementById('buyNowBtn').addEventListener('click', ()=> {
+      if(document.getElementById('buyNowBtn').disabled) {
+        showToast('Product not released yet');
+        return;
+      }
+      // show checkout modal with product summary
+      const cont = document.getElementById('checkoutContent');
+      cont.innerHTML = `
+        <div style="padding:6px;">
+          <strong>Orbital Strike Cannon</strong><div>€29.99</div>
+          <p style="margin-top:8px;">Proceed to buy now (demo). This is a placeholder for actual payment integration.</p>
+          <div style="text-align:right; margin-top:12px;">
+            <button id="confirmBuy" style="background:linear-gradient(90deg,#0ea5e9,#0369a1); color:white; padding:8px 12px; border-radius:8px; border:none; cursor:pointer;">Confirm</button>
+          </div>
+        </div>
+      `;
+      openModal('checkoutModal');
+
+      document.getElementById('confirmBuy').addEventListener('click', ()=>{
+        // For demo, we just show confirmation and clear cart
+        showToast('Purchase successful! (demo)');
+        // optionally add to cart or perform other actions
+        closeModal('checkoutModal');
+      });
+    });
+
+    /* ---------- Cookies popup ---------- */
+    (function cookieInit(){
+      const key = 'scriptsell_cookies_v1';
+      const popup = document.getElementById('cookiePopup');
+      const accepted = localStorage.getItem(key);
+      if(!accepted){
+        popup.style.display='block';
+      }
+      document.getElementById('cookieAccept').addEventListener('click', ()=>{
+        localStorage.setItem(key, '1');
+        popup.style.display='none';
+      });
+    })();
+
+    /* ---------- Admin panel password (change below to set your password) ---------- */
+    (function adminInit(){
+      const ADMIN_PW = 'scriptselladmin'; // <- change this password if you want
+      const adminSubmit = document.getElementById('adminSubmit');
+      const adminPassInput = document.getElementById('adminPass');
+      const adminConsole = document.getElementById('adminConsole');
+      const adminOutput = document.getElementById('adminOutput');
+      const runAdmin = document.getElementById('runAdmin');
+
+      adminSubmit.addEventListener('click', ()=>{
+        const val = adminPassInput.value;
+        if(val === ADMIN_PW){
+          adminPassInput.value = '';
+          adminConsole.style.display = 'block';
+          adminOutput.innerText = 'Welcome, admin. Enter commands below and click Run.';
+        } else {
+          adminOutput.style.display = 'block';
+          adminOutput.innerText = 'Wrong password.';
+        }
+      });
+
+      runAdmin.addEventListener('click', ()=>{
+        const cmd = document.getElementById('adminCmd').value.trim();
+        if(!cmd){ adminOutput.innerText = 'No command.'; return; }
+        // For safety: only allow a few demo commands
+        if(cmd === 'clear-cart'){
+          cart = [];
+          saveCart();
+          adminOutput.innerText = 'Cart cleared by admin.';
+        } else if(cmd === 'list-cart'){
+          adminOutput.innerText = 'Cart items:\\n' + (cart.length ? cart.map(i=>i.name+' €'+i.price).join('\\n') : 'empty');
+        } else {
+          adminOutput.innerText = 'Unknown command (demo). Allowed: clear-cart, list-cart';
+        }
+      });
+    })();
+
+    /* ---------- Accessibility & small UX ---------- */
+    // close a modal when clicking outside panel
+    document.querySelectorAll('.modal').forEach(mod => {
+      mod.addEventListener('click', (e)=>{
+        if(e.target === mod){
+          mod.style.display='none';
+        }
+      });
+    });
+
+    // prevent page from losing cart UI on load
+    // initial UI update called earlier
+    // ensure bubble shows saved cart count
+    (function restoreCart(){
+      cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+      updateCartUI();
+    })();
+
+    /* ---------- small utility to ensure persistent UI update ---------- */
+    // observe localStorage changes across tabs
+    window.addEventListener('storage', (e) => {
+      if(e.key === CART_KEY){
+        cart = JSON.parse(e.newValue || '[]');
+        updateCartUI();
+      }
+    });
+
+  </script>
 </body>
 </html>
