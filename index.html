@@ -178,7 +178,7 @@
             gap: 15px;
             margin-bottom: 20px;
             z-index: 2;
-            flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+            flex-wrap: wrap;
         }
         .action-btn {
             display: flex;
@@ -351,6 +351,13 @@
             max-width: 1200px;
             padding: 20px;
             z-index: 1;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        main.show {
+            opacity: 1;
+            transform: translateY(0);
         }
         .content-section {
             margin: 40px auto;
@@ -432,6 +439,46 @@
             opacity: 0.8;
             transform: scale(1.05);
         }
+        
+        .product-reviews {
+            margin-top: 15px;
+            text-align: left;
+            font-size: 0.9em;
+        }
+        
+        .star-rating .fa-star {
+            color: #f39c12;
+        }
+        
+        .review-form textarea {
+            width: 100%;
+            height: 80px;
+            padding: 8px;
+            margin-top: 10px;
+            border-radius: 8px;
+            background: #333;
+            color: #fff;
+            border: none;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 10px;
+        }
+        .pagination button {
+            padding: 8px 16px;
+            background: var(--button-gradient);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .pagination button.active {
+            background: #00c6ff;
+        }
 
         /* Footer */
         footer {
@@ -465,7 +512,6 @@
 </head>
 <body>
 
-    <!-- Loading Screen -->
     <div id="loading-screen">
         <canvas id="loading-canvas"></canvas>
         <div class="loading-content">
@@ -477,10 +523,8 @@
         </div>
     </div>
 
-    <!-- Background Canvas -->
     <canvas id="background-canvas"></canvas>
 
-    <!-- Header -->
     <header>
         <h1><span style="color:white; text-shadow: none;">&lt;\&gt; Scriptsell</span></h1>
         <h2>Buy Top Roblox Products</h2>
@@ -494,7 +538,6 @@
         </nav>
     </header>
 
-    <!-- Top Action Buttons with Icons -->
     <div id="top-buttons">
         <a class="action-btn" data-frame="admin-frame"><i class="fas fa-user-shield"></i>Admin</a>
         <a class="action-btn" data-frame="cart-frame"><i class="fas fa-shopping-cart"></i>Cart <div class="cart-bubble" id="cart-count">0</div></a>
@@ -506,24 +549,19 @@
         <a class="action-btn" data-frame="cookies-frame"><i class="fas fa-cookie-bite"></i>Cookies</a>
     </div>
 
-    <!-- Main content sections -->
     <main>
-        <!-- Why Us Section -->
         <section id="why-us" class="content-section">
             <h3>Why Choose Us?</h3>
             <p>At Scriptsell, we provide top-tier Roblox scripts and assets, ensuring you get the highest quality products for your projects. Our commitment is to offer reliable, efficient, and well-supported solutions to help you succeed in the Roblox development community.</p>
         </section>
 
-        <!-- Products Section -->
         <section id="products" class="content-section">
             <h3>Featured Products</h3>
             <div id="product-list" class="product-grid">
-                <!-- Product cards will be generated here by JavaScript -->
-            </div>
+                </div>
         </section>
     </main>
 
-    <!-- Footer -->
     <footer>
         <div class="social-links">
             <a href="#"><i class="fab fa-twitter"></i></a>
@@ -533,7 +571,6 @@
         <p>&copy; 2025 Scriptsell. All rights reserved.</p>
     </footer>
 
-    <!-- Single, Dynamic Custom Frame -->
     <div class="custom-frame" id="dynamic-frame">
         <div class="frame-header">
             <h3 id="frame-title"></h3>
@@ -542,882 +579,1141 @@
         <div class="frame-content" id="frame-content-container"></div>
     </div>
 
-    <!-- Background Music -->
     <audio id="bg-music" loop>
         <source src="good-night-lofi-cozy-chill-music-160166.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // Loading screen logic
-        const loadingText = document.getElementById('loading-text');
-        const loadingBar = document.getElementById('loading-bar');
-        const loadingPercent = document.getElementById('loading-percent');
-        const dynamicFrame = document.getElementById('dynamic-frame');
-        const frameTitle = document.getElementById('frame-title');
-        const frameContentContainer = document.getElementById('frame-content-container');
-        const loadingCanvas = document.getElementById('loading-canvas');
-        const lCtx = loadingCanvas.getContext('2d');
-        const music = document.getElementById('bg-music');
+        // Use an immediately invoked function expression (IIFE) to create a private scope for our application
+        (function() {
 
-        const loadingPoints = [];
-        const pointCount = 100;
+            // ====================================================================================
+            // Global State and Core Utilities
+            // ====================================================================================
 
-        function createLoadingPoints() {
-            loadingCanvas.width = window.innerWidth;
-            loadingCanvas.height = window.innerHeight;
-            for (let i = 0; i < pointCount; i++) {
-                loadingPoints.push({
-                    x: Math.random() * loadingCanvas.width,
-                    y: Math.random() * loadingCanvas.height,
-                    radius: Math.random() * 2 + 1,
-                    dx: (Math.random() - 0.5) * 0.5,
-                    dy: (Math.random() - 0.5) * 0.5,
-                    color: `hsl(${Math.random() * 360}, 100%, 50%)`
-                });
-            }
-        }
+            const AppState = {
+                dynamicFrame: document.getElementById('dynamic-frame'),
+                frameTitle: document.getElementById('frame-title'),
+                frameContentContainer: document.getElementById('frame-content-container'),
+                cartCountEl: document.getElementById('cart-count'),
+                mainContent: document.querySelector('main'),
+                music: document.getElementById('bg-music'),
+                products: JSON.parse(localStorage.getItem('products')) || [
+                    { id: '1', name: 'Infinite Jump', price: 9.99, image: 'https://placehold.co/200x200/222/fff?text=Infinite+Jump', why: 'Jump to new heights in any game!', reviews: [] },
+                    { id: '2', name: 'Speed Boost', price: 14.99, image: 'https://placehold.co/200x200/222/fff?text=Speed+Boost', why: 'Run faster than everyone else.', reviews: [] },
+                    { id: '3', name: 'God Mode', price: 29.99, image: 'https://placehold.co/200x200/222/fff?text=God+Mode', why: 'Become invincible and dominate!', reviews: [] },
+                    { id: '4', name: 'ESP', price: 19.99, image: 'https://placehold.co/200x200/222/fff?text=ESP', why: 'See enemies through walls.', reviews: [] },
+                    { id: '5', name: 'Fly Hack', price: 18.50, image: 'https://placehold.co/200x200/222/fff?text=Fly+Hack', why: 'Soar through the skies and explore.', reviews: [] },
+                    { id: '6', name: 'Auto Farm', price: 22.00, image: 'https://placehold.co/200x200/222/fff?text=Auto+Farm', why: 'Automate repetitive tasks for easy gains.', reviews: [] },
+                    { id: '7', name: 'Aimbot', price: 35.00, image: 'https://placehold.co/200x200/222/fff?text=Aimbot', why: 'Perfect your aim in any shooting game.', reviews: [] },
+                    { id: '8', name: 'Teleport', price: 15.00, image: 'https://placehold.co/200x200/222/fff?text=Teleport', why: 'Instantly move to any location.', reviews: [] },
+                    { id: '9', name: 'Money Script', price: 25.00, image: 'https://placehold.co/200x200/222/fff?text=Money+Script', why: 'Generate in-game currency effortlessly.', reviews: [] },
+                    { id: '10', name: 'Server Crasher', price: 40.00, image: 'https://placehold.co/200x200/222/fff?text=Server+Crasher', why: 'Take down game servers. (Use with caution).', reviews: [] }
+                ],
+                cart: JSON.parse(localStorage.getItem('cart')) || [],
+                users: JSON.parse(localStorage.getItem('users')) || {
+                    'admin@scriptsell.com': { password: 'admin123', rank: 'admin', purchases: [], recommendations: [] }
+                },
+                currentUser: JSON.parse(localStorage.getItem('currentUser')) || null,
+                recommendations: JSON.parse(localStorage.getItem('recommendations')) || [],
+                loginAttempts: JSON.parse(localStorage.getItem('loginAttempts')) || {},
+                MAX_ATTEMPTS: 5,
+                LOCKOUT_TIME: 60 * 1000,
+                PRODUCTS_PER_PAGE: 6
+            };
 
-        function drawLoading() {
-            lCtx.clearRect(0, 0, loadingCanvas.width, loadingCanvas.height);
+            const Utils = {
+                // Utility function to show a custom modal/frame with a message
+                showMessage: function(message, title = 'Notification') {
+                    const messageFrame = document.createElement('div');
+                    messageFrame.className = 'custom-frame show';
+                    messageFrame.innerHTML = `
+                        <div class="frame-header">
+                            <h3>${title}</h3>
+                            <button class="close-btn" onclick="this.parentNode.parentNode.remove()">X</button>
+                        </div>
+                        <div class="frame-content">
+                            <p>${message}</p>
+                        </div>
+                    `;
+                    document.body.appendChild(messageFrame);
+                },
 
-            for (let i = 0; i < loadingPoints.length; i++) {
-                for (let j = i + 1; j < loadingPoints.length; j++) {
-                    const dist = Math.sqrt(Math.pow(loadingPoints[i].x - loadingPoints[j].x, 2) + Math.pow(loadingPoints[i].y - loadingPoints[j].y, 2));
-                    if (dist < 100) {
-                        lCtx.beginPath();
-                        lCtx.moveTo(loadingPoints[i].x, loadingPoints[i].y);
-                        lCtx.lineTo(loadingPoints[j].x, loadingPoints[j].y);
-                        lCtx.strokeStyle = `rgba(0, 198, 255, ${1 - dist / 100})`;
-                        lCtx.stroke();
+                // Utility function to confirm an action
+                confirmAction: function(message, onConfirm) {
+                    const confirmFrame = document.createElement('div');
+                    confirmFrame.className = 'custom-frame show';
+                    confirmFrame.innerHTML = `
+                        <div class="frame-header">
+                            <h3>Confirm</h3>
+                            <button class="close-btn" onclick="this.parentNode.parentNode.remove()">X</button>
+                        </div>
+                        <div class="frame-content">
+                            <p>${message}</p>
+                            <div class="cart-buttons">
+                                <button class="submit-btn" onclick="window.WebsiteManager.handleConfirm(true, '${btoa(onConfirm.toString())}'); this.parentNode.parentNode.parentNode.remove();">Yes</button>
+                                <button class="submit-btn" onclick="window.WebsiteManager.handleConfirm(false); this.parentNode.parentNode.parentNode.remove();">No</button>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(confirmFrame);
+                },
+
+                // Generic handler for the confirmation frame
+                handleConfirm: function(result, callbackStr) {
+                    if (result) {
+                        try {
+                            const callback = atob(callbackStr);
+                            // eval() is used here to execute the passed function string.
+                            // In a real-world scenario, you might use a more secure method
+                            // like a predefined function map.
+                            eval(`(${callback})()`);
+                        } catch (e) {
+                            console.error('Error executing callback:', e);
+                        }
                     }
-                }
-            }
-
-            loadingPoints.forEach(point => {
-                lCtx.beginPath();
-                lCtx.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
-                lCtx.fillStyle = `rgba(0, 198, 255, 0.8)`;
-                lCtx.fill();
-                point.x += point.dx;
-                point.y += point.dy;
-                if (point.x < 0 || point.x > loadingCanvas.width) point.dx *= -1;
-                if (point.y < 0 || point.y > loadingCanvas.height) point.dy *= -1;
-            });
-
-            requestAnimationFrame(drawLoading);
-        }
-
-        createLoadingPoints();
-        drawLoading();
-
-        window.addEventListener('resize', () => {
-            loadingCanvas.width = window.innerWidth;
-            loadingCanvas.height = window.innerHeight;
-            loadingPoints.forEach(point => {
-                point.x = Math.random() * loadingCanvas.width;
-                point.y = Math.random() * loadingCanvas.height;
-            });
-        });
-
-        const texts = [
-            "Loading Scripts",
-            "Loading Products",
-            "Loading Cookies",
-            "Loading Updates",
-            "Loading Cart"
-        ];
-
-        let percent = 0;
-        let textIndex = 0;
-
-        const loadingInterval = setInterval(() => {
-            percent++;
-            loadingBar.style.width = percent + "%";
-            loadingPercent.textContent = percent + "%";
-
-            if (percent % 20 === 0 && textIndex < texts.length) {
-                loadingText.textContent = texts[textIndex];
-                textIndex++;
-            }
-
-            if (percent >= 100) {
-                clearInterval(loadingInterval);
-                document.getElementById('loading-screen').style.opacity = 0;
-                setTimeout(() => {
-                    document.getElementById('loading-screen').style.display = 'none';
-                    initWebsite();
-                }, 500);
-            }
-        }, 30);
-
-        function openFrame(title, content) {
-            frameTitle.textContent = title;
-            frameContentContainer.innerHTML = content;
-            dynamicFrame.classList.add('show');
-        }
-
-        function closeFrame() {
-            dynamicFrame.classList.remove('show');
-        }
-
-        function showMessage(message) {
-            const messageFrame = document.createElement('div');
-            messageFrame.className = 'custom-frame show';
-            messageFrame.innerHTML = `
-                <div class="frame-header">
-                    <h3>Notification</h3>
-                    <button class="close-btn" onclick="this.parentNode.parentNode.remove()">X</button>
-                </div>
-                <div class="frame-content">
-                    <p>${message}</p>
-                </div>
-            `;
-            document.body.appendChild(messageFrame);
-        }
-
-        function confirmAction(message, onConfirm) {
-            const confirmFrame = document.createElement('div');
-            confirmFrame.className = 'custom-frame show';
-            confirmFrame.innerHTML = `
-                <div class="frame-header">
-                    <h3>Confirm</h3>
-                    <button class="close-btn" onclick="this.parentNode.parentNode.remove()">X</button>
-                </div>
-                <div class="frame-content">
-                    <p>${message}</p>
-                    <div class="cart-buttons">
-                        <button class="submit-btn" onclick="window.handleConfirm(true, '${btoa(onConfirm.toString())}'); this.parentNode.parentNode.parentNode.remove();">Yes</button>
-                        <button class="submit-btn" onclick="window.handleConfirm(false); this.parentNode.parentNode.parentNode.remove();">No</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(confirmFrame);
-        }
-
-        window.handleConfirm = (result, callbackStr) => {
-            if (result) {
-                try {
-                    const callback = atob(callbackStr);
-                    eval(`(${callback})()`);
-                } catch (e) {
-                    console.error('Error executing callback:', e);
-                }
-            }
-        };
-
-        // Anti-Hack Logic
-        const loginAttempts = JSON.parse(localStorage.getItem('loginAttempts')) || {};
-        const MAX_ATTEMPTS = 5;
-        const LOCKOUT_TIME = 60 * 1000; // 1 minute
-
-        function checkLoginAttempt(email) {
-            if (!loginAttempts[email]) {
-                loginAttempts[email] = { count: 0, locked: null };
-            }
-            const now = Date.now();
-            if (loginAttempts[email].locked && now < loginAttempts[email].locked) {
-                return false;
-            }
-            loginAttempts[email].count++;
-            if (loginAttempts[email].count >= MAX_ATTEMPTS) {
-                loginAttempts[email].locked = now + LOCKOUT_TIME;
-                loginAttempts[email].count = 0;
-                localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
-                return false;
-            }
-            localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
-            return true;
-        }
-
-        function resetLoginAttempts(email) {
-            if (loginAttempts[email]) {
-                loginAttempts[email].count = 0;
-                loginAttempts[email].locked = null;
-                localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
-            }
-        }
-
-        // All other JS is moved to this function to run after the loading screen
-        function initWebsite() {
-            const savedVolume = localStorage.getItem('musicVolume') || 0.5;
-            music.volume = savedVolume;
-            music.play().catch(e => console.log('Autoplay blocked:', e));
-
-            // Release Timer
-            function updateReleaseTimer() {
-                const releaseDate = new Date('2026-01-01T00:00:00');
-                const now = new Date();
-                const diff = releaseDate - now;
-                if (diff <= 0) {
-                    document.getElementById('release-timer').textContent = "Released!";
-                    return;
-                }
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-                const minutes = Math.floor((diff / (1000 * 60)) % 60);
-                const seconds = Math.floor((diff / 1000) % 60);
-                document.getElementById('release-timer').textContent = `${days}d ${hours}h ${minutes}m ${seconds}s remaining`;
-            }
-            setInterval(updateReleaseTimer, 1000);
-            updateReleaseTimer();
-
-            // Background Animation
-            const canvas = document.getElementById('background-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const balls = [];
-            const ballCount = 30;
-            let ballColor = localStorage.getItem('ballColor') || 'rgba(0, 198, 255, 0.7)';
-            let lineColor = localStorage.getItem('lineColor') || 'rgba(0, 198, 255, 0.2)';
-
-            for (let i = 0; i < ballCount; i++) {
-                balls.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    radius: 3 + Math.random() * 3,
-                    dx: (Math.random() - 0.5) * 1.5,
-                    dy: (Math.random() - 0.5) * 1.5
-                });
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                for (let i = 0; i < balls.length; i++) {
-                    for (let j = i + 1; j < balls.length; j++) {
-                        if (Math.random() > 0.5) continue;
-                        ctx.beginPath();
-                        ctx.moveTo(balls[i].x, balls[i].y);
-                        ctx.lineTo(balls[j].x, balls[j].y);
-                        ctx.strokeStyle = lineColor;
-                        ctx.stroke();
+                },
+                
+                // Helper to validate email format
+                isValidEmail: function(email) {
+                    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+                },
+                
+                // Function to generate a star rating HTML based on a numeric rating
+                getStarRatingHtml: function(rating) {
+                    const fullStars = Math.floor(rating);
+                    const halfStar = rating % 1 >= 0.5 ? 1 : 0;
+                    const emptyStars = 5 - fullStars - halfStar;
+                    let html = '';
+                    for (let i = 0; i < fullStars; i++) {
+                        html += '<i class="fas fa-star"></i>';
                     }
+                    if (halfStar) {
+                        html += '<i class="fas fa-star-half-alt"></i>';
+                    }
+                    for (let i = 0; i < emptyStars; i++) {
+                        html += '<i class="far fa-star"></i>';
+                    }
+                    return html;
                 }
-                balls.forEach(ball => {
-                    ctx.beginPath();
-                    ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = ballColor;
-                    ctx.fill();
-                    ball.x += ball.dx;
-                    ball.y += ball.dy;
-                    if (ball.x < 0 || ball.x > canvas.width) ball.dx *= -1;
-                    if (ball.y < 0 || ball.y > canvas.height) ball.dy *= -1;
-                });
-                requestAnimationFrame(draw);
-            }
-            draw();
+            };
 
-            window.addEventListener('resize', () => {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            });
+            // ====================================================================================
+            // User Management Module
+            // ====================================================================================
 
-            // Cart and Checkout Logic
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const cartCountEl = document.getElementById('cart-count');
+            const UserManager = {
+                // Manages login attempts to prevent brute-force attacks
+                checkLoginAttempt: function(email) {
+                    if (!AppState.loginAttempts[email]) {
+                        AppState.loginAttempts[email] = { count: 0, locked: null };
+                    }
+                    const now = Date.now();
+                    if (AppState.loginAttempts[email].locked && now < AppState.loginAttempts[email].locked) {
+                        return false;
+                    }
+                    AppState.loginAttempts[email].count++;
+                    if (AppState.loginAttempts[email].count >= AppState.MAX_ATTEMPTS) {
+                        AppState.loginAttempts[email].locked = now + AppState.LOCKOUT_TIME;
+                        AppState.loginAttempts[email].count = 0;
+                        localStorage.setItem('loginAttempts', JSON.stringify(AppState.loginAttempts));
+                        return false;
+                    }
+                    localStorage.setItem('loginAttempts', JSON.stringify(AppState.loginAttempts));
+                    return true;
+                },
 
-            function saveCart() {
-                localStorage.setItem('cart', JSON.stringify(cart));
-            }
+                // Resets login attempts for a user upon successful login
+                resetLoginAttempts: function(email) {
+                    if (AppState.loginAttempts[email]) {
+                        AppState.loginAttempts[email].count = 0;
+                        AppState.loginAttempts[email].locked = null;
+                        localStorage.setItem('loginAttempts', JSON.stringify(AppState.loginAttempts));
+                    }
+                },
 
-            function updateCartBubble() {
-                cartCountEl.textContent = cart.length;
-            }
+                // Handles the login process
+                submitLogin: function() {
+                    const email = document.getElementById('login-email').value;
+                    const password = document.getElementById('login-password').value;
+                    if (!Utils.isValidEmail(email)) {
+                        Utils.showMessage('Please enter a valid email address.');
+                        return;
+                    }
+                    if (!UserManager.checkLoginAttempt(email)) {
+                        Utils.showMessage('Too many failed attempts. Please try again later.');
+                        return;
+                    }
+                    if (AppState.users[email] && AppState.users[email].password === password) {
+                        AppState.currentUser = { email, rank: AppState.users[email].rank };
+                        localStorage.setItem('currentUser', JSON.stringify(AppState.currentUser));
+                        UserManager.resetLoginAttempts(email);
+                        Utils.showMessage('Login successful!');
+                        WebsiteManager.closeFrame();
+                    } else {
+                        Utils.showMessage('Wrong credentials!');
+                    }
+                },
 
-            function getCartContent() {
-                let html = '<div id="cart-items">';
-                if (cart.length === 0) {
-                    html += '<p>Your cart is empty.</p>';
-                } else {
-                    cart.forEach(item => {
-                        const product = products.find(p => p.id === item.id);
+                // Handles the sign-in/account creation process
+                submitSignin: function() {
+                    const email = document.getElementById('signin-email').value;
+                    const password = document.getElementById('signin-password').value;
+                    const password2 = document.getElementById('signin-password2').value;
+                    if (!Utils.isValidEmail(email)) {
+                        Utils.showMessage('Please enter a valid email address.');
+                        return;
+                    }
+                    if (AppState.users[email]) {
+                        Utils.showMessage('Email already taken!');
+                        return;
+                    }
+                    if (password !== password2) {
+                        Utils.showMessage('Passwords do not match!');
+                        return;
+                    }
+                    AppState.users[email] = { password, rank: 'user', purchases: [], recommendations: [] };
+                    localStorage.setItem('users', JSON.stringify(AppState.users));
+                    AppState.currentUser = { email, rank: 'user' };
+                    localStorage.setItem('currentUser', JSON.stringify(AppState.currentUser));
+                    Utils.showMessage('Account created successfully!');
+                    WebsiteManager.closeFrame();
+                },
+
+                // Handles the logout process
+                logout: function() {
+                    AppState.currentUser = null;
+                    localStorage.removeItem('currentUser');
+                    Utils.showMessage('You have been logged out.');
+                    WebsiteManager.closeFrame();
+                },
+                
+                // Renders the user's dashboard
+                renderDashboard: function() {
+                    if (!AppState.currentUser) {
+                        Utils.showMessage('You must be logged in to view your dashboard.');
+                        return;
+                    }
+                    const user = AppState.users[AppState.currentUser.email];
+                    let purchaseHistoryHtml = '';
+                    if (user && user.purchases.length > 0) {
+                        user.purchases.forEach(purchase => {
+                            const product = AppState.products.find(p => p.id === purchase.productId);
+                            if (product) {
+                                purchaseHistoryHtml += `
+                                    <div class="cart-item">
+                                        <span>${product.name} - $${product.price.toFixed(2)} x ${purchase.qty}</span>
+                                        <span>Date: ${new Date(purchase.date).toLocaleDateString()}</span>
+                                    </div>
+                                `;
+                            }
+                        });
+                    } else {
+                        purchaseHistoryHtml = '<p>You have no purchase history.</p>';
+                    }
+                    
+                    const dashboardContent = `
+                        <h4>Account Info</h4>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>Rank:</strong> ${user.rank}</p>
+                        <hr style="border-color: var(--electric-blue); margin: 15px 0;">
+                        <h4>Purchase History</h4>
+                        <div style="max-height: 200px; overflow-y: auto;">
+                            ${purchaseHistoryHtml}
+                        </div>
+                        <button class="submit-btn" onclick="window.WebsiteManager.logout()">Logout</button>
+                    `;
+                    WebsiteManager.openFrame('User Dashboard', dashboardContent);
+                }
+            };
+
+            // ====================================================================================
+            // Product & Cart Management Module
+            // ====================================================================================
+
+            const ProductManager = {
+                saveProducts: function() {
+                    localStorage.setItem('products', JSON.stringify(AppState.products));
+                },
+
+                saveCart: function() {
+                    localStorage.setItem('cart', JSON.stringify(AppState.cart));
+                },
+                
+                // Calculates the average star rating for a product
+                getAverageRating: function(productId) {
+                    const product = AppState.products.find(p => p.id === productId);
+                    if (!product || !product.reviews || product.reviews.length === 0) {
+                        return 0;
+                    }
+                    const totalRating = product.reviews.reduce((sum, review) => sum + review.rating, 0);
+                    return (totalRating / product.reviews.length).toFixed(1);
+                },
+
+                // Renders the product cards on the main page
+                renderProducts: function(filteredProducts = AppState.products) {
+                    const container = document.getElementById('product-list');
+                    container.innerHTML = '';
+                    if (filteredProducts.length === 0) {
+                        container.innerHTML = '<p style="text-align: center; width: 100%;">No products found.</p>';
+                        return;
+                    }
+                    filteredProducts.forEach(product => {
+                        const card = document.createElement('div');
+                        card.className = 'product-card';
+                        card.id = `product-${product.id}`;
+                        const averageRating = ProductManager.getAverageRating(product.id);
+                        card.innerHTML = `
+                            <h4>${product.name}</h4>
+                            <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/200x200/222/fff?text=Image+Error'">
+                            <p>${product.why}</p>
+                            <p class="price">$${product.price.toFixed(2)}</p>
+                            <div class="product-reviews">
+                                <div class="star-rating">${Utils.getStarRatingHtml(averageRating)} (${averageRating})</div>
+                                <a href="javascript:void(0);" onclick="window.WebsiteManager.openReviewFrame('${product.id}')">View Reviews</a>
+                            </div>
+                            <button class="add-to-cart" onclick="window.WebsiteManager.addToCart('${product.id}')">Add to Cart</button>
+                        `;
+                        container.appendChild(card);
+                    });
+                },
+
+                // Adds a product to the cart
+                addToCart: function(productId) {
+                    const product = AppState.products.find(p => p.id === productId);
+                    if (!product) {
+                        Utils.showMessage('Product not found!');
+                        return;
+                    }
+                    const existing = AppState.cart.find(c => c.id === productId);
+                    if (existing) {
+                        existing.qty++;
+                    } else {
+                        AppState.cart.push({
+                            id: productId,
+                            qty: 1
+                        });
+                    }
+                    ProductManager.saveCart();
+                    WebsiteManager.updateCartUI();
+                    Utils.showMessage(`${product.name} added to cart!`);
+                },
+
+                // Renders the cart's content in a frame
+                getCartContent: function() {
+                    let html = '<div id="cart-items">';
+                    if (AppState.cart.length === 0) {
+                        html += '<p>Your cart is empty.</p>';
+                    } else {
+                        AppState.cart.forEach(item => {
+                            const product = AppState.products.find(p => p.id === item.id);
+                            if (!product) return;
+                            html += `
+                                <div class="cart-item">
+                                    <span>${product.name} ($${product.price.toFixed(2)})</span>
+                                    <input type="number" value="${item.qty}" min="1" onchange="window.WebsiteManager.updateQty('${item.id}', this.value)">
+                                    <button onclick="window.WebsiteManager.removeFromCart('${item.id}')">Remove</button>
+                                </div>
+                            `;
+                        });
+                    }
+                    html += `</div><div class="frame-actions cart-buttons">
+                        <button class="submit-btn" onclick="window.WebsiteManager.clearCart()">Clear All</button>
+                        <button class="submit-btn" onclick="window.WebsiteManager.openCheckout()">Checkout</button>
+                    </div>`;
+                    return html;
+                },
+                
+                // Handles the checkout process
+                openCheckout: function() {
+                    WebsiteManager.closeFrame();
+                    const total = AppState.cart.reduce((a, item) => {
+                        const product = AppState.products.find(p => p.id === item.id);
+                        return a + (product ? product.price * item.qty : 0);
+                    }, 0);
+                    let checkoutContent = '<div id="checkout-items">';
+                    AppState.cart.forEach(item => {
+                        const product = AppState.products.find(p => p.id === item.id);
                         if (!product) return;
-                        html += `
-                            <div class="cart-item">
-                                <span>${product.name} ($${product.price})</span>
-                                <input type="number" value="${item.qty}" min="1" onchange="window.updateQty('${item.id}', this.value)">
-                                <button onclick="window.removeFromCart('${item.id}')">Remove</button>
+                        const itemTotal = product.price * item.qty;
+                        checkoutContent += `<div>${product.name} ($${product.price.toFixed(2)}) x ${item.qty} = $${itemTotal.toFixed(2)}</div>`;
+                    });
+                    checkoutContent += `</div><h4>Total: $<span id="checkout-total">${total.toFixed(2)}</span></h4>
+                                         <button class="submit-btn" onclick="window.WebsiteManager.buyCart()">Buy</button>`;
+                    WebsiteManager.openFrame('Checkout', checkoutContent);
+                },
+
+                // Finalizes the purchase
+                buyCart: function() {
+                    if (!AppState.currentUser) {
+                         Utils.showMessage('You must be logged in to complete a purchase.');
+                         return;
+                    }
+                    const user = AppState.users[AppState.currentUser.email];
+                    if (user) {
+                        AppState.cart.forEach(item => {
+                            user.purchases.push({
+                                productId: item.id,
+                                qty: item.qty,
+                                date: Date.now()
+                            });
+                        });
+                        localStorage.setItem('users', JSON.stringify(AppState.users));
+                    }
+                    
+                    const total = AppState.cart.reduce((a, item) => {
+                        const product = AppState.products.find(p => p.id === item.id);
+                        return a + (product ? product.price * item.qty : 0);
+                    }, 0);
+                    Utils.showMessage(`Checkout completed! Total amount: $${total.toFixed(2)}`);
+                    AppState.cart = [];
+                    ProductManager.saveCart();
+                    WebsiteManager.updateCartUI();
+                    WebsiteManager.closeFrame();
+                }
+            };
+            
+            // ====================================================================================
+            // Admin Panel Module
+            // ====================================================================================
+
+            const AdminManager = {
+                // Handles the admin login process
+                submitAdminLogin: function() {
+                    const email = document.getElementById('admin-email').value;
+                    const password = document.getElementById('admin-password').value;
+                    if (email === 'admin@scriptsell.com' && password === 'admin123') {
+                        AppState.currentUser = { email, rank: 'admin' };
+                        localStorage.setItem('currentUser', JSON.stringify(AppState.currentUser));
+                        Utils.showMessage('Admin access granted!');
+                        WebsiteManager.closeFrame();
+                        WebsiteManager.openFrame('Admin Panel', AdminManager.getAdminPanelContent());
+                    } else {
+                        Utils.showMessage('Wrong credentials!');
+                    }
+                },
+                
+                // Renders the main admin panel content
+                getAdminPanelContent: function() {
+                    if (!AppState.currentUser || AppState.currentUser.rank !== 'admin') {
+                         return `<p>You do not have permission to view this page.</p>`;
+                    }
+                    return `
+                        <div class="admin-section">
+                            <h4>Add Product</h4>
+                            <input type="text" id="add-name" placeholder="Product Name">
+                            <input type="number" id="add-price" placeholder="Price">
+                            <input type="text" id="add-why" placeholder="Why Buy (Optional)">
+                            <button class="submit-btn" onclick="window.WebsiteManager.addProduct()">Add Product</button>
+                        </div>
+                        <div class="admin-section">
+                            <h4>Edit Product</h4>
+                            <input type="text" id="edit-id" placeholder="Product ID">
+                            <input type="text" id="edit-name" placeholder="New Name (Optional)">
+                            <input type="number" id="edit-price" placeholder="New Price (Optional)">
+                            <input type="text" id="edit-why" placeholder="New Why Buy (Optional)">
+                            <button class="submit-btn" onclick="window.WebsiteManager.editProduct()">Edit Product</button>
+                        </div>
+                        <div class="admin-section">
+                            <h4>Delete Product</h4>
+                            <input type="text" id="delete-id" placeholder="Product ID">
+                            <button class="submit-btn" onclick="window.WebsiteManager.deleteProduct()">Delete Product</button>
+                        </div>
+                        <div class="admin-section">
+                            <h4>View All Users</h4>
+                            <button class="submit-btn" onclick="window.WebsiteManager.viewAllUsers()">View Users</button>
+                        </div>
+                        <div class="admin-section">
+                            <h4>View All Products</h4>
+                            <button class="submit-btn" onclick="window.WebsiteManager.viewAllProducts()">View Products</button>
+                        </div>
+                        <div class="admin-section">
+                            <h4>Shutdown Website</h4>
+                            <button class="submit-btn" onclick="window.WebsiteManager.shutdownWebsite()">Shutdown</button>
+                        </div>
+                    `;
+                },
+
+                // Adds a new product via the admin panel
+                addProduct: function() {
+                    const name = document.getElementById('add-name').value;
+                    const price = parseFloat(document.getElementById('add-price').value);
+                    const why = document.getElementById('add-why').value || '';
+                    if (!name || isNaN(price)) {
+                        Utils.showMessage('Name and Price are required');
+                        return;
+                    }
+                    const id = Date.now().toString();
+                    AppState.products.push({ id, name, price, why, image: 'https://placehold.co/200x200/222/fff?text=' + encodeURIComponent(name), reviews: [] });
+                    ProductManager.saveProducts();
+                    ProductManager.renderProducts();
+                    Utils.showMessage('Product added successfully!');
+                    WebsiteManager.openFrame('Admin Panel', AdminManager.getAdminPanelContent());
+                },
+                
+                // Edits an existing product
+                editProduct: function() {
+                    const id = document.getElementById('edit-id').value;
+                    const product = AppState.products.find(p => p.id === id);
+                    if (!product) {
+                        Utils.showMessage('Product not found');
+                        return;
+                    }
+                    const name = document.getElementById('edit-name').value;
+                    const price = document.getElementById('edit-price').value;
+                    const why = document.getElementById('edit-why').value;
+                    if (name) product.name = name;
+                    if (price) product.price = parseFloat(price);
+                    if (why) product.why = why;
+                    ProductManager.saveProducts();
+                    ProductManager.renderProducts();
+                    Utils.showMessage('Product edited successfully!');
+                    WebsiteManager.openFrame('Admin Panel', AdminManager.getAdminPanelContent());
+                },
+
+                // Deletes a product
+                deleteProduct: function() {
+                    const id = document.getElementById('delete-id').value;
+                    const index = AppState.products.findIndex(p => p.id === id);
+                    if (index === -1) {
+                        Utils.showMessage('Product not found');
+                        return;
+                    }
+                    AppState.products.splice(index, 1);
+                    ProductManager.saveProducts();
+                    ProductManager.renderProducts();
+                    Utils.showMessage('Product deleted successfully!');
+                    WebsiteManager.openFrame('Admin Panel', AdminManager.getAdminPanelContent());
+                },
+                
+                // Renders a list of all users for the admin
+                viewAllUsers: function() {
+                    let usersHtml = `
+                        <div style="max-height: 400px; overflow-y: auto;">
+                        <style> .user-item { padding: 10px; border-bottom: 1px solid #333; } </style>
+                    `;
+                    for (const email in AppState.users) {
+                        const user = AppState.users[email];
+                        usersHtml += `
+                            <div class="user-item">
+                                <strong>Email:</strong> ${email}<br>
+                                <strong>Rank:</strong> ${user.rank}<br>
+                                <strong>Purchases:</strong> ${user.purchases.length}<br>
+                                <strong>Recommendations:</strong> ${user.recommendations.length}
+                            </div>
+                        `;
+                    }
+                    usersHtml += `</div>`;
+                    WebsiteManager.openFrame('All Users', usersHtml);
+                },
+
+                // Renders a list of all products for the admin
+                viewAllProducts: function() {
+                    let productsHtml = `
+                        <div style="max-height: 400px; overflow-y: auto;">
+                        <style> .product-item { padding: 10px; border-bottom: 1px solid #333; } </style>
+                    `;
+                    AppState.products.forEach(product => {
+                        productsHtml += `
+                            <div class="product-item">
+                                <strong>ID:</strong> ${product.id}<br>
+                                <strong>Name:</strong> ${product.name}<br>
+                                <strong>Price:</strong> $${product.price.toFixed(2)}<br>
+                                <strong>Why Buy:</strong> ${product.why}<br>
+                                <strong>Reviews:</strong> ${product.reviews.length}
                             </div>
                         `;
                     });
-                }
-                html += `</div><div class="frame-actions cart-buttons">
-                    <button class="submit-btn" onclick="window.clearCart()">Clear All</button>
-                    <button class="submit-btn" onclick="window.openCheckout()">Checkout</button>
-                </div>`;
-                return html;
-            }
+                    productsHtml += `</div>`;
+                    WebsiteManager.openFrame('All Products (Admin View)', productsHtml);
+                },
 
-            function updateCartUI() {
-                const cartContent = getCartContent();
-                if (dynamicFrame.classList.contains('show') && frameTitle.textContent === 'Cart') {
-                     openFrame('Cart', cartContent);
-                }
-                updateCartBubble();
-            }
-
-            function addToCart(productId) {
-                const product = products.find(p => p.id === productId);
-                if (!product) {
-                    showMessage('Product not found!');
-                    return;
-                }
-                const existing = cart.find(c => c.id === productId);
-                if (existing) {
-                    existing.qty++;
-                } else {
-                    cart.push({
-                        id: productId,
-                        qty: 1
+                // Simulates a website shutdown
+                shutdownWebsite: function() {
+                    Utils.confirmAction('Are you sure you want to shut down the website?', () => {
+                        document.body.innerHTML = '<h1 style="text-align:center;margin-top:50px;">Website Shutdown</h1>';
                     });
                 }
-                saveCart();
-                updateCartUI();
-                showMessage(`${product.name} added to cart!`);
-            }
-
-            function removeFromCart(productId) {
-                cart = cart.filter(c => c.id !== productId);
-                saveCart();
-                updateCartUI();
-            }
-
-            function updateQty(productId, qty) {
-                const item = cart.find(c => c.id === productId);
-                if (item) {
-                    item.qty = parseInt(qty, 10) < 1 ? 1 : parseInt(qty, 10);
-                    saveCart();
-                    updateCartUI();
-                }
-            }
-
-            function clearCart() {
-                 confirmAction('Clear all items from cart?', () => {
-                    cart = [];
-                    saveCart();
-                    updateCartUI();
-                    closeFrame();
-                 });
-            }
-
-            function openCheckout() {
-                closeFrame();
-                const total = cart.reduce((a, item) => {
-                    const product = products.find(p => p.id === item.id);
-                    return a + (product ? product.price * item.qty : 0);
-                }, 0);
-                let checkoutContent = '<div id="checkout-items">';
-                cart.forEach(item => {
-                    const product = products.find(p => p.id === item.id);
-                    if (!product) return;
-                    const itemTotal = product.price * item.qty;
-                    checkoutContent += `<div>${product.name} ($${product.price}) x ${item.qty} = $${itemTotal.toFixed(2)}</div>`;
-                });
-                checkoutContent += `</div><h4>Total: $<span id="checkout-total">${total.toFixed(2)}</span></h4>
-                                     <button class="submit-btn" onclick="window.buyCart()">Buy</button>`;
-                openFrame('Checkout', checkoutContent);
-            }
-
-            function buyCart() {
-                const total = cart.reduce((a, item) => {
-                    const product = products.find(p => p.id === item.id);
-                    return a + (product ? product.price * item.qty : 0);
-                }, 0);
-                showMessage(`Checkout completed! Total amount: $${total.toFixed(2)}`);
-                cart = [];
-                saveCart();
-                updateCartUI();
-                closeFrame();
-            }
-
-            // User Management
-            let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-            const users = JSON.parse(localStorage.getItem('users')) || {};
-
-            function isValidEmail(email) {
-                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-            }
-
-            function submitLogin() {
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                if (!isValidEmail(email)) {
-                    showMessage('Please enter a valid email address.');
-                    return;
-                }
-                if (!checkLoginAttempt(email)) {
-                    showMessage('Too many failed attempts. Please try again later.');
-                    return;
-                }
-                if (users[email] && users[email].password === password) {
-                    currentUser = { email, rank: users[email].rank };
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    resetLoginAttempts(email);
-                    showMessage('Login successful!');
-                    closeFrame();
-                } else {
-                    showMessage('Wrong credentials!');
-                }
-            }
-
-            function submitSignin() {
-                const email = document.getElementById('signin-email').value;
-                const password = document.getElementById('signin-password').value;
-                const password2 = document.getElementById('signin-password2').value;
-                if (!isValidEmail(email)) {
-                    showMessage('Please enter a valid email address.');
-                    return;
-                }
-                if (users[email]) {
-                    showMessage('Email already taken!');
-                    return;
-                }
-                if (password !== password2) {
-                    showMessage('Passwords do not match!');
-                    return;
-                }
-                users[email] = { password, rank: 'user' };
-                localStorage.setItem('users', JSON.stringify(users));
-                currentUser = { email, rank: 'user' };
-                localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                showMessage('Account created successfully!');
-                closeFrame();
-            }
+            };
             
-            // Recommendations
-            const recommendations = JSON.parse(localStorage.getItem('recommendations')) || [];
+            // ====================================================================================
+            // Website & UI Manager
+            // ====================================================================================
+            
+            const WebsiteManager = {
+                // Main function to initialize the website after loading screen
+                init: function() {
+                    const savedVolume = localStorage.getItem('musicVolume') || 0.5;
+                    AppState.music.volume = savedVolume;
+                    AppState.music.play().catch(e => console.log('Autoplay blocked:', e));
 
-            function renderRecommendations() {
-                let html = '<div id="recommend-list">';
-                recommendations.forEach(rec => {
-                    html += `<div>(${rec.email} @ ${rec.time}): ${rec.text}</div>`;
-                });
-                html += `</div><input type="text" id="recommend-input" placeholder="Write your recommendation...">
-                          <button class="submit-btn" onclick="window.submitRecommendation()">Submit</button>`;
-                return html;
-            }
-
-            function submitRecommendation() {
-                if (!currentUser) {
-                    showMessage('You need to login to access recommendations');
-                    return;
-                }
-                const text = document.getElementById('recommend-input').value.trim();
-                if (!text) return;
-                const now = new Date();
-                const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-                recommendations.push({ email: currentUser.email, text, time: timeStr });
-                localStorage.setItem('recommendations', JSON.stringify(recommendations));
-                openFrame('Recommendations', renderRecommendations());
-            }
-
-            // Admin Logic
-            function submitAdminLogin() {
-                const username = document.getElementById('admin-email').value;
-                const password = document.getElementById('admin-password').value;
-                if (username === 'admin@scriptsell.com' && password === 'admin123') {
-                    currentUser = { email: username, rank: 'admin' };
-                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    showMessage('Admin access granted!');
-                    closeFrame();
-                    openFrame('Admin Panel', getAdminPanelContent());
-                } else {
-                    showMessage('Wrong credentials!');
-                }
-            }
-
-            function getAdminPanelContent() {
-                if (!currentUser || currentUser.rank !== 'admin') {
-                     return `<p>You do not have permission to view this page.</p>`;
-                }
-                return `
-                    <div class="admin-section">
-                        <h4>Add Product</h4>
-                        <input type="text" id="add-name" placeholder="Product Name">
-                        <input type="number" id="add-price" placeholder="Price">
-                        <input type="text" id="add-why" placeholder="Why Buy (Optional)">
-                        <button class="submit-btn" onclick="window.addProduct()">Add Product</button>
-                    </div>
-                    <div class="admin-section">
-                        <h4>Edit Product</h4>
-                        <input type="text" id="edit-id" placeholder="Product ID">
-                        <input type="text" id="edit-name" placeholder="New Name (Optional)">
-                        <input type="number" id="edit-price" placeholder="New Price (Optional)">
-                        <input type="text" id="edit-why" placeholder="New Why Buy (Optional)">
-                        <button class="submit-btn" onclick="window.editProduct()">Edit Product</button>
-                    </div>
-                    <div class="admin-section">
-                        <h4>Delete Product</h4>
-                        <input type="text" id="delete-id" placeholder="Product ID">
-                        <button class="submit-btn" onclick="window.deleteProduct()">Delete Product</button>
-                    </div>
-                    <div class="admin-section">
-                        <h4>Shutdown Website</h4>
-                        <button class="submit-btn" onclick="window.shutdownWebsite()">Shutdown</button>
-                    </div>
-                `;
-            }
-
-            // Products
-            let products = JSON.parse(localStorage.getItem('products')) || [
-                { id: '1', name: 'Infinite Jump', price: 9.99, image: 'https://placehold.co/200x200/222/fff?text=Infinite+Jump', why: 'Jump to new heights in any game!' },
-                { id: '2', name: 'Speed Boost', price: 14.99, image: 'https://placehold.co/200x200/222/fff?text=Speed+Boost', why: 'Run faster than everyone else.' },
-                { id: '3', name: 'God Mode', price: 29.99, image: 'https://placehold.co/200x200/222/fff?text=God+Mode', why: 'Become invincible and dominate!' },
-                { id: '4', name: 'ESP', price: 19.99, image: 'https://placehold.co/200x200/222/fff?text=ESP', why: 'See enemies through walls.' }
-            ];
-
-            function saveProducts() {
-                localStorage.setItem('products', JSON.stringify(products));
-            }
-
-            function renderProducts(filteredProducts = products) {
-                const container = document.getElementById('product-list');
-                container.innerHTML = '';
-                if (filteredProducts.length === 0) {
-                    container.innerHTML = '<p style="text-align: center; width: 100%;">No products found.</p>';
-                    return;
-                }
-                filteredProducts.forEach(product => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-                    card.id = `product-${product.id}`;
-                    card.innerHTML = `
-                        <h4>${product.name}</h4>
-                        <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/200x200/222/fff?text=Image+Error'">
-                        <p>${product.why}</p>
-                        <p class="price">$${product.price.toFixed(2)}</p>
-                        <button class="add-to-cart" onclick="window.addToCart('${product.id}')">Add to Cart</button>
-                    `;
-                    container.appendChild(card);
-                });
-            }
-
-            // Search functionality
-            function performSearch() {
-                const query = document.getElementById('search-input').value.toLowerCase();
-                const searchResults = document.getElementById('search-results');
-                if (query.length === 0) {
-                    searchResults.innerHTML = '';
-                    return;
-                }
-                const filteredProducts = products.filter(product => 
-                    product.name.toLowerCase().includes(query) ||
-                    product.why.toLowerCase().includes(query)
-                );
-                
-                if (filteredProducts.length > 0) {
-                    let resultsHtml = '';
-                    filteredProducts.forEach(product => {
-                        resultsHtml += `<div class="search-result-item" onclick="window.showProduct('${product.id}')">${product.name}</div>`;
-                    });
-                    searchResults.innerHTML = resultsHtml;
-                } else {
-                    searchResults.innerHTML = '<p>No products found.</p>';
-                }
-            }
-
-            function showProduct(productId) {
-                closeFrame();
-                const productCard = document.getElementById(`product-${productId}`);
-                if (productCard) {
-                    document.querySelectorAll('.product-card').forEach(card => card.classList.remove('highlight'));
-                    productCard.classList.add('highlight');
-                    productCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    WebsiteManager.updateReleaseTimer();
+                    WebsiteManager.initBackgroundAnimation();
+                    WebsiteManager.setupEventListeners();
+                    WebsiteManager.updateCartUI();
+                    ProductManager.renderProducts();
+                    
+                    // Fade in the main content after a brief delay
                     setTimeout(() => {
-                        productCard.classList.remove('highlight');
-                    }, 3000);
-                }
-            }
+                        AppState.mainContent.classList.add('show');
+                    }, 100);
+                },
 
-            function addProduct() {
-                const name = document.getElementById('add-name').value;
-                const price = parseFloat(document.getElementById('add-price').value);
-                const why = document.getElementById('add-why').value || '';
-                if (!name || isNaN(price)) {
-                    showMessage('Name and Price are required');
-                    return;
-                }
-                const id = Date.now().toString();
-                products.push({ id, name, price, why, image: 'https://placehold.co/200x200/222/fff?text=' + encodeURIComponent(name) });
-                saveProducts();
-                renderProducts();
-                showMessage('Product added successfully!');
-                openFrame('Admin Panel', getAdminPanelContent());
-            }
+                // Opens a custom frame with dynamic content
+                openFrame: function(title, content) {
+                    AppState.frameTitle.textContent = title;
+                    AppState.frameContentContainer.innerHTML = content;
+                    AppState.dynamicFrame.classList.add('show');
+                },
 
-            function editProduct() {
-                const id = document.getElementById('edit-id').value;
-                const product = products.find(p => p.id === id);
-                if (!product) {
-                    showMessage('Product not found');
-                    return;
-                }
-                const name = document.getElementById('edit-name').value;
-                const price = document.getElementById('edit-price').value;
-                const why = document.getElementById('edit-why').value;
-                if (name) product.name = name;
-                if (price) product.price = parseFloat(price);
-                if (why) product.why = why;
-                saveProducts();
-                renderProducts();
-                showMessage('Product edited successfully!');
-                openFrame('Admin Panel', getAdminPanelContent());
-            }
+                // Closes the custom frame
+                closeFrame: function() {
+                    AppState.dynamicFrame.classList.remove('show');
+                },
 
-            function deleteProduct() {
-                const id = document.getElementById('delete-id').value;
-                const index = products.findIndex(p => p.id === id);
-                if (index === -1) {
-                    showMessage('Product not found');
-                    return;
-                }
-                products.splice(index, 1);
-                saveProducts();
-                renderProducts();
-                showMessage('Product deleted successfully!');
-                openFrame('Admin Panel', getAdminPanelContent());
-            }
+                // Updates the cart bubble count
+                updateCartUI: function() {
+                    AppState.cartCountEl.textContent = AppState.cart.length;
+                },
+                
+                // Renders products with pagination
+                renderPaginatedProducts: function(page = 1) {
+                    const totalPages = Math.ceil(AppState.products.length / AppState.PRODUCTS_PER_PAGE);
+                    const start = (page - 1) * AppState.PRODUCTS_PER_PAGE;
+                    const end = start + AppState.PRODUCTS_PER_PAGE;
+                    const productsOnPage = AppState.products.slice(start, end);
+                    
+                    let html = '<div class="product-grid">';
+                    productsOnPage.forEach(product => {
+                        const averageRating = ProductManager.getAverageRating(product.id);
+                        html += `
+                            <div class="product-card">
+                                <h4>${product.name}</h4>
+                                <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/200x200/222/fff?text=Image+Error'">
+                                <p class="price">$${product.price.toFixed(2)}</p>
+                                <div class="product-reviews">
+                                    <div class="star-rating">${Utils.getStarRatingHtml(averageRating)} (${averageRating})</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
 
-            function shutdownWebsite() {
-                confirmAction('Are you sure you want to shut down the website?', () => {
-                    document.body.innerHTML = '<h1 style="text-align:center;margin-top:50px;">Website Shutdown</h1>';
-                });
-            }
-
-            // Settings and Cookies
-            function getSettingsContent() {
-                const savedVolume = localStorage.getItem('musicVolume') || 0.5;
-                const savedBallColor = localStorage.getItem('ballColor') || '#00c6ff';
-                const savedLineColor = localStorage.getItem('lineColor') || '#00c6ff';
-                return `
-                    <label for="music-volume">Music Volume:</label>
-                    <input type="range" id="music-volume" min="0" max="1" step="0.01" value="${savedVolume}" onchange="window.changeVolume()">
-                    <div style="margin-top: 20px;">
-                        <label for="ball-color">Ball Color:</label>
-                        <input type="color" id="ball-color" value="${savedBallColor}" onchange="window.saveColors()">
-                    </div>
-                    <div style="margin-top: 10px;">
-                        <label for="line-color">Line Color:</label>
-                        <input type="color" id="line-color" value="${savedLineColor}" onchange="window.saveColors()">
-                    </div>
-                    <button class="submit-btn" onclick="window.logout()">Logout</button>
-                `;
-            }
-
-            function changeVolume() {
-                const vol = document.getElementById('music-volume').value;
-                music.volume = vol;
-                localStorage.setItem('musicVolume', vol);
-            }
-
-            function saveColors() {
-                const ballColorInput = document.getElementById('ball-color').value;
-                const lineColorInput = document.getElementById('line-color').value;
-                ballColor = ballColorInput;
-                lineColor = lineColorInput;
-                localStorage.setItem('ballColor', ballColorInput);
-                localStorage.setItem('lineColor', lineColorInput);
-            }
-
-            function logout() {
-                currentUser = null;
-                localStorage.removeItem('currentUser');
-                showMessage('You have been logged out.');
-                closeFrame();
-            }
-
-            function getCookiesContent() {
-                return `
-                    <p>Manage your cookies preferences here:</p>
-                    <button class="submit-btn" onclick="window.acceptCookies()">Accept All Cookies</button>
-                    <button class="submit-btn" onclick="window.declineCookies()">Decline Cookies</button>
-                `;
-            }
-
-            function acceptCookies() {
-                localStorage.setItem('cookiesAccepted', 'true');
-                showMessage('Cookies accepted!');
-                closeFrame();
-            }
-
-            function declineCookies() {
-                localStorage.setItem('cookiesAccepted', 'false');
-                showMessage('Cookies declined!');
-                closeFrame();
-            }
-
-            // Navigation Frame Content
-            function getHomeContent() {
-                return `<p>Welcome to the Scriptsell homepage!</p><p>We specialize in providing high-quality Roblox assets and scripts.</p>`;
-            }
-
-            function getHotDealsContent() {
-                const hotDeals = products.filter(p => p.price <= 10);
-                if (hotDeals.length === 0) {
-                    return `<p>No hot deals at the moment. Check back later!</p>`;
-                }
-                let html = '<div class="product-grid">';
-                hotDeals.forEach(p => {
-                    html += `
-                        <div class="product-card">
-                            <h4>${p.name}</h4>
-                            <p class="price">$${p.price.toFixed(2)}</p>
+                    // Add pagination buttons
+                    html += '<div class="pagination">';
+                    for (let i = 1; i <= totalPages; i++) {
+                        html += `<button class="${i === page ? 'active' : ''}" onclick="window.WebsiteManager.renderPaginatedProducts(${i})">${i}</button>`;
+                    }
+                    html += '</div>';
+                    
+                    WebsiteManager.openFrame('All Products', html);
+                },
+                
+                // Opens the review frame for a specific product
+                openReviewFrame: function(productId) {
+                    const product = AppState.products.find(p => p.id === productId);
+                    if (!product) {
+                        Utils.showMessage('Product not found.');
+                        return;
+                    }
+                    const averageRating = ProductManager.getAverageRating(productId);
+                    let reviewsHtml = '';
+                    if (product.reviews.length > 0) {
+                        reviewsHtml = `<h4>Reviews:</h4><div style="max-height: 200px; overflow-y: auto;">`;
+                        product.reviews.forEach(review => {
+                            reviewsHtml += `
+                                <div style="padding: 10px; border-bottom: 1px solid #333;">
+                                    <strong>${review.email.split('@')[0]}</strong> (${review.rating}/5)<br>
+                                    <p style="margin: 5px 0;">${review.text}</p>
+                                </div>
+                            `;
+                        });
+                        reviewsHtml += '</div>';
+                    } else {
+                        reviewsHtml = '<p>No reviews yet.</p>';
+                    }
+                    
+                    const reviewContent = `
+                        <h3>${product.name}</h3>
+                        <div class="star-rating" style="font-size: 1.5em; text-align: center;">${Utils.getStarRatingHtml(averageRating)} (${averageRating})</div>
+                        ${reviewsHtml}
+                        <div class="review-form">
+                            <h4>Submit a Review</h4>
+                            <select id="review-rating" style="width: 100%; padding: 8px; border-radius: 8px; border: none; background: #333; color: #fff;">
+                                <option value="1">1 Star</option>
+                                <option value="2">2 Stars</option>
+                                <option value="3">3 Stars</option>
+                                <option value="4">4 Stars</option>
+                                <option value="5">5 Stars</option>
+                            </select>
+                            <textarea id="review-text" placeholder="Write your review..."></textarea>
+                            <button class="submit-btn" onclick="window.WebsiteManager.submitReview('${productId}')">Submit Review</button>
                         </div>
                     `;
-                });
-                html += '</div>';
-                return html;
-            }
+                    WebsiteManager.openFrame('Product Reviews', reviewContent);
+                },
+                
+                // Handles submitting a new review
+                submitReview: function(productId) {
+                    if (!AppState.currentUser) {
+                        Utils.showMessage('You must be logged in to submit a review.');
+                        return;
+                    }
+                    const product = AppState.products.find(p => p.id === productId);
+                    const rating = parseInt(document.getElementById('review-rating').value);
+                    const text = document.getElementById('review-text').value.trim();
+                    if (text === '') {
+                        Utils.showMessage('Please write a review before submitting.');
+                        return;
+                    }
+                    if (product) {
+                        product.reviews.push({
+                            email: AppState.currentUser.email,
+                            rating: rating,
+                            text: text
+                        });
+                        ProductManager.saveProducts();
+                        ProductManager.renderProducts();
+                        WebsiteManager.openReviewFrame(productId);
+                        Utils.showMessage('Review submitted successfully!');
+                    }
+                },
 
-            function getBestProductsContent() {
-                 const bestProducts = products.filter(p => p.price > 10);
-                 if (bestProducts.length === 0) {
-                     return `<p>No best products at the moment.</p>`;
-                 }
-                 let html = '<div class="product-grid">';
-                 bestProducts.forEach(p => {
-                     html += `
-                         <div class="product-card">
-                             <h4>${p.name}</h4>
-                             <p class="price">$${p.price.toFixed(2)}</p>
-                         </div>
-                     `;
-                 });
-                 html += '</div>';
-                 return html;
-            }
+                // Search functionality logic
+                performSearch: function() {
+                    const query = document.getElementById('search-input').value.toLowerCase();
+                    const searchResults = document.getElementById('search-results');
+                    if (query.length === 0) {
+                        searchResults.innerHTML = '';
+                        return;
+                    }
+                    const filteredProducts = AppState.products.filter(product => 
+                        product.name.toLowerCase().includes(query) ||
+                        product.why.toLowerCase().includes(query)
+                    );
+                    
+                    if (filteredProducts.length > 0) {
+                        let resultsHtml = '';
+                        filteredProducts.forEach(product => {
+                            resultsHtml += `<div class="search-result-item" onclick="window.WebsiteManager.showProduct('${product.id}')">${product.name}</div>`;
+                        });
+                        searchResults.innerHTML = resultsHtml;
+                    } else {
+                        searchResults.innerHTML = '<p>No products found.</p>';
+                    }
+                },
 
-            function getInfoContent() {
-                return `<p>This is a demonstration website for a fictional Roblox script marketplace.</p><p>We are dedicated to providing the best tools for developers.</p>`;
-            }
+                // Scrolls to and highlights a product card
+                showProduct: function(productId) {
+                    WebsiteManager.closeFrame();
+                    const productCard = document.getElementById(`product-${productId}`);
+                    if (productCard) {
+                        document.querySelectorAll('.product-card').forEach(card => card.classList.remove('highlight'));
+                        productCard.classList.add('highlight');
+                        productCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        setTimeout(() => {
+                            productCard.classList.remove('highlight');
+                        }, 3000);
+                    }
+                },
+                
+                // Sets up all event listeners for buttons and links
+                setupEventListeners: function() {
+                    document.querySelectorAll('[data-frame]').forEach(button => {
+                        button.addEventListener('click', () => {
+                            const frameId = button.getAttribute('data-frame');
+                            WebsiteManager.handleFrameOpen(frameId);
+                        });
+                    });
+                },
 
-            function getAllProductsContent() {
-                let html = '<div class="product-grid">';
-                if (products.length === 0) {
-                     return `<p>No products available yet. Check the Admin Panel to add some!</p>`;
-                }
-                products.forEach(p => {
-                    html += `
-                        <div class="product-card">
-                            <h4>${p.name}</h4>
-                            <p class="price">$${p.price.toFixed(2)}</p>
-                        </div>
-                    `;
-                });
-                html += '</div>';
-                return html;
-            }
-
-            // Centralized Event Listeners for top buttons
-            document.querySelectorAll('[data-frame]').forEach(button => {
-                button.addEventListener('click', () => {
-                    const frameId = button.getAttribute('data-frame');
+                // Handles opening different frames based on data-frame attribute
+                handleFrameOpen: function(frameId) {
                     switch (frameId) {
                         case 'home-frame':
-                            openFrame('Home', getHomeContent());
+                            WebsiteManager.openFrame('Home', WebsiteManager.getHomeContent());
                             break;
                         case 'hot-deals-frame':
-                            openFrame('Best Deals', getHotDealsContent());
+                            WebsiteManager.openFrame('Best Deals', WebsiteManager.getHotDealsContent());
                             break;
                         case 'best-products-frame':
-                            openFrame('Best Products', getBestProductsContent());
+                            WebsiteManager.openFrame('Best Products', WebsiteManager.getBestProductsContent());
                             break;
                         case 'info-frame':
-                            openFrame('Info', getInfoContent());
+                            WebsiteManager.openFrame('Info', WebsiteManager.getInfoContent());
                             break;
                         case 'all-products-frame':
-                            openFrame('All Products', getAllProductsContent());
+                            WebsiteManager.renderPaginatedProducts(1);
                             break;
                         case 'cart-frame':
-                            openFrame('Cart', getCartContent());
+                            WebsiteManager.openFrame('Cart', ProductManager.getCartContent());
                             break;
                         case 'admin-frame':
                             const adminContent = `
                                 <input type="email" id="admin-email" placeholder="Admin Email">
                                 <input type="password" id="admin-password" placeholder="Password">
-                                <button class="submit-btn" onclick="window.submitAdminLogin()">Submit</button>
+                                <button class="submit-btn" onclick="window.WebsiteManager.submitAdminLogin()">Submit</button>
                             `;
-                            openFrame('Admin Panel Login', adminContent);
+                            WebsiteManager.openFrame('Admin Panel Login', adminContent);
                             break;
                         case 'login-frame':
                             const loginContent = `
                                 <input type="email" id="login-email" placeholder="Email">
                                 <input type="password" id="login-password" placeholder="Password">
-                                <button class="submit-btn" onclick="window.submitLogin()">Login</button>
+                                <button class="submit-btn" onclick="window.WebsiteManager.submitLogin()">Login</button>
                             `;
-                            openFrame('Login', loginContent);
+                            WebsiteManager.openFrame('Login', loginContent);
                             break;
                         case 'signin-frame':
                             const signinContent = `
                                 <input type="email" id="signin-email" placeholder="Email">
                                 <input type="password" id="signin-password" placeholder="Password">
                                 <input type="password" id="signin-password2" placeholder="Confirm Password">
-                                <button class="submit-btn" onclick="window.submitSignin()">Create Account</button>
+                                <button class="submit-btn" onclick="window.WebsiteManager.submitSignin()">Create Account</button>
                             `;
-                            openFrame('Sign In', signinContent);
+                            WebsiteManager.openFrame('Sign In', signinContent);
                             break;
                         case 'recommend-frame':
-                            if (!currentUser) {
-                                showMessage('You need to login to access recommendations');
+                            if (!AppState.currentUser) {
+                                Utils.showMessage('You need to login to access recommendations');
                             } else {
-                                openFrame('Recommendations', renderRecommendations());
+                                WebsiteManager.openFrame('Recommendations', WebsiteManager.renderRecommendations());
                             }
                             break;
                         case 'settings-frame':
-                             if (!currentUser) {
-                                showMessage('You need to login to access settings');
+                             if (!AppState.currentUser) {
+                                Utils.showMessage('You need to login to access settings');
                             } else {
-                                openFrame('Settings', getSettingsContent());
+                                WebsiteManager.openFrame('Settings', WebsiteManager.getSettingsContent());
                             }
                             break;
                         case 'cookies-frame':
-                            openFrame('Cookies Settings', getCookiesContent());
+                            WebsiteManager.openFrame('Cookies Settings', WebsiteManager.getCookiesContent());
                             break;
                         case 'search-frame':
                             const searchContent = `
                                 <div class="search-container">
-                                    <input type="text" id="search-input" placeholder="Search products..." onkeyup="window.performSearch()">
+                                    <input type="text" id="search-input" placeholder="Search products..." onkeyup="window.WebsiteManager.performSearch()">
                                     <div class="search-results" id="search-results"></div>
                                 </div>
                             `;
-                            openFrame('Search Products', searchContent);
+                            WebsiteManager.openFrame('Search Products', searchContent);
                             break;
                     }
-                });
+                },
+
+                // Renders the recommendations frame
+                renderRecommendations: function() {
+                    let html = '<div id="recommend-list">';
+                    AppState.recommendations.forEach(rec => {
+                        html += `<div>(${rec.email} @ ${rec.time}): ${rec.text}</div>`;
+                    });
+                    html += `</div><input type="text" id="recommend-input" placeholder="Write your recommendation...">
+                              <button class="submit-btn" onclick="window.WebsiteManager.submitRecommendation()">Submit</button>`;
+                    return html;
+                },
+
+                // Handles submitting a new recommendation
+                submitRecommendation: function() {
+                    if (!AppState.currentUser) {
+                        Utils.showMessage('You need to login to access recommendations');
+                        return;
+                    }
+                    const text = document.getElementById('recommend-input').value.trim();
+                    if (!text) return;
+                    const now = new Date();
+                    const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+                    AppState.recommendations.push({ email: AppState.currentUser.email, text, time: timeStr });
+                    localStorage.setItem('recommendations', JSON.stringify(AppState.recommendations));
+                    WebsiteManager.openFrame('Recommendations', WebsiteManager.renderRecommendations());
+                },
+
+                // Renders the Settings frame content
+                getSettingsContent: function() {
+                    const savedVolume = localStorage.getItem('musicVolume') || 0.5;
+                    const savedBallColor = localStorage.getItem('ballColor') || '#00c6ff';
+                    const savedLineColor = localStorage.getItem('lineColor') || '#00c6ff';
+                    return `
+                        <label for="music-volume">Music Volume:</label>
+                        <input type="range" id="music-volume" min="0" max="1" step="0.01" value="${savedVolume}" onchange="window.WebsiteManager.changeVolume()">
+                        <div style="margin-top: 20px;">
+                            <label for="ball-color">Ball Color:</label>
+                            <input type="color" id="ball-color" value="${savedBallColor}" onchange="window.WebsiteManager.saveColors()">
+                        </div>
+                        <div style="margin-top: 10px;">
+                            <label for="line-color">Line Color:</label>
+                            <input type="color" id="line-color" value="${savedLineColor}" onchange="window.WebsiteManager.saveColors()">
+                        </div>
+                        <button class="submit-btn" onclick="window.WebsiteManager.logout()">Logout</button>
+                    `;
+                },
+
+                // Changes music volume
+                changeVolume: function() {
+                    const vol = document.getElementById('music-volume').value;
+                    AppState.music.volume = vol;
+                    localStorage.setItem('musicVolume', vol);
+                },
+
+                // Saves background animation colors
+                saveColors: function() {
+                    const ballColorInput = document.getElementById('ball-color').value;
+                    const lineColorInput = document.getElementById('line-color').value;
+                    document.documentElement.style.setProperty('--ball-color', ballColorInput);
+                    document.documentElement.style.setProperty('--line-color', lineColorInput);
+                    localStorage.setItem('ballColor', ballColorInput);
+                    localStorage.setItem('lineColor', lineColorInput);
+                },
+                
+                // Renders the Cookies frame content
+                getCookiesContent: function() {
+                    return `
+                        <p>Manage your cookies preferences here:</p>
+                        <button class="submit-btn" onclick="window.WebsiteManager.acceptCookies()">Accept All Cookies</button>
+                        <button class="submit-btn" onclick="window.WebsiteManager.declineCookies()">Decline Cookies</button>
+                    `;
+                },
+                
+                // Accepts cookies and saves preference
+                acceptCookies: function() {
+                    localStorage.setItem('cookiesAccepted', 'true');
+                    Utils.showMessage('Cookies accepted!');
+                    WebsiteManager.closeFrame();
+                },
+
+                // Declines cookies and saves preference
+                declineCookies: function() {
+                    localStorage.setItem('cookiesAccepted', 'false');
+                    Utils.showMessage('Cookies declined!');
+                    WebsiteManager.closeFrame();
+                },
+                
+                // Renders the Home frame content
+                getHomeContent: function() {
+                    return `<p>Welcome to the Scriptsell homepage!</p><p>We specialize in providing high-quality Roblox assets and scripts.</p>`;
+                },
+
+                // Renders the Best Deals frame content
+                getHotDealsContent: function() {
+                    const hotDeals = AppState.products.filter(p => p.price <= 10);
+                    if (hotDeals.length === 0) {
+                        return `<p>No hot deals at the moment. Check back later!</p>`;
+                    }
+                    let html = '<div class="product-grid">';
+                    hotDeals.forEach(p => {
+                        html += `<div class="product-card"><h4>${p.name}</h4><p class="price">$${p.price.toFixed(2)}</p></div>`;
+                    });
+                    html += '</div>';
+                    return html;
+                },
+
+                // Renders the Best Products frame content
+                getBestProductsContent: function() {
+                     const bestProducts = AppState.products.filter(p => p.price > 10);
+                     if (bestProducts.length === 0) {
+                         return `<p>No best products at the moment.</p>`;
+                     }
+                     let html = '<div class="product-grid">';
+                     bestProducts.forEach(p => {
+                         html += `<div class="product-card"><h4>${p.name}</h4><p class="price">$${p.price.toFixed(2)}</p></div>`;
+                     });
+                     html += '</div>';
+                     return html;
+                },
+
+                // Renders the Info frame content
+                getInfoContent: function() {
+                    return `<p>This is a demonstration website for a fictional Roblox script marketplace.</p><p>We are dedicated to providing the best tools for developers.</p>`;
+                },
+
+                // Updates the release timer
+                updateReleaseTimer: function() {
+                    const releaseDate = new Date('2026-01-01T00:00:00');
+                    const timerEl = document.getElementById('release-timer');
+                    setInterval(() => {
+                        const diff = releaseDate - new Date();
+                        if (diff <= 0) {
+                            timerEl.textContent = "Released!";
+                            return;
+                        }
+                        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                        const seconds = Math.floor((diff / 1000) % 60);
+                        timerEl.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s remaining`;
+                    }, 1000);
+                },
+
+                // Initializes the background animation
+                initBackgroundAnimation: function() {
+                    const canvas = document.getElementById('background-canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                    const balls = [];
+                    const ballCount = 30;
+                    
+                    for (let i = 0; i < ballCount; i++) {
+                        balls.push({
+                            x: Math.random() * canvas.width,
+                            y: Math.random() * canvas.height,
+                            radius: 3 + Math.random() * 3,
+                            dx: (Math.random() - 0.5) * 1.5,
+                            dy: (Math.random() - 0.5) * 1.5
+                        });
+                    }
+
+                    function draw() {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        const ballColor = getComputedStyle(document.documentElement).getPropertyValue('--ball-color');
+                        const lineColor = getComputedStyle(document.documentElement).getPropertyValue('--line-color');
+                        
+                        for (let i = 0; i < balls.length; i++) {
+                            for (let j = i + 1; j < balls.length; j++) {
+                                if (Math.random() > 0.5) continue;
+                                ctx.beginPath();
+                                ctx.moveTo(balls[i].x, balls[i].y);
+                                ctx.lineTo(balls[j].x, balls[j].y);
+                                ctx.strokeStyle = lineColor;
+                                ctx.stroke();
+                            }
+                        }
+                        balls.forEach(ball => {
+                            ctx.beginPath();
+                            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                            ctx.fillStyle = ballColor;
+                            ctx.fill();
+                            ball.x += ball.dx;
+                            ball.y += ball.dy;
+                            if (ball.x < 0 || ball.x > canvas.width) ball.dx *= -1;
+                            if (ball.y < 0 || ball.y > canvas.height) ball.dy *= -1;
+                        });
+                        requestAnimationFrame(draw);
+                    }
+                    draw();
+
+                    window.addEventListener('resize', () => {
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                    });
+                }
+            };
+
+            // ====================================================================================
+            // Main Entry Point
+            // ====================================================================================
+            
+            // Loading screen logic
+            const loadingInterval = setInterval(() => {
+                AppState.loadingPercent++;
+                loadingBar.style.width = AppState.loadingPercent + "%";
+                loadingPercent.textContent = AppState.loadingPercent + "%";
+                if (AppState.loadingPercent % 20 === 0 && AppState.textIndex < AppState.texts.length) {
+                    loadingText.textContent = AppState.texts[AppState.textIndex++];
+                }
+                if (AppState.loadingPercent >= 100) {
+                    clearInterval(loadingInterval);
+                    document.getElementById('loading-screen').style.opacity = 0;
+                    setTimeout(() => {
+                        document.getElementById('loading-screen').style.display = 'none';
+                        WebsiteManager.init();
+                    }, 500);
+                }
+            }, 30);
+            
+            // Expose public functions to the global window object
+            Object.assign(window.WebsiteManager, {
+                // Core UI functions
+                openFrame: WebsiteManager.openFrame,
+                closeFrame: WebsiteManager.closeFrame,
+                updateCartUI: WebsiteManager.updateCartUI,
+                handleConfirm: Utils.handleConfirm,
+                // User & Auth functions
+                submitLogin: UserManager.submitLogin,
+                submitSignin: UserManager.submitSignin,
+                logout: UserManager.logout,
+                // Product & Cart functions
+                addToCart: ProductManager.addToCart,
+                updateQty: function(id, qty) {
+                    const item = AppState.cart.find(c => c.id === id);
+                    if (item) {
+                        item.qty = parseInt(qty, 10) < 1 ? 1 : parseInt(qty, 10);
+                        ProductManager.saveCart();
+                        WebsiteManager.updateCartUI();
+                    }
+                },
+                removeFromCart: function(id) {
+                    AppState.cart = AppState.cart.filter(c => c.id !== id);
+                    ProductManager.saveCart();
+                    WebsiteManager.updateCartUI();
+                },
+                clearCart: function() {
+                     Utils.confirmAction('Clear all items from cart?', () => {
+                        AppState.cart = [];
+                        ProductManager.saveCart();
+                        WebsiteManager.updateCartUI();
+                        WebsiteManager.closeFrame();
+                     });
+                },
+                openCheckout: ProductManager.openCheckout,
+                buyCart: ProductManager.buyCart,
+                // Admin functions
+                submitAdminLogin: AdminManager.submitAdminLogin,
+                addProduct: AdminManager.addProduct,
+                editProduct: AdminManager.editProduct,
+                deleteProduct: AdminManager.deleteProduct,
+                viewAllUsers: AdminManager.viewAllUsers,
+                viewAllProducts: AdminManager.viewAllProducts,
+                shutdownWebsite: AdminManager.shutdownWebsite,
+                // Settings & Misc
+                changeVolume: WebsiteManager.changeVolume,
+                saveColors: WebsiteManager.saveColors,
+                acceptCookies: WebsiteManager.acceptCookies,
+                declineCookies: WebsiteManager.declineCookies,
+                performSearch: WebsiteManager.performSearch,
+                showProduct: WebsiteManager.showProduct,
+                // Review & Recommendation Functions
+                openReviewFrame: WebsiteManager.openReviewFrame,
+                submitReview: WebsiteManager.submitReview,
+                submitRecommendation: WebsiteManager.submitRecommendation,
+                renderPaginatedProducts: WebsiteManager.renderPaginatedProducts,
+                renderDashboard: UserManager.renderDashboard
             });
 
-            // Make these functions available in the global scope
-            window.openFrame = openFrame;
-            window.closeFrame = closeFrame;
-            window.updateQty = updateQty;
-            window.removeFromCart = removeFromCart;
-            window.clearCart = clearCart;
-            window.openCheckout = openCheckout;
-            window.buyCart = buyCart;
-            window.submitAdminLogin = submitAdminLogin;
-            window.addProduct = addProduct;
-            window.editProduct = editProduct;
-            window.deleteProduct = deleteProduct;
-            window.shutdownWebsite = shutdownWebsite;
-            window.changeVolume = changeVolume;
-            window.saveColors = saveColors;
-            window.logout = logout;
-            window.acceptCookies = acceptCookies;
-            window.declineCookies = declineCookies;
-            window.submitLogin = submitLogin;
-            window.submitSignin = submitSignin;
-            window.submitRecommendation = submitRecommendation;
-            window.addToCart = addToCart;
-            window.getAdminPanelContent = getAdminPanelContent;
-            window.performSearch = performSearch;
-            window.showProduct = showProduct;
-
-            // Initial calls
-            updateCartBubble();
-            renderProducts();
-        }
+            // Re-assign the main window object for ease of use in HTML onclick attributes
+            window.WebsiteManager = window.WebsiteManager || {};
+            window.WebsiteManager.submitLogin = UserManager.submitLogin;
+            window.WebsiteManager.submitSignin = UserManager.submitSignin;
+            window.WebsiteManager.submitAdminLogin = AdminManager.submitAdminLogin;
+            window.WebsiteManager.addProduct = AdminManager.addProduct;
+            window.WebsiteManager.editProduct = AdminManager.editProduct;
+            window.WebsiteManager.deleteProduct = AdminManager.deleteProduct;
+            window.WebsiteManager.shutdownWebsite = AdminManager.shutdownWebsite;
+            window.WebsiteManager.changeVolume = WebsiteManager.changeVolume;
+            window.WebsiteManager.saveColors = WebsiteManager.saveColors;
+            window.WebsiteManager.logout = UserManager.logout;
+            window.WebsiteManager.acceptCookies = WebsiteManager.acceptCookies;
+            window.WebsiteManager.declineCookies = WebsiteManager.declineCookies;
+            window.WebsiteManager.submitRecommendation = WebsiteManager.submitRecommendation;
+            window.WebsiteManager.addToCart = ProductManager.addToCart;
+            window.WebsiteManager.openCheckout = ProductManager.openCheckout;
+            window.WebsiteManager.buyCart = ProductManager.buyCart;
+            window.WebsiteManager.updateQty = function(id, qty) { ProductManager.updateQty(id, qty); };
+            window.WebsiteManager.removeFromCart = function(id) { ProductManager.removeFromCart(id); };
+            window.WebsiteManager.clearCart = function() { ProductManager.clearCart(); };
+            window.WebsiteManager.openFrame = WebsiteManager.openFrame;
+            window.WebsiteManager.closeFrame = WebsiteManager.closeFrame;
+            window.WebsiteManager.getAdminPanelContent = AdminManager.getAdminPanelContent;
+            window.WebsiteManager.performSearch = WebsiteManager.performSearch;
+            window.WebsiteManager.showProduct = WebsiteManager.showProduct;
+            window.WebsiteManager.openReviewFrame = WebsiteManager.openReviewFrame;
+            window.WebsiteManager.submitReview = WebsiteManager.submitReview;
+            window.WebsiteManager.renderPaginatedProducts = WebsiteManager.renderPaginatedProducts;
+            window.WebsiteManager.viewAllUsers = AdminManager.viewAllUsers;
+            window.WebsiteManager.viewAllProducts = AdminManager.viewAllProducts;
+            window.WebsiteManager.renderDashboard = UserManager.renderDashboard;
+        })();
     </script>
-    <!-- Font Awesome for social icons -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
