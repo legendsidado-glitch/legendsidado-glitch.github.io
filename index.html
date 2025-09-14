@@ -269,7 +269,7 @@
         .frame-content {
             margin-bottom: 15px;
         }
-        .frame-content input {
+        .frame-content input, .frame-content textarea, .frame-content select {
             width: 100%;
             padding: 8px;
             margin: 5px 0;
@@ -394,6 +394,7 @@
             padding: 20px;
             text-align: center;
             transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
+            cursor: pointer;
         }
 
         .product-card:hover {
@@ -507,7 +508,51 @@
             font-size: 0.9rem;
             color: #777;
         }
+        
+        /* New Styles for Blog and Profile */
+        .blog-post {
+            background: var(--electric-blue);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
 
+        .blog-post:hover {
+            transform: scale(1.02);
+        }
+
+        .blog-post h4 {
+            margin-bottom: 10px;
+        }
+
+        .blog-comments {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--dark-blue);
+        }
+
+        .comment-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .achievement-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        .achievement-list li {
+            background: rgba(0, 198, 255, 0.1);
+            border: 1px solid rgba(0, 198, 255, 0.5);
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+        }
     </style>
 </head>
 <body>
@@ -515,7 +560,7 @@
     <div id="loading-screen">
         <canvas id="loading-canvas"></canvas>
         <div class="loading-content">
-            <div id="loading-text">Loading Scripts</div>
+            <div id="loading-text">Initializing Modules</div>
             <div id="loading-bar-container">
                 <div id="loading-bar"></div>
             </div>
@@ -535,6 +580,7 @@
             <a href="javascript:void(0);" data-frame="best-products-frame">Best Products</a>
             <a href="javascript:void(0);" data-frame="info-frame">Info</a>
             <a href="javascript:void(0);" data-frame="all-products-frame">All Products</a>
+            <a href="javascript:void(0);" data-frame="blog-frame">Blog</a>
         </nav>
     </header>
 
@@ -542,6 +588,7 @@
         <a class="action-btn" data-frame="admin-frame"><i class="fas fa-user-shield"></i>Admin</a>
         <a class="action-btn" data-frame="cart-frame"><i class="fas fa-shopping-cart"></i>Cart <div class="cart-bubble" id="cart-count">0</div></a>
         <a class="action-btn" data-frame="search-frame"><i class="fas fa-search"></i>Search</a>
+        <a class="action-btn" data-frame="profile-frame"><i class="fas fa-user"></i>Profile</a>
         <a class="action-btn" data-frame="login-frame"><i class="fas fa-sign-in-alt"></i>Login</a>
         <a class="action-btn" data-frame="signin-frame"><i class="fas fa-user-plus"></i>Sign In</a>
         <a class="action-btn" data-frame="recommend-frame"><i class="fas fa-star"></i>Recommendations</a>
@@ -598,24 +645,33 @@
                 cartCountEl: document.getElementById('cart-count'),
                 mainContent: document.querySelector('main'),
                 music: document.getElementById('bg-music'),
+                loadingPercent: 0,
+                texts: [
+                    "Initializing Modules", "Loading Assets", "Setting up Environment",
+                    "Establishing Connection", "Almost Ready!"
+                ],
+                textIndex: 0,
                 products: JSON.parse(localStorage.getItem('products')) || [
-                    { id: '1', name: 'Infinite Jump', price: 9.99, image: 'https://placehold.co/200x200/222/fff?text=Infinite+Jump', why: 'Jump to new heights in any game!', reviews: [] },
-                    { id: '2', name: 'Speed Boost', price: 14.99, image: 'https://placehold.co/200x200/222/fff?text=Speed+Boost', why: 'Run faster than everyone else.', reviews: [] },
-                    { id: '3', name: 'God Mode', price: 29.99, image: 'https://placehold.co/200x200/222/fff?text=God+Mode', why: 'Become invincible and dominate!', reviews: [] },
-                    { id: '4', name: 'ESP', price: 19.99, image: 'https://placehold.co/200x200/222/fff?text=ESP', why: 'See enemies through walls.', reviews: [] },
-                    { id: '5', name: 'Fly Hack', price: 18.50, image: 'https://placehold.co/200x200/222/fff?text=Fly+Hack', why: 'Soar through the skies and explore.', reviews: [] },
-                    { id: '6', name: 'Auto Farm', price: 22.00, image: 'https://placehold.co/200x200/222/fff?text=Auto+Farm', why: 'Automate repetitive tasks for easy gains.', reviews: [] },
-                    { id: '7', name: 'Aimbot', price: 35.00, image: 'https://placehold.co/200x200/222/fff?text=Aimbot', why: 'Perfect your aim in any shooting game.', reviews: [] },
-                    { id: '8', name: 'Teleport', price: 15.00, image: 'https://placehold.co/200x200/222/fff?text=Teleport', why: 'Instantly move to any location.', reviews: [] },
-                    { id: '9', name: 'Money Script', price: 25.00, image: 'https://placehold.co/200x200/222/fff?text=Money+Script', why: 'Generate in-game currency effortlessly.', reviews: [] },
-                    { id: '10', name: 'Server Crasher', price: 40.00, image: 'https://placehold.co/200x200/222/fff?text=Server+Crasher', why: 'Take down game servers. (Use with caution).', reviews: [] }
+                    { id: '1', name: 'Infinite Jump', price: 9.99, image: 'https://placehold.co/200x200/222/fff?text=Infinite+Jump', why: 'Jump to new heights in any game!', description: 'Allows you to jump endlessly without touching the ground. Perfect for navigating complex maps or reaching hidden areas.', reviews: [] },
+                    { id: '2', name: 'Speed Boost', price: 14.99, image: 'https://placehold.co/200x200/222/fff?text=Speed+Boost', why: 'Run faster than everyone else.', description: 'A reliable speed hack that provides a significant boost to your character\'s movement speed. Highly configurable.', reviews: [] },
+                    { id: '3', name: 'God Mode', price: 29.99, image: 'https://placehold.co/200x200/222/fff?text=God+Mode', why: 'Become invincible and dominate!', description: 'Renders your character immune to all forms of damage. Great for testing builds or for a casual, unbeatable experience.', reviews: [] },
+                    { id: '4', name: 'ESP', price: 19.99, image: 'https://placehold.co/200x200/222/fff?text=ESP', why: 'See enemies through walls.', description: 'Stands for Extra Sensory Perception. This script draws boxes or outlines around players and objects, even through walls.', reviews: [] },
+                    { id: '5', name: 'Fly Hack', price: 18.50, image: 'https://placehold.co/200x200/222/fff?text=Fly+Hack', why: 'Soar through the skies and explore.', description: 'Gives you the ability to fly freely around the game world. Perfect for sightseeing or gaining a tactical advantage.', reviews: [] },
+                    { id: '6', name: 'Auto Farm', price: 22.00, image: 'https://placehold.co/200x200/222/fff?text=Auto+Farm', why: 'Automate repetitive tasks for easy gains.', description: 'Automates the collection of resources or currency in games that require repetitive grinding. Customizable and efficient.', reviews: [] },
+                    { id: '7', name: 'Aimbot', price: 35.00, image: 'https://placehold.co/200x200/222/fff?text=Aimbot', why: 'Perfect your aim in any shooting game.', description: 'An advanced auto-aim script that locks onto enemies, ensuring you never miss a shot. Features include headshot targeting and configurable keybinds.', reviews: [] },
+                    { id: '8', name: 'Teleport', price: 15.00, image: 'https://placehold.co/200x200/222/fff?text=Teleport', why: 'Instantly move to any location.', description: 'Allows you to teleport to any player, part, or location in the game with a single command. Save time and get where you need to be instantly.', reviews: [] },
+                    { id: '9', name: 'Money Script', price: 25.00, image: 'https://placehold.co/200x200/222/fff?text=Money+Script', why: 'Generate in-game currency effortlessly.', description: 'A powerful script that can generate in-game currency, bypassing the usual grind. Works on most popular tycoon and simulator games.', reviews: [] },
+                    { id: '10', name: 'Server Crasher', price: 40.00, image: 'https://placehold.co/200x200/222/fff?text=Server+Crasher', why: 'Take down game servers. (Use with caution).', description: 'A highly destructive script that exploits vulnerabilities to cause a server to shut down or freeze. Use responsibly.', reviews: [] },
+                    { id: '11', name: 'Walkspeed Changer', price: 5.00, image: 'https://placehold.co/200x200/222/fff?text=Walkspeed+Changer', why: 'Control your speed precisely.', description: 'A simple but effective script that allows you to change your character\'s walk speed to any value.', reviews: [] },
+                    { id: '12', name: 'Noclip', price: 12.50, image: 'https://placehold.co/200x200/222/fff?text=Noclip', why: 'Walk through any object.', description: 'Lets you pass through solid objects, walls, and floors. Explore the hidden parts of any game map.', reviews: [] }
                 ],
                 cart: JSON.parse(localStorage.getItem('cart')) || [],
                 users: JSON.parse(localStorage.getItem('users')) || {
-                    'admin@scriptsell.com': { password: 'admin123', rank: 'admin', purchases: [], recommendations: [] }
+                    'admin@scriptsell.com': { password: 'admin123', rank: 'admin', purchases: [], reviews: [], achievements: [] }
                 },
                 currentUser: JSON.parse(localStorage.getItem('currentUser')) || null,
                 recommendations: JSON.parse(localStorage.getItem('recommendations')) || [],
+                blogPosts: JSON.parse(localStorage.getItem('blogPosts')) || [],
                 loginAttempts: JSON.parse(localStorage.getItem('loginAttempts')) || {},
                 MAX_ATTEMPTS: 5,
                 LOCKOUT_TIME: 60 * 1000,
@@ -772,7 +828,7 @@
                         Utils.showMessage('Passwords do not match!');
                         return;
                     }
-                    AppState.users[email] = { password, rank: 'user', purchases: [], recommendations: [] };
+                    AppState.users[email] = { password, rank: 'user', purchases: [], reviews: [], achievements: [] };
                     localStorage.setItem('users', JSON.stringify(AppState.users));
                     AppState.currentUser = { email, rank: 'user' };
                     localStorage.setItem('currentUser', JSON.stringify(AppState.currentUser));
@@ -791,10 +847,16 @@
                 // Renders the user's dashboard
                 renderDashboard: function() {
                     if (!AppState.currentUser) {
-                        Utils.showMessage('You must be logged in to view your dashboard.');
+                        Utils.showMessage('You must be logged in to view your profile.');
                         return;
                     }
                     const user = AppState.users[AppState.currentUser.email];
+                    
+                    // Check for achievements
+                    const achievements = UserManager.getAchievements(user);
+                    user.achievements = achievements;
+                    localStorage.setItem('users', JSON.stringify(AppState.users));
+
                     let purchaseHistoryHtml = '';
                     if (user && user.purchases.length > 0) {
                         user.purchases.forEach(purchase => {
@@ -811,6 +873,17 @@
                     } else {
                         purchaseHistoryHtml = '<p>You have no purchase history.</p>';
                     }
+
+                    let achievementHtml = '';
+                    if (achievements.length > 0) {
+                        achievementHtml = '<ul class="achievement-list">';
+                        achievements.forEach(ach => {
+                            achievementHtml += `<li><i class="fas fa-medal"></i> <strong>${ach.name}</strong>: ${ach.description}</li>`;
+                        });
+                        achievementHtml += '</ul>';
+                    } else {
+                        achievementHtml = '<p>You have no achievements yet. Keep exploring!</p>';
+                    }
                     
                     const dashboardContent = `
                         <h4>Account Info</h4>
@@ -821,9 +894,38 @@
                         <div style="max-height: 200px; overflow-y: auto;">
                             ${purchaseHistoryHtml}
                         </div>
+                        <hr style="border-color: var(--electric-blue); margin: 15px 0;">
+                        <h4>Achievements</h4>
+                        <div style="max-height: 150px; overflow-y: auto;">
+                            ${achievementHtml}
+                        </div>
                         <button class="submit-btn" onclick="window.WebsiteManager.logout()">Logout</button>
                     `;
-                    WebsiteManager.openFrame('User Dashboard', dashboardContent);
+                    WebsiteManager.openFrame('User Profile', dashboardContent);
+                },
+
+                getAchievements: function(user) {
+                    const achievements = [];
+                    const purchaseCount = user.purchases.length;
+                    const reviewCount = user.reviews.length;
+                    
+                    if (purchaseCount >= 1) {
+                        achievements.push({ name: 'First Buyer', description: 'Made your first purchase.' });
+                    }
+                    if (purchaseCount >= 5) {
+                        achievements.push({ name: 'Frequent Shopper', description: 'Purchased 5 or more products.' });
+                    }
+                    if (purchaseCount >= 10) {
+                        achievements.push({ name: 'Power Buyer', description: 'Purchased 10 or more products. You\'re a pro!' });
+                    }
+                    if (reviewCount >= 1) {
+                        achievements.push({ name: 'First Reviewer', description: 'Wrote your first product review.' });
+                    }
+                    if (reviewCount >= 5) {
+                        achievements.push({ name: 'Community Contributor', description: 'Wrote 5 or more reviews. Thanks for helping the community!' });
+                    }
+                    
+                    return achievements;
                 }
             };
 
@@ -862,6 +964,7 @@
                         const card = document.createElement('div');
                         card.className = 'product-card';
                         card.id = `product-${product.id}`;
+                        card.setAttribute('onclick', `window.WebsiteManager.openProductDetails('${product.id}')`);
                         const averageRating = ProductManager.getAverageRating(product.id);
                         card.innerHTML = `
                             <h4>${product.name}</h4>
@@ -870,12 +973,55 @@
                             <p class="price">$${product.price.toFixed(2)}</p>
                             <div class="product-reviews">
                                 <div class="star-rating">${Utils.getStarRatingHtml(averageRating)} (${averageRating})</div>
-                                <a href="javascript:void(0);" onclick="window.WebsiteManager.openReviewFrame('${product.id}')">View Reviews</a>
+                                <a href="javascript:void(0);" onclick="event.stopPropagation(); window.WebsiteManager.openReviewFrame('${product.id}')">View Reviews</a>
                             </div>
-                            <button class="add-to-cart" onclick="window.WebsiteManager.addToCart('${product.id}')">Add to Cart</button>
+                            <button class="add-to-cart" onclick="event.stopPropagation(); window.WebsiteManager.addToCart('${product.id}')">Add to Cart</button>
                         `;
                         container.appendChild(card);
                     });
+                },
+                
+                // Opens a new frame to display full product details
+                openProductDetails: function(productId) {
+                    const product = AppState.products.find(p => p.id === productId);
+                    if (!product) {
+                        Utils.showMessage('Product not found.');
+                        return;
+                    }
+                    const averageRating = ProductManager.getAverageRating(productId);
+                    const reviewsHtml = WebsiteManager.getReviewsHtml(product);
+                    
+                    const detailsContent = `
+                        <div style="text-align: center;">
+                            <img src="${product.image}" alt="${product.name}" style="max-width: 80%; border-radius: 10px; margin-bottom: 15px;">
+                            <h3>${product.name}</h3>
+                            <div class="star-rating" style="font-size: 1.5em; text-align: center;">${Utils.getStarRatingHtml(averageRating)} (${averageRating})</div>
+                            <p class="price" style="font-size: 1.5rem; margin-top: 10px;">$${product.price.toFixed(2)}</p>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <h4>Description</h4>
+                            <p>${product.description}</p>
+                        </div>
+                        <button class="submit-btn" onclick="window.WebsiteManager.addToCart('${product.id}')">Add to Cart</button>
+                        <hr style="border-color: var(--electric-blue); margin: 20px 0;">
+                        <div class="review-section">
+                            <h4>Customer Reviews</h4>
+                            ${reviewsHtml}
+                            <div class="review-form">
+                                <h4>Submit a Review</h4>
+                                <select id="review-rating" style="width: 100%; padding: 8px; border-radius: 8px; border: none; background: #333; color: #fff;">
+                                    <option value="1">1 Star</option>
+                                    <option value="2">2 Stars</option>
+                                    <option value="3">3 Stars</option>
+                                    <option value="4">4 Stars</option>
+                                    <option value="5">5 Stars</option>
+                                </select>
+                                <textarea id="review-text" placeholder="Write your review..."></textarea>
+                                <button class="submit-btn" onclick="window.WebsiteManager.submitReview('${productId}')">Submit Review</button>
+                            </div>
+                        </div>
+                    `;
+                    WebsiteManager.openFrame(product.name, detailsContent);
                 },
 
                 // Adds a product to the cart
@@ -974,6 +1120,95 @@
             };
             
             // ====================================================================================
+            // Blog Management Module
+            // ====================================================================================
+
+            const BlogManager = {
+                saveBlogPosts: function() {
+                    localStorage.setItem('blogPosts', JSON.stringify(AppState.blogPosts));
+                },
+                
+                renderBlogPosts: function() {
+                    let blogHtml = '';
+                    if (AppState.blogPosts.length === 0) {
+                        blogHtml = '<p>No blog posts yet. Check back soon!</p>';
+                    } else {
+                        AppState.blogPosts.forEach(post => {
+                            blogHtml += `
+                                <div class="blog-post" onclick="window.WebsiteManager.openBlogPost('${post.id}')">
+                                    <h4>${post.title}</h4>
+                                    <p style="font-size: 0.8em; color: #aaa;">By Admin on ${new Date(post.date).toLocaleDateString()}</p>
+                                    <p>${post.summary}</p>
+                                </div>
+                            `;
+                        });
+                    }
+                    WebsiteManager.openFrame('Scriptsell Blog', blogHtml);
+                },
+
+                openBlogPost: function(postId) {
+                    const post = AppState.blogPosts.find(p => p.id === postId);
+                    if (!post) {
+                        Utils.showMessage('Blog post not found.');
+                        return;
+                    }
+                    let commentsHtml = '<div class="blog-comments">';
+                    if (post.comments.length > 0) {
+                        commentsHtml += '<h4>Comments:</h4>';
+                        post.comments.forEach(comment => {
+                            commentsHtml += `
+                                <div class="comment-item">
+                                    <strong>${comment.user.split('@')[0]}</strong> on ${new Date(comment.date).toLocaleDateString()}<br>
+                                    <p>${comment.text}</p>
+                                </div>
+                            `;
+                        });
+                    } else {
+                        commentsHtml += '<p>No comments yet. Be the first to comment!</p>';
+                    }
+                    commentsHtml += `</div>`;
+                    
+                    const postContent = `
+                        <div style="padding: 10px;">
+                            <h3>${post.title}</h3>
+                            <p style="font-size: 0.9em; color: #aaa;">Published on ${new Date(post.date).toLocaleDateString()}</p>
+                            <p>${post.content}</p>
+                        </div>
+                        <hr style="border-color: var(--electric-blue); margin: 20px 0;">
+                        ${commentsHtml}
+                        <div class="comment-form" style="margin-top: 20px;">
+                            <textarea id="comment-text" placeholder="Write your comment..."></textarea>
+                            <button class="submit-btn" onclick="window.WebsiteManager.submitComment('${postId}')">Submit Comment</button>
+                        </div>
+                    `;
+                    WebsiteManager.openFrame('Blog Post', postContent);
+                },
+
+                submitComment: function(postId) {
+                    if (!AppState.currentUser) {
+                        Utils.showMessage('You must be logged in to comment on blog posts.');
+                        return;
+                    }
+                    const post = AppState.blogPosts.find(p => p.id === postId);
+                    const commentText = document.getElementById('comment-text').value.trim();
+                    if (!commentText) {
+                        Utils.showMessage('Comment cannot be empty.');
+                        return;
+                    }
+                    if (post) {
+                        post.comments.push({
+                            user: AppState.currentUser.email,
+                            text: commentText,
+                            date: Date.now()
+                        });
+                        BlogManager.saveBlogPosts();
+                        BlogManager.openBlogPost(postId);
+                        Utils.showMessage('Comment submitted!');
+                    }
+                }
+            };
+            
+            // ====================================================================================
             // Admin Panel Module
             // ====================================================================================
 
@@ -1000,10 +1235,11 @@
                     }
                     return `
                         <div class="admin-section">
-                            <h4>Add Product</h4>
+                            <h4>Product Management</h4>
                             <input type="text" id="add-name" placeholder="Product Name">
                             <input type="number" id="add-price" placeholder="Price">
                             <input type="text" id="add-why" placeholder="Why Buy (Optional)">
+                            <textarea id="add-desc" placeholder="Product Description"></textarea>
                             <button class="submit-btn" onclick="window.WebsiteManager.addProduct()">Add Product</button>
                         </div>
                         <div class="admin-section">
@@ -1012,12 +1248,20 @@
                             <input type="text" id="edit-name" placeholder="New Name (Optional)">
                             <input type="number" id="edit-price" placeholder="New Price (Optional)">
                             <input type="text" id="edit-why" placeholder="New Why Buy (Optional)">
+                            <textarea id="edit-desc" placeholder="New Description (Optional)"></textarea>
                             <button class="submit-btn" onclick="window.WebsiteManager.editProduct()">Edit Product</button>
                         </div>
                         <div class="admin-section">
                             <h4>Delete Product</h4>
                             <input type="text" id="delete-id" placeholder="Product ID">
                             <button class="submit-btn" onclick="window.WebsiteManager.deleteProduct()">Delete Product</button>
+                        </div>
+                        <div class="admin-section">
+                            <h4>Blog Management</h4>
+                            <input type="text" id="blog-title" placeholder="Blog Post Title">
+                            <textarea id="blog-summary" placeholder="Summary"></textarea>
+                            <textarea id="blog-content" placeholder="Full Content"></textarea>
+                            <button class="submit-btn" onclick="window.WebsiteManager.createBlogPost()">Create Post</button>
                         </div>
                         <div class="admin-section">
                             <h4>View All Users</h4>
@@ -1039,12 +1283,13 @@
                     const name = document.getElementById('add-name').value;
                     const price = parseFloat(document.getElementById('add-price').value);
                     const why = document.getElementById('add-why').value || '';
+                    const description = document.getElementById('add-desc').value || '';
                     if (!name || isNaN(price)) {
                         Utils.showMessage('Name and Price are required');
                         return;
                     }
                     const id = Date.now().toString();
-                    AppState.products.push({ id, name, price, why, image: 'https://placehold.co/200x200/222/fff?text=' + encodeURIComponent(name), reviews: [] });
+                    AppState.products.push({ id, name, price, why, description, image: 'https://placehold.co/200x200/222/fff?text=' + encodeURIComponent(name), reviews: [] });
                     ProductManager.saveProducts();
                     ProductManager.renderProducts();
                     Utils.showMessage('Product added successfully!');
@@ -1062,9 +1307,11 @@
                     const name = document.getElementById('edit-name').value;
                     const price = document.getElementById('edit-price').value;
                     const why = document.getElementById('edit-why').value;
+                    const description = document.getElementById('edit-desc').value;
                     if (name) product.name = name;
                     if (price) product.price = parseFloat(price);
                     if (why) product.why = why;
+                    if (description) product.description = description;
                     ProductManager.saveProducts();
                     ProductManager.renderProducts();
                     Utils.showMessage('Product edited successfully!');
@@ -1086,6 +1333,29 @@
                     WebsiteManager.openFrame('Admin Panel', AdminManager.getAdminPanelContent());
                 },
                 
+                // Creates a new blog post
+                createBlogPost: function() {
+                    const title = document.getElementById('blog-title').value;
+                    const summary = document.getElementById('blog-summary').value;
+                    const content = document.getElementById('blog-content').value;
+                    if (!title || !summary || !content) {
+                        Utils.showMessage('All blog post fields are required.');
+                        return;
+                    }
+                    const newPost = {
+                        id: Date.now().toString(),
+                        title,
+                        summary,
+                        content,
+                        date: Date.now(),
+                        comments: []
+                    };
+                    AppState.blogPosts.push(newPost);
+                    BlogManager.saveBlogPosts();
+                    Utils.showMessage('Blog post created successfully!');
+                    WebsiteManager.openFrame('Admin Panel', AdminManager.getAdminPanelContent());
+                },
+
                 // Renders a list of all users for the admin
                 viewAllUsers: function() {
                     let usersHtml = `
@@ -1099,7 +1369,8 @@
                                 <strong>Email:</strong> ${email}<br>
                                 <strong>Rank:</strong> ${user.rank}<br>
                                 <strong>Purchases:</strong> ${user.purchases.length}<br>
-                                <strong>Recommendations:</strong> ${user.recommendations.length}
+                                <strong>Reviews:</strong> ${user.reviews.length}<br>
+                                <strong>Achievements:</strong> ${user.achievements.length}
                             </div>
                         `;
                     }
@@ -1120,6 +1391,7 @@
                                 <strong>Name:</strong> ${product.name}<br>
                                 <strong>Price:</strong> $${product.price.toFixed(2)}<br>
                                 <strong>Why Buy:</strong> ${product.why}<br>
+                                <strong>Description:</strong> ${product.description.substring(0, 50)}...<br>
                                 <strong>Reviews:</strong> ${product.reviews.length}
                             </div>
                         `;
@@ -1187,7 +1459,7 @@
                     productsOnPage.forEach(product => {
                         const averageRating = ProductManager.getAverageRating(product.id);
                         html += `
-                            <div class="product-card">
+                            <div class="product-card" onclick="window.WebsiteManager.openProductDetails('${product.id}')">
                                 <h4>${product.name}</h4>
                                 <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/200x200/222/fff?text=Image+Error'">
                                 <p class="price">$${product.price.toFixed(2)}</p>
@@ -1209,17 +1481,11 @@
                     WebsiteManager.openFrame('All Products', html);
                 },
                 
-                // Opens the review frame for a specific product
-                openReviewFrame: function(productId) {
-                    const product = AppState.products.find(p => p.id === productId);
-                    if (!product) {
-                        Utils.showMessage('Product not found.');
-                        return;
-                    }
-                    const averageRating = ProductManager.getAverageRating(productId);
+                // Helper function to generate reviews HTML
+                getReviewsHtml: function(product) {
                     let reviewsHtml = '';
                     if (product.reviews.length > 0) {
-                        reviewsHtml = `<h4>Reviews:</h4><div style="max-height: 200px; overflow-y: auto;">`;
+                        reviewsHtml = `<div style="max-height: 200px; overflow-y: auto;">`;
                         product.reviews.forEach(review => {
                             reviewsHtml += `
                                 <div style="padding: 10px; border-bottom: 1px solid #333;">
@@ -1230,29 +1496,11 @@
                         });
                         reviewsHtml += '</div>';
                     } else {
-                        reviewsHtml = '<p>No reviews yet.</p>';
+                        reviewsHtml = '<p>No reviews yet. Be the first to leave one!</p>';
                     }
-                    
-                    const reviewContent = `
-                        <h3>${product.name}</h3>
-                        <div class="star-rating" style="font-size: 1.5em; text-align: center;">${Utils.getStarRatingHtml(averageRating)} (${averageRating})</div>
-                        ${reviewsHtml}
-                        <div class="review-form">
-                            <h4>Submit a Review</h4>
-                            <select id="review-rating" style="width: 100%; padding: 8px; border-radius: 8px; border: none; background: #333; color: #fff;">
-                                <option value="1">1 Star</option>
-                                <option value="2">2 Stars</option>
-                                <option value="3">3 Stars</option>
-                                <option value="4">4 Stars</option>
-                                <option value="5">5 Stars</option>
-                            </select>
-                            <textarea id="review-text" placeholder="Write your review..."></textarea>
-                            <button class="submit-btn" onclick="window.WebsiteManager.submitReview('${productId}')">Submit Review</button>
-                        </div>
-                    `;
-                    WebsiteManager.openFrame('Product Reviews', reviewContent);
+                    return reviewsHtml;
                 },
-                
+
                 // Handles submitting a new review
                 submitReview: function(productId) {
                     if (!AppState.currentUser) {
@@ -1272,9 +1520,14 @@
                             rating: rating,
                             text: text
                         });
+                        const user = AppState.users[AppState.currentUser.email];
+                        if (user) {
+                            user.reviews.push({ productId, rating, text });
+                            localStorage.setItem('users', JSON.stringify(AppState.users));
+                        }
                         ProductManager.saveProducts();
                         ProductManager.renderProducts();
-                        WebsiteManager.openReviewFrame(productId);
+                        WebsiteManager.openProductDetails(productId);
                         Utils.showMessage('Review submitted successfully!');
                     }
                 },
@@ -1345,6 +1598,9 @@
                         case 'all-products-frame':
                             WebsiteManager.renderPaginatedProducts(1);
                             break;
+                        case 'blog-frame':
+                            BlogManager.renderBlogPosts();
+                            break;
                         case 'cart-frame':
                             WebsiteManager.openFrame('Cart', ProductManager.getCartContent());
                             break;
@@ -1372,6 +1628,9 @@
                                 <button class="submit-btn" onclick="window.WebsiteManager.submitSignin()">Create Account</button>
                             `;
                             WebsiteManager.openFrame('Sign In', signinContent);
+                            break;
+                        case 'profile-frame':
+                            UserManager.renderDashboard();
                             break;
                         case 'recommend-frame':
                             if (!AppState.currentUser) {
@@ -1501,7 +1760,7 @@
                     }
                     let html = '<div class="product-grid">';
                     hotDeals.forEach(p => {
-                        html += `<div class="product-card"><h4>${p.name}</h4><p class="price">$${p.price.toFixed(2)}</p></div>`;
+                        html += `<div class="product-card" onclick="window.WebsiteManager.openProductDetails('${p.id}')"><h4>${p.name}</h4><p class="price">$${p.price.toFixed(2)}</p></div>`;
                     });
                     html += '</div>';
                     return html;
@@ -1515,7 +1774,7 @@
                      }
                      let html = '<div class="product-grid">';
                      bestProducts.forEach(p => {
-                         html += `<div class="product-card"><h4>${p.name}</h4><p class="price">$${p.price.toFixed(2)}</p></div>`;
+                         html += `<div class="product-card" onclick="window.WebsiteManager.openProductDetails('${p.id}')"><h4>${p.name}</h4><p class="price">$${p.price.toFixed(2)}</p></div>`;
                      });
                      html += '</div>';
                      return html;
@@ -1604,6 +1863,11 @@
             // ====================================================================================
             
             // Loading screen logic
+            const loadingScreen = document.getElementById('loading-screen');
+            const loadingBar = document.getElementById('loading-bar');
+            const loadingPercent = document.getElementById('loading-percent');
+            const loadingText = document.getElementById('loading-text');
+
             const loadingInterval = setInterval(() => {
                 AppState.loadingPercent++;
                 loadingBar.style.width = AppState.loadingPercent + "%";
@@ -1613,21 +1877,23 @@
                 }
                 if (AppState.loadingPercent >= 100) {
                     clearInterval(loadingInterval);
-                    document.getElementById('loading-screen').style.opacity = 0;
+                    loadingScreen.style.opacity = 0;
                     setTimeout(() => {
-                        document.getElementById('loading-screen').style.display = 'none';
+                        loadingScreen.style.display = 'none';
                         WebsiteManager.init();
                     }, 500);
                 }
             }, 30);
             
             // Expose public functions to the global window object
+            window.WebsiteManager = window.WebsiteManager || {};
             Object.assign(window.WebsiteManager, {
                 // Core UI functions
                 openFrame: WebsiteManager.openFrame,
                 closeFrame: WebsiteManager.closeFrame,
                 updateCartUI: WebsiteManager.updateCartUI,
                 handleConfirm: Utils.handleConfirm,
+                openProductDetails: ProductManager.openProductDetails,
                 // User & Auth functions
                 submitLogin: UserManager.submitLogin,
                 submitSignin: UserManager.submitSignin,
@@ -1662,9 +1928,13 @@
                 addProduct: AdminManager.addProduct,
                 editProduct: AdminManager.editProduct,
                 deleteProduct: AdminManager.deleteProduct,
+                createBlogPost: AdminManager.createBlogPost,
                 viewAllUsers: AdminManager.viewAllUsers,
                 viewAllProducts: AdminManager.viewAllProducts,
                 shutdownWebsite: AdminManager.shutdownWebsite,
+                // Blog functions
+                openBlogPost: BlogManager.openBlogPost,
+                submitComment: BlogManager.submitComment,
                 // Settings & Misc
                 changeVolume: WebsiteManager.changeVolume,
                 saveColors: WebsiteManager.saveColors,
@@ -1673,47 +1943,13 @@
                 performSearch: WebsiteManager.performSearch,
                 showProduct: WebsiteManager.showProduct,
                 // Review & Recommendation Functions
-                openReviewFrame: WebsiteManager.openReviewFrame,
+                openReviewFrame: ProductManager.openReviewFrame,
                 submitReview: WebsiteManager.submitReview,
                 submitRecommendation: WebsiteManager.submitRecommendation,
                 renderPaginatedProducts: WebsiteManager.renderPaginatedProducts,
                 renderDashboard: UserManager.renderDashboard
             });
-
-            // Re-assign the main window object for ease of use in HTML onclick attributes
-            window.WebsiteManager = window.WebsiteManager || {};
-            window.WebsiteManager.submitLogin = UserManager.submitLogin;
-            window.WebsiteManager.submitSignin = UserManager.submitSignin;
-            window.WebsiteManager.submitAdminLogin = AdminManager.submitAdminLogin;
-            window.WebsiteManager.addProduct = AdminManager.addProduct;
-            window.WebsiteManager.editProduct = AdminManager.editProduct;
-            window.WebsiteManager.deleteProduct = AdminManager.deleteProduct;
-            window.WebsiteManager.shutdownWebsite = AdminManager.shutdownWebsite;
-            window.WebsiteManager.changeVolume = WebsiteManager.changeVolume;
-            window.WebsiteManager.saveColors = WebsiteManager.saveColors;
-            window.WebsiteManager.logout = UserManager.logout;
-            window.WebsiteManager.acceptCookies = WebsiteManager.acceptCookies;
-            window.WebsiteManager.declineCookies = WebsiteManager.declineCookies;
-            window.WebsiteManager.submitRecommendation = WebsiteManager.submitRecommendation;
-            window.WebsiteManager.addToCart = ProductManager.addToCart;
-            window.WebsiteManager.openCheckout = ProductManager.openCheckout;
-            window.WebsiteManager.buyCart = ProductManager.buyCart;
-            window.WebsiteManager.updateQty = function(id, qty) { ProductManager.updateQty(id, qty); };
-            window.WebsiteManager.removeFromCart = function(id) { ProductManager.removeFromCart(id); };
-            window.WebsiteManager.clearCart = function() { ProductManager.clearCart(); };
-            window.WebsiteManager.openFrame = WebsiteManager.openFrame;
-            window.WebsiteManager.closeFrame = WebsiteManager.closeFrame;
-            window.WebsiteManager.getAdminPanelContent = AdminManager.getAdminPanelContent;
-            window.WebsiteManager.performSearch = WebsiteManager.performSearch;
-            window.WebsiteManager.showProduct = WebsiteManager.showProduct;
-            window.WebsiteManager.openReviewFrame = WebsiteManager.openReviewFrame;
-            window.WebsiteManager.submitReview = WebsiteManager.submitReview;
-            window.WebsiteManager.renderPaginatedProducts = WebsiteManager.renderPaginatedProducts;
-            window.WebsiteManager.viewAllUsers = AdminManager.viewAllUsers;
-            window.WebsiteManager.viewAllProducts = AdminManager.viewAllProducts;
-            window.WebsiteManager.renderDashboard = UserManager.renderDashboard;
         })();
     </script>
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
 </html>
