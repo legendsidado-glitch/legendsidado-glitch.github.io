@@ -7,6 +7,7 @@
     <title>&lt;\&gt; Scriptsell</title>
     <link rel="icon" href="Scriptsell.png" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* CSS Variables for colors */
         :root {
@@ -66,33 +67,29 @@
             align-items: center;
             flex-direction: column;
             z-index: 9999;
+            transition: opacity 0.5s ease-out;
         }
-        .loading-circles {
-            position: relative;
-            width: 150px;
-            height: 150px;
-        }
-        .circle {
+
+        #loading-canvas {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background: linear-gradient(135deg, #00c6ff, #0072ff);
-            border-radius: 50%;
-            animation: moveCircle 2s linear infinite;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
-        @keyframes moveCircle {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(50px, 30px); }
-            50% { transform: translate(-50px, 50px); }
-            75% { transform: translate(30px, -40px); }
-            100% { transform: translate(0, 0); }
+        
+        .loading-content {
+            z-index: 1;
+            text-align: center;
         }
+
         #loading-text {
             color: #fff;
             font-size: 1.5rem;
-            margin-top: 30px;
-            text-align: center;
+            margin-bottom: 30px;
         }
+
         #loading-bar-container {
             width: 300px;
             height: 20px;
@@ -101,12 +98,14 @@
             overflow: hidden;
             margin-top: 20px;
         }
+
         #loading-bar {
             width: 0%;
             height: 100%;
             background: linear-gradient(90deg, #00c6ff, #0072ff);
             transition: width 0.2s ease;
         }
+
         #loading-percent {
             color: #fff;
             margin-top: 10px;
@@ -130,6 +129,7 @@
             padding: 20px;
             text-align: center;
             color: #fff;
+            z-index: 2;
         }
         header h1 {
             font-size: 2.5rem;
@@ -169,14 +169,19 @@
             transform: scale(1.05);
         }
 
-        /* Top Action Buttons */
+        /* Top Action Buttons with Icons */
         #top-buttons {
             display: flex;
             justify-content: center;
             gap: 15px;
             margin-bottom: 20px;
+            z-index: 2;
+            flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
         }
         .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
             padding: 10px 18px;
             background: var(--button-gradient);
@@ -185,6 +190,10 @@
             cursor: pointer;
             font-weight: bold;
             transition: 0.3s;
+            text-decoration: none;
+        }
+        .action-btn i {
+            margin-right: 8px;
         }
         .action-btn:hover {
             background: var(--button-hover-gradient);
@@ -424,19 +433,14 @@
 <body>
 
     <div id="loading-screen">
-        <div class="loading-circles">
-            <div class="circle" style="top:0; left:50%; animation-delay:0s;"></div>
-            <div class="circle" style="top:50%; left:100%; animation-delay:0.2s;"></div>
-            <div class="circle" style="top:100%; left:50%; animation-delay:0.4s;"></div>
-            <div class="circle" style="top:50%; left:0%; animation-delay:0.6s;"></div>
-            <div class="circle" style="top:25%; left:75%; animation-delay:0.8s;"></div>
-            <div class="circle" style="top:75%; left:25%; animation-delay:1s;"></div>
+        <canvas id="loading-canvas"></canvas>
+        <div class="loading-content">
+            <div id="loading-text">Loading Scripts</div>
+            <div id="loading-bar-container">
+                <div id="loading-bar"></div>
+            </div>
+            <div id="loading-percent">0%</div>
         </div>
-        <div id="loading-text">Loading Scripts</div>
-        <div id="loading-bar-container">
-            <div id="loading-bar"></div>
-        </div>
-        <div id="loading-percent">0%</div>
     </div>
 
     <canvas id="background-canvas"></canvas>
@@ -455,14 +459,14 @@
     </header>
 
     <div id="top-buttons">
-        <div class="action-btn" data-frame="admin-frame">Admin</div>
-        <div class="action-btn" data-frame="cart-frame">Cart <div class="cart-bubble" id="cart-count">0</div></div>
-        <div class="action-btn" data-frame="search-frame">Search</div>
-        <div class="action-btn" data-frame="login-frame">Login</div>
-        <div class="action-btn" data-frame="signin-frame">Sign In</div>
-        <div class="action-btn" data-frame="recommend-frame">Recommendations</div>
-        <div class="action-btn" data-frame="settings-frame">Settings</div>
-        <div class="action-btn" data-frame="cookies-frame">Cookies</div>
+        <a class="action-btn" data-frame="admin-frame"><i class="fas fa-user-shield"></i>Admin</a>
+        <a class="action-btn" data-frame="cart-frame"><i class="fas fa-shopping-cart"></i>Cart <div class="cart-bubble" id="cart-count">0</div></a>
+        <a class="action-btn" data-frame="search-frame"><i class="fas fa-search"></i>Search</a>
+        <a class="action-btn" data-frame="login-frame"><i class="fas fa-sign-in-alt"></i>Login</a>
+        <a class="action-btn" data-frame="signin-frame"><i class="fas fa-user-plus"></i>Sign In</a>
+        <a class="action-btn" data-frame="recommend-frame"><i class="fas fa-star"></i>Recommendations</a>
+        <a class="action-btn" data-frame="settings-frame"><i class="fas fa-cog"></i>Settings</a>
+        <a class="action-btn" data-frame="cookies-frame"><i class="fas fa-cookie-bite"></i>Cookies</a>
     </div>
 
     <main>
@@ -496,17 +500,80 @@
     </div>
 
     <audio id="bg-music" loop>
-        <source src="music.mp3" type="audio/mpeg">
+        <source src="good-night-lofi-cozy-chill-music-160166.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // Loading screen logic (Corrected to run first)
+        // Loading screen logic
         const loadingText = document.getElementById('loading-text');
         const loadingBar = document.getElementById('loading-bar');
         const loadingPercent = document.getElementById('loading-percent');
         const dynamicFrame = document.getElementById('dynamic-frame');
         const frameTitle = document.getElementById('frame-title');
         const frameContentContainer = document.getElementById('frame-content-container');
+        const loadingCanvas = document.getElementById('loading-canvas');
+        const lCtx = loadingCanvas.getContext('2d');
+        const music = document.getElementById('bg-music');
+
+        const loadingPoints = [];
+        const pointCount = 100;
+
+        function createLoadingPoints() {
+            loadingCanvas.width = window.innerWidth;
+            loadingCanvas.height = window.innerHeight;
+            for (let i = 0; i < pointCount; i++) {
+                loadingPoints.push({
+                    x: Math.random() * loadingCanvas.width,
+                    y: Math.random() * loadingCanvas.height,
+                    radius: Math.random() * 2 + 1,
+                    dx: (Math.random() - 0.5) * 0.5,
+                    dy: (Math.random() - 0.5) * 0.5,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`
+                });
+            }
+        }
+
+        function drawLoading() {
+            lCtx.clearRect(0, 0, loadingCanvas.width, loadingCanvas.height);
+
+            for (let i = 0; i < loadingPoints.length; i++) {
+                for (let j = i + 1; j < loadingPoints.length; j++) {
+                    const dist = Math.sqrt(Math.pow(loadingPoints[i].x - loadingPoints[j].x, 2) + Math.pow(loadingPoints[i].y - loadingPoints[j].y, 2));
+                    if (dist < 100) {
+                        lCtx.beginPath();
+                        lCtx.moveTo(loadingPoints[i].x, loadingPoints[i].y);
+                        lCtx.lineTo(loadingPoints[j].x, loadingPoints[j].y);
+                        lCtx.strokeStyle = `rgba(0, 198, 255, ${1 - dist / 100})`;
+                        lCtx.stroke();
+                    }
+                }
+            }
+
+            loadingPoints.forEach(point => {
+                lCtx.beginPath();
+                lCtx.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
+                lCtx.fillStyle = `rgba(0, 198, 255, 0.8)`;
+                lCtx.fill();
+                point.x += point.dx;
+                point.y += point.dy;
+                if (point.x < 0 || point.x > loadingCanvas.width) point.dx *= -1;
+                if (point.y < 0 || point.y > loadingCanvas.height) point.dy *= -1;
+            });
+
+            requestAnimationFrame(drawLoading);
+        }
+
+        createLoadingPoints();
+        drawLoading();
+
+        window.addEventListener('resize', () => {
+            loadingCanvas.width = window.innerWidth;
+            loadingCanvas.height = window.innerHeight;
+            loadingPoints.forEach(point => {
+                point.x = Math.random() * loadingCanvas.width;
+                point.y = Math.random() * loadingCanvas.height;
+            });
+        });
 
         const texts = [
             "Loading Scripts",
@@ -531,10 +598,13 @@
 
             if (percent >= 100) {
                 clearInterval(loadingInterval);
-                document.getElementById('loading-screen').style.display = 'none';
-                initWebsite();
+                document.getElementById('loading-screen').style.opacity = 0;
+                setTimeout(() => {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    initWebsite();
+                }, 500);
             }
-        }, 50);
+        }, 30);
 
         function openFrame(title, content) {
             frameTitle.textContent = title;
@@ -546,8 +616,43 @@
             dynamicFrame.classList.remove('show');
         }
 
+        // Anti-Hack Logic
+        const loginAttempts = JSON.parse(localStorage.getItem('loginAttempts')) || {};
+        const MAX_ATTEMPTS = 5;
+        const LOCKOUT_TIME = 60 * 1000; // 1 minute
+
+        function checkLoginAttempt(username) {
+            if (!loginAttempts[username]) {
+                loginAttempts[username] = { count: 0, locked: null };
+            }
+            const now = Date.now();
+            if (loginAttempts[username].locked && now < loginAttempts[username].locked) {
+                return false;
+            }
+            loginAttempts[username].count++;
+            if (loginAttempts[username].count >= MAX_ATTEMPTS) {
+                loginAttempts[username].locked = now + LOCKOUT_TIME;
+                loginAttempts[username].count = 0; // Reset count for next lockout
+                localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
+                return false;
+            }
+            localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
+            return true;
+        }
+
+        function resetLoginAttempts(username) {
+            if (loginAttempts[username]) {
+                loginAttempts[username].count = 0;
+                loginAttempts[username].locked = null;
+                localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
+            }
+        }
+
         // All other JS is moved to this function to run after the loading screen
         function initWebsite() {
+            const savedVolume = localStorage.getItem('musicVolume') || 0.5;
+            music.volume = savedVolume;
+            music.play().catch(e => console.log('Autoplay blocked:', e));
 
             // Release Timer
             function updateReleaseTimer() {
@@ -727,20 +832,18 @@
             // User Management
             let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
             const users = JSON.parse(localStorage.getItem('users')) || {};
-            let seePassword = false;
 
             function submitLogin() {
                 const username = document.getElementById('login-username').value;
                 const password = document.getElementById('login-password').value;
-                const rank = document.getElementById('login-rank').value;
-                let lockedUntil = localStorage.getItem('loginLockedUntil');
-                if (lockedUntil && Date.now() < lockedUntil) {
-                    alert('Login locked! Try later.');
+                if (!checkLoginAttempt(username)) {
+                    alert('Too many failed attempts. Please try again later.');
                     return;
                 }
-                if (users[username] && users[username].password === password && users[username].rank === rank) {
-                    currentUser = { username, rank };
+                if (users[username] && users[username].password === password) {
+                    currentUser = { username, rank: users[username].rank };
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    resetLoginAttempts(username);
                     alert('Login successful!');
                     closeFrame();
                 } else {
@@ -818,6 +921,9 @@
             }
 
             function getAdminPanelContent() {
+                if (currentUser && currentUser.rank !== 'admin') {
+                     return `<p>You do not have permission to view this page.</p>`;
+                }
                 return `
                     <div class="admin-section">
                         <h4>Add Product</h4>
@@ -931,11 +1037,6 @@
             }
 
             // Settings and Cookies
-            const music = document.getElementById('bg-music');
-            const savedVolume = localStorage.getItem('musicVolume') || 0.5;
-            music.volume = savedVolume;
-            music.play().catch(e => console.log('Autoplay blocked:', e));
-
             function getSettingsContent() {
                 const savedVolume = localStorage.getItem('musicVolume') || 0.5;
                 return `
