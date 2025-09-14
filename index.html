@@ -16,6 +16,8 @@
             --main-gradient: linear-gradient(90deg, #1c2a4c, #0f172a);
             --button-gradient: linear-gradient(90deg, #3a5068, #233140);
             --button-hover-gradient: linear-gradient(90deg, #233140, #3a5068);
+            --ball-color: rgba(0, 198, 255, 0.7);
+            --line-color: rgba(0, 198, 255, 0.2);
         }
 
         /* General styles and resets */
@@ -53,7 +55,7 @@
         body::-webkit-scrollbar-thumb:hover {
             background: #2b3950;
         }
-
+        
         /* Loading Screen */
         #loading-screen {
             position: fixed;
@@ -328,7 +330,21 @@
             background: #222;
             color: #fff;
         }
-
+        .search-results {
+            margin-top: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .search-result-item {
+            padding: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            border-radius: 8px;
+        }
+        .search-result-item:hover {
+            background-color: rgba(0, 198, 255, 0.1);
+        }
+        
         /* Main content sections */
         main {
             width: 100%;
@@ -370,12 +386,16 @@
             border-radius: 10px;
             padding: 20px;
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
         }
 
         .product-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 5px 20px rgba(0, 198, 255, 0.3);
+        }
+        .product-card.highlight {
+            border: 2px solid #00c6ff;
+            box-shadow: 0 0 20px #00c6ff;
         }
         .product-card img {
             max-width: 100%;
@@ -466,11 +486,11 @@
         <h2>Buy Top Roblox Products</h2>
         <div id="release-timer"></div>
         <nav>
-            <a href="index.html">Home</a>
-            <a href="hot-deals.html">Best Deals</a>
-            <a href="products.html">Best Products</a>
-            <a href="infos.html">Info</a>
-            <a href="all-products.html">All Products</a>
+            <a href="javascript:void(0);" data-frame="home-frame">Home</a>
+            <a href="javascript:void(0);" data-frame="hot-deals-frame">Best Deals</a>
+            <a href="javascript:void(0);" data-frame="best-products-frame">Best Products</a>
+            <a href="javascript:void(0);" data-frame="info-frame">Info</a>
+            <a href="javascript:void(0);" data-frame="all-products-frame">All Products</a>
         </nav>
     </header>
 
@@ -640,23 +660,68 @@
             dynamicFrame.classList.remove('show');
         }
 
+        function showMessage(message) {
+            const messageFrame = document.createElement('div');
+            messageFrame.className = 'custom-frame show';
+            messageFrame.innerHTML = `
+                <div class="frame-header">
+                    <h3>Notification</h3>
+                    <button class="close-btn" onclick="this.parentNode.parentNode.remove()">X</button>
+                </div>
+                <div class="frame-content">
+                    <p>${message}</p>
+                </div>
+            `;
+            document.body.appendChild(messageFrame);
+        }
+
+        function confirmAction(message, onConfirm) {
+            const confirmFrame = document.createElement('div');
+            confirmFrame.className = 'custom-frame show';
+            confirmFrame.innerHTML = `
+                <div class="frame-header">
+                    <h3>Confirm</h3>
+                    <button class="close-btn" onclick="this.parentNode.parentNode.remove()">X</button>
+                </div>
+                <div class="frame-content">
+                    <p>${message}</p>
+                    <div class="cart-buttons">
+                        <button class="submit-btn" onclick="window.handleConfirm(true, '${btoa(onConfirm.toString())}'); this.parentNode.parentNode.parentNode.remove();">Yes</button>
+                        <button class="submit-btn" onclick="window.handleConfirm(false); this.parentNode.parentNode.parentNode.remove();">No</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(confirmFrame);
+        }
+
+        window.handleConfirm = (result, callbackStr) => {
+            if (result) {
+                try {
+                    const callback = atob(callbackStr);
+                    eval(`(${callback})()`);
+                } catch (e) {
+                    console.error('Error executing callback:', e);
+                }
+            }
+        };
+
         // Anti-Hack Logic
         const loginAttempts = JSON.parse(localStorage.getItem('loginAttempts')) || {};
         const MAX_ATTEMPTS = 5;
         const LOCKOUT_TIME = 60 * 1000; // 1 minute
 
-        function checkLoginAttempt(username) {
-            if (!loginAttempts[username]) {
-                loginAttempts[username] = { count: 0, locked: null };
+        function checkLoginAttempt(email) {
+            if (!loginAttempts[email]) {
+                loginAttempts[email] = { count: 0, locked: null };
             }
             const now = Date.now();
-            if (loginAttempts[username].locked && now < loginAttempts[username].locked) {
+            if (loginAttempts[email].locked && now < loginAttempts[email].locked) {
                 return false;
             }
-            loginAttempts[username].count++;
-            if (loginAttempts[username].count >= MAX_ATTEMPTS) {
-                loginAttempts[username].locked = now + LOCKOUT_TIME;
-                loginAttempts[username].count = 0; // Reset count for next lockout
+            loginAttempts[email].count++;
+            if (loginAttempts[email].count >= MAX_ATTEMPTS) {
+                loginAttempts[email].locked = now + LOCKOUT_TIME;
+                loginAttempts[email].count = 0;
                 localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
                 return false;
             }
@@ -664,10 +729,10 @@
             return true;
         }
 
-        function resetLoginAttempts(username) {
-            if (loginAttempts[username]) {
-                loginAttempts[username].count = 0;
-                loginAttempts[username].locked = null;
+        function resetLoginAttempts(email) {
+            if (loginAttempts[email]) {
+                loginAttempts[email].count = 0;
+                loginAttempts[email].locked = null;
                 localStorage.setItem('loginAttempts', JSON.stringify(loginAttempts));
             }
         }
@@ -703,6 +768,8 @@
             canvas.height = window.innerHeight;
             const balls = [];
             const ballCount = 30;
+            let ballColor = localStorage.getItem('ballColor') || 'rgba(0, 198, 255, 0.7)';
+            let lineColor = localStorage.getItem('lineColor') || 'rgba(0, 198, 255, 0.2)';
 
             for (let i = 0; i < ballCount; i++) {
                 balls.push({
@@ -722,14 +789,14 @@
                         ctx.beginPath();
                         ctx.moveTo(balls[i].x, balls[i].y);
                         ctx.lineTo(balls[j].x, balls[j].y);
-                        ctx.strokeStyle = 'rgba(0,198,255,0.2)';
+                        ctx.strokeStyle = lineColor;
                         ctx.stroke();
                     }
                 }
                 balls.forEach(ball => {
                     ctx.beginPath();
                     ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = 'rgba(0,198,255,0.7)';
+                    ctx.fillStyle = ballColor;
                     ctx.fill();
                     ball.x += ball.dx;
                     ball.y += ball.dy;
@@ -759,17 +826,21 @@
 
             function getCartContent() {
                 let html = '<div id="cart-items">';
-                cart.forEach(item => {
-                    const product = products.find(p => p.id === item.id);
-                    if (!product) return;
-                    html += `
-                        <div class="cart-item">
-                            <span>${product.name} ($${product.price})</span>
-                            <input type="number" value="${item.qty}" min="1" onchange="window.updateQty('${item.id}', this.value)">
-                            <button onclick="window.removeFromCart('${item.id}')">Remove</button>
-                        </div>
-                    `;
-                });
+                if (cart.length === 0) {
+                    html += '<p>Your cart is empty.</p>';
+                } else {
+                    cart.forEach(item => {
+                        const product = products.find(p => p.id === item.id);
+                        if (!product) return;
+                        html += `
+                            <div class="cart-item">
+                                <span>${product.name} ($${product.price})</span>
+                                <input type="number" value="${item.qty}" min="1" onchange="window.updateQty('${item.id}', this.value)">
+                                <button onclick="window.removeFromCart('${item.id}')">Remove</button>
+                            </div>
+                        `;
+                    });
+                }
                 html += `</div><div class="frame-actions cart-buttons">
                     <button class="submit-btn" onclick="window.clearCart()">Clear All</button>
                     <button class="submit-btn" onclick="window.openCheckout()">Checkout</button>
@@ -787,7 +858,10 @@
 
             function addToCart(productId) {
                 const product = products.find(p => p.id === productId);
-                if (!product) return;
+                if (!product) {
+                    showMessage('Product not found!');
+                    return;
+                }
                 const existing = cart.find(c => c.id === productId);
                 if (existing) {
                     existing.qty++;
@@ -799,7 +873,7 @@
                 }
                 saveCart();
                 updateCartUI();
-                alert(`${product.name} added to cart!`);
+                showMessage(`${product.name} added to cart!`);
             }
 
             function removeFromCart(productId) {
@@ -818,11 +892,12 @@
             }
 
             function clearCart() {
-                if (confirm('Clear all items from cart?')) {
+                 confirmAction('Clear all items from cart?', () => {
                     cart = [];
                     saveCart();
                     updateCartUI();
-                }
+                    closeFrame();
+                 });
             }
 
             function openCheckout() {
@@ -848,8 +923,10 @@
                     const product = products.find(p => p.id === item.id);
                     return a + (product ? product.price * item.qty : 0);
                 }, 0);
-                alert(`Checkout completed! Total amount: $${total.toFixed(2)}`);
-                clearCart();
+                showMessage(`Checkout completed! Total amount: $${total.toFixed(2)}`);
+                cart = [];
+                saveCart();
+                updateCartUI();
                 closeFrame();
             }
 
@@ -857,41 +934,53 @@
             let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
             const users = JSON.parse(localStorage.getItem('users')) || {};
 
+            function isValidEmail(email) {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            }
+
             function submitLogin() {
-                const username = document.getElementById('login-username').value;
+                const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
-                if (!checkLoginAttempt(username)) {
-                    alert('Too many failed attempts. Please try again later.');
+                if (!isValidEmail(email)) {
+                    showMessage('Please enter a valid email address.');
                     return;
                 }
-                if (users[username] && users[username].password === password) {
-                    currentUser = { username, rank: users[username].rank };
+                if (!checkLoginAttempt(email)) {
+                    showMessage('Too many failed attempts. Please try again later.');
+                    return;
+                }
+                if (users[email] && users[email].password === password) {
+                    currentUser = { email, rank: users[email].rank };
                     localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                    resetLoginAttempts(username);
-                    alert('Login successful!');
+                    resetLoginAttempts(email);
+                    showMessage('Login successful!');
                     closeFrame();
                 } else {
-                    alert('Wrong credentials!');
+                    showMessage('Wrong credentials!');
                 }
             }
 
             function submitSignin() {
-                const username = document.getElementById('signin-username').value;
+                const email = document.getElementById('signin-email').value;
                 const password = document.getElementById('signin-password').value;
                 const password2 = document.getElementById('signin-password2').value;
-                if (users[username]) {
-                    alert('Username already taken!');
+                if (!isValidEmail(email)) {
+                    showMessage('Please enter a valid email address.');
+                    return;
+                }
+                if (users[email]) {
+                    showMessage('Email already taken!');
                     return;
                 }
                 if (password !== password2) {
-                    alert('Passwords do not match!');
+                    showMessage('Passwords do not match!');
                     return;
                 }
-                users[username] = { password, rank: 'user' };
+                users[email] = { password, rank: 'user' };
                 localStorage.setItem('users', JSON.stringify(users));
-                currentUser = { username, rank: 'user' };
+                currentUser = { email, rank: 'user' };
                 localStorage.setItem('currentUser', JSON.stringify(currentUser));
-                alert('Account created successfully!');
+                showMessage('Account created successfully!');
                 closeFrame();
             }
             
@@ -901,7 +990,7 @@
             function renderRecommendations() {
                 let html = '<div id="recommend-list">';
                 recommendations.forEach(rec => {
-                    html += `<div>(${rec.username} @ ${rec.time}): ${rec.text}</div>`;
+                    html += `<div>(${rec.email} @ ${rec.time}): ${rec.text}</div>`;
                 });
                 html += `</div><input type="text" id="recommend-input" placeholder="Write your recommendation...">
                           <button class="submit-btn" onclick="window.submitRecommendation()">Submit</button>`;
@@ -910,42 +999,35 @@
 
             function submitRecommendation() {
                 if (!currentUser) {
-                    alert('You need to login to access recommendations');
+                    showMessage('You need to login to access recommendations');
                     return;
                 }
                 const text = document.getElementById('recommend-input').value.trim();
                 if (!text) return;
                 const now = new Date();
                 const timeStr = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-                recommendations.push({ username: currentUser.username, text, time: timeStr });
+                recommendations.push({ email: currentUser.email, text, time: timeStr });
                 localStorage.setItem('recommendations', JSON.stringify(recommendations));
                 openFrame('Recommendations', renderRecommendations());
             }
 
             // Admin Logic
-            let adminAttempts = 0;
-            const adminLockTime = 24 * 60 * 60 * 1000;
-
             function submitAdminLogin() {
-                const username = document.getElementById('admin-username').value;
+                const username = document.getElementById('admin-email').value;
                 const password = document.getElementById('admin-password').value;
-                let lockedUntil = localStorage.getItem('adminLockedUntil');
-                if (lockedUntil && Date.now() < lockedUntil) {
-                    alert('Admin locked! Try later.');
-                    return;
-                }
-                if (username === 'user' && password === 'password') {
-                    alert('Admin access granted!');
-                    adminAttempts = 0;
+                if (username === 'admin@scriptsell.com' && password === 'admin123') {
+                    currentUser = { email: username, rank: 'admin' };
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showMessage('Admin access granted!');
                     closeFrame();
                     openFrame('Admin Panel', getAdminPanelContent());
                 } else {
-                    alert('Wrong credentials!');
+                    showMessage('Wrong credentials!');
                 }
             }
 
             function getAdminPanelContent() {
-                if (currentUser && currentUser.rank !== 'admin') {
+                if (!currentUser || currentUser.rank !== 'admin') {
                      return `<p>You do not have permission to view this page.</p>`;
                 }
                 return `
@@ -998,6 +1080,7 @@
                 filteredProducts.forEach(product => {
                     const card = document.createElement('div');
                     card.className = 'product-card';
+                    card.id = `product-${product.id}`;
                     card.innerHTML = `
                         <h4>${product.name}</h4>
                         <img src="${product.image}" alt="${product.name}" onerror="this.onerror=null;this.src='https://placehold.co/200x200/222/fff?text=Image+Error'">
@@ -1012,11 +1095,38 @@
             // Search functionality
             function performSearch() {
                 const query = document.getElementById('search-input').value.toLowerCase();
+                const searchResults = document.getElementById('search-results');
+                if (query.length === 0) {
+                    searchResults.innerHTML = '';
+                    return;
+                }
                 const filteredProducts = products.filter(product => 
                     product.name.toLowerCase().includes(query) ||
                     product.why.toLowerCase().includes(query)
                 );
-                renderProducts(filteredProducts);
+                
+                if (filteredProducts.length > 0) {
+                    let resultsHtml = '';
+                    filteredProducts.forEach(product => {
+                        resultsHtml += `<div class="search-result-item" onclick="window.showProduct('${product.id}')">${product.name}</div>`;
+                    });
+                    searchResults.innerHTML = resultsHtml;
+                } else {
+                    searchResults.innerHTML = '<p>No products found.</p>';
+                }
+            }
+
+            function showProduct(productId) {
+                closeFrame();
+                const productCard = document.getElementById(`product-${productId}`);
+                if (productCard) {
+                    document.querySelectorAll('.product-card').forEach(card => card.classList.remove('highlight'));
+                    productCard.classList.add('highlight');
+                    productCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => {
+                        productCard.classList.remove('highlight');
+                    }, 3000);
+                }
             }
 
             function addProduct() {
@@ -1024,14 +1134,14 @@
                 const price = parseFloat(document.getElementById('add-price').value);
                 const why = document.getElementById('add-why').value || '';
                 if (!name || isNaN(price)) {
-                    alert('Name and Price are required');
+                    showMessage('Name and Price are required');
                     return;
                 }
                 const id = Date.now().toString();
                 products.push({ id, name, price, why, image: 'https://placehold.co/200x200/222/fff?text=' + encodeURIComponent(name) });
                 saveProducts();
                 renderProducts();
-                alert('Product added successfully!');
+                showMessage('Product added successfully!');
                 openFrame('Admin Panel', getAdminPanelContent());
             }
 
@@ -1039,7 +1149,7 @@
                 const id = document.getElementById('edit-id').value;
                 const product = products.find(p => p.id === id);
                 if (!product) {
-                    alert('Product not found');
+                    showMessage('Product not found');
                     return;
                 }
                 const name = document.getElementById('edit-name').value;
@@ -1050,7 +1160,7 @@
                 if (why) product.why = why;
                 saveProducts();
                 renderProducts();
-                alert('Product edited successfully!');
+                showMessage('Product edited successfully!');
                 openFrame('Admin Panel', getAdminPanelContent());
             }
 
@@ -1058,28 +1168,38 @@
                 const id = document.getElementById('delete-id').value;
                 const index = products.findIndex(p => p.id === id);
                 if (index === -1) {
-                    alert('Product not found');
+                    showMessage('Product not found');
                     return;
                 }
                 products.splice(index, 1);
                 saveProducts();
                 renderProducts();
-                alert('Product deleted successfully!');
+                showMessage('Product deleted successfully!');
                 openFrame('Admin Panel', getAdminPanelContent());
             }
 
             function shutdownWebsite() {
-                if (confirm('Are you sure you want to shut down the website?')) {
+                confirmAction('Are you sure you want to shut down the website?', () => {
                     document.body.innerHTML = '<h1 style="text-align:center;margin-top:50px;">Website Shutdown</h1>';
-                }
+                });
             }
 
             // Settings and Cookies
             function getSettingsContent() {
                 const savedVolume = localStorage.getItem('musicVolume') || 0.5;
+                const savedBallColor = localStorage.getItem('ballColor') || '#00c6ff';
+                const savedLineColor = localStorage.getItem('lineColor') || '#00c6ff';
                 return `
                     <label for="music-volume">Music Volume:</label>
                     <input type="range" id="music-volume" min="0" max="1" step="0.01" value="${savedVolume}" onchange="window.changeVolume()">
+                    <div style="margin-top: 20px;">
+                        <label for="ball-color">Ball Color:</label>
+                        <input type="color" id="ball-color" value="${savedBallColor}" onchange="window.saveColors()">
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <label for="line-color">Line Color:</label>
+                        <input type="color" id="line-color" value="${savedLineColor}" onchange="window.saveColors()">
+                    </div>
                     <button class="submit-btn" onclick="window.logout()">Logout</button>
                 `;
             }
@@ -1090,10 +1210,19 @@
                 localStorage.setItem('musicVolume', vol);
             }
 
+            function saveColors() {
+                const ballColorInput = document.getElementById('ball-color').value;
+                const lineColorInput = document.getElementById('line-color').value;
+                ballColor = ballColorInput;
+                lineColor = lineColorInput;
+                localStorage.setItem('ballColor', ballColorInput);
+                localStorage.setItem('lineColor', lineColorInput);
+            }
+
             function logout() {
                 currentUser = null;
                 localStorage.removeItem('currentUser');
-                alert('You have been logged out.');
+                showMessage('You have been logged out.');
                 closeFrame();
             }
 
@@ -1107,27 +1236,104 @@
 
             function acceptCookies() {
                 localStorage.setItem('cookiesAccepted', 'true');
-                alert('Cookies accepted!');
+                showMessage('Cookies accepted!');
                 closeFrame();
             }
 
             function declineCookies() {
                 localStorage.setItem('cookiesAccepted', 'false');
-                alert('Cookies declined!');
+                showMessage('Cookies declined!');
                 closeFrame();
             }
 
+            // Navigation Frame Content
+            function getHomeContent() {
+                return `<p>Welcome to the Scriptsell homepage!</p><p>We specialize in providing high-quality Roblox assets and scripts.</p>`;
+            }
+
+            function getHotDealsContent() {
+                const hotDeals = products.filter(p => p.price <= 10);
+                if (hotDeals.length === 0) {
+                    return `<p>No hot deals at the moment. Check back later!</p>`;
+                }
+                let html = '<div class="product-grid">';
+                hotDeals.forEach(p => {
+                    html += `
+                        <div class="product-card">
+                            <h4>${p.name}</h4>
+                            <p class="price">$${p.price.toFixed(2)}</p>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                return html;
+            }
+
+            function getBestProductsContent() {
+                 const bestProducts = products.filter(p => p.price > 10);
+                 if (bestProducts.length === 0) {
+                     return `<p>No best products at the moment.</p>`;
+                 }
+                 let html = '<div class="product-grid">';
+                 bestProducts.forEach(p => {
+                     html += `
+                         <div class="product-card">
+                             <h4>${p.name}</h4>
+                             <p class="price">$${p.price.toFixed(2)}</p>
+                         </div>
+                     `;
+                 });
+                 html += '</div>';
+                 return html;
+            }
+
+            function getInfoContent() {
+                return `<p>This is a demonstration website for a fictional Roblox script marketplace.</p><p>We are dedicated to providing the best tools for developers.</p>`;
+            }
+
+            function getAllProductsContent() {
+                let html = '<div class="product-grid">';
+                if (products.length === 0) {
+                     return `<p>No products available yet. Check the Admin Panel to add some!</p>`;
+                }
+                products.forEach(p => {
+                    html += `
+                        <div class="product-card">
+                            <h4>${p.name}</h4>
+                            <p class="price">$${p.price.toFixed(2)}</p>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                return html;
+            }
+
             // Centralized Event Listeners for top buttons
-            document.querySelectorAll('.action-btn').forEach(button => {
+            document.querySelectorAll('[data-frame]').forEach(button => {
                 button.addEventListener('click', () => {
                     const frameId = button.getAttribute('data-frame');
                     switch (frameId) {
+                        case 'home-frame':
+                            openFrame('Home', getHomeContent());
+                            break;
+                        case 'hot-deals-frame':
+                            openFrame('Best Deals', getHotDealsContent());
+                            break;
+                        case 'best-products-frame':
+                            openFrame('Best Products', getBestProductsContent());
+                            break;
+                        case 'info-frame':
+                            openFrame('Info', getInfoContent());
+                            break;
+                        case 'all-products-frame':
+                            openFrame('All Products', getAllProductsContent());
+                            break;
                         case 'cart-frame':
                             openFrame('Cart', getCartContent());
                             break;
                         case 'admin-frame':
                             const adminContent = `
-                                <input type="text" id="admin-username" placeholder="Username">
+                                <input type="email" id="admin-email" placeholder="Admin Email">
                                 <input type="password" id="admin-password" placeholder="Password">
                                 <button class="submit-btn" onclick="window.submitAdminLogin()">Submit</button>
                             `;
@@ -1135,7 +1341,7 @@
                             break;
                         case 'login-frame':
                             const loginContent = `
-                                <input type="text" id="login-username" placeholder="Username">
+                                <input type="email" id="login-email" placeholder="Email">
                                 <input type="password" id="login-password" placeholder="Password">
                                 <button class="submit-btn" onclick="window.submitLogin()">Login</button>
                             `;
@@ -1143,7 +1349,7 @@
                             break;
                         case 'signin-frame':
                             const signinContent = `
-                                <input type="text" id="signin-username" placeholder="Username">
+                                <input type="email" id="signin-email" placeholder="Email">
                                 <input type="password" id="signin-password" placeholder="Password">
                                 <input type="password" id="signin-password2" placeholder="Confirm Password">
                                 <button class="submit-btn" onclick="window.submitSignin()">Create Account</button>
@@ -1152,14 +1358,14 @@
                             break;
                         case 'recommend-frame':
                             if (!currentUser) {
-                                alert('You need to login to access recommendations');
+                                showMessage('You need to login to access recommendations');
                             } else {
                                 openFrame('Recommendations', renderRecommendations());
                             }
                             break;
                         case 'settings-frame':
                              if (!currentUser) {
-                                alert('You need to login to access settings');
+                                showMessage('You need to login to access settings');
                             } else {
                                 openFrame('Settings', getSettingsContent());
                             }
@@ -1171,6 +1377,7 @@
                             const searchContent = `
                                 <div class="search-container">
                                     <input type="text" id="search-input" placeholder="Search products..." onkeyup="window.performSearch()">
+                                    <div class="search-results" id="search-results"></div>
                                 </div>
                             `;
                             openFrame('Search Products', searchContent);
@@ -1193,6 +1400,7 @@
             window.deleteProduct = deleteProduct;
             window.shutdownWebsite = shutdownWebsite;
             window.changeVolume = changeVolume;
+            window.saveColors = saveColors;
             window.logout = logout;
             window.acceptCookies = acceptCookies;
             window.declineCookies = declineCookies;
@@ -1202,6 +1410,7 @@
             window.addToCart = addToCart;
             window.getAdminPanelContent = getAdminPanelContent;
             window.performSearch = performSearch;
+            window.showProduct = showProduct;
 
             // Initial calls
             updateCartBubble();
