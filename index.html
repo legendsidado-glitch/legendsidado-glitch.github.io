@@ -97,8 +97,7 @@ main.content{max-width:1200px; margin:28px auto; padding:0 18px; display:flex; f
 .features li{margin:6px 0;}
 .product-actions{display:flex; gap:10px; margin-top:8px;}
 .btn-cta{padding:10px 16px; border-radius:10px; font-weight:900; border:none; cursor:pointer; transition:0.3s;}
-.btn-add{background:linear-gradient(90deg,#2bb673
-,#00c6ff); color:white;}
+.btn-add{background:linear-gradient(90deg,#2bb673,#00c6ff); color:white;}
 .btn-add:hover{transform:scale(1.05);}
 .btn-remove{background:#ff4c4c; color:white;}
 .btn-remove:hover{transform:scale(1.05);}
@@ -132,599 +131,224 @@ main.content{max-width:1200px; margin:28px auto; padding:0 18px; display:flex; f
 .admin-btn:hover{transform:scale(1.05);}
 
 /* ------------------- Footer ------------------- */
-footer.main-footer{padding:28px; background:#1f1f1f; color:white; display:flex; flex-direction:column; gap:16px; border-top-left-radius:22px; border-top-right-radius:22px;}
-footer .footer-top{display:flex; justify-content:space-between; flex-wrap:wrap;}
-footer .footer-section{flex:1 1 220px; display:flex; flex-direction:column; gap:8px;}
-footer h4{font-weight:900; font-size:18px; margin-bottom:6px;}
-footer a{color:white; text-decoration:none; transition:0.3s;}
-footer a:hover{text-decoration:underline;}
-footer .social-icons{display:flex; gap:12px;}
-footer .social-icons a{width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:linear-gradient(90deg,var(--accent-1),var(--accent-2)); border-radius:50%; color:white; font-weight:900; transition:0.3s;}
-footer .social-icons a:hover{transform:scale(1.1);}
-
-/* ------------------- Animations ------------------- */
-@keyframes blinkText{
-  0%,50%,100%{opacity:1;}
-  25%,75%{opacity:0.3;}
-}
+footer.main-footer{padding:28px; background:#1f1f1f; color:white; display:flex; flex-direction:column; gap:16px; border-top-left-radius:22px; border-top-right-radius:22px; text-align:center;}
 </style>
 </head>
-
 <body>
 
-<!-- ------------------- Loading Screen ------------------- -->
+<!-- Loading Screen -->
 <div id="loading-screen">
+  <h1>Loading Scriptsell...</h1>
+  <div class="loading-bar"><i></i></div>
   <div class="loading-bg">
-    <div style="top:10%;left:15%;"></div>
-    <div style="top:40%;left:65%;"></div>
-    <div style="top:70%;left:30%;"></div>
-    <div style="top:25%;left:80%;"></div>
-    <div style="top:60%;left:10%;"></div>
+    <div style="top:20px; left:30px;"></div>
+    <div style="top:120px; left:200px;"></div>
+    <div style="top:250px; left:50px;"></div>
   </div>
-  <h1 id="loading-text">Loading Website</h1>
-  <div class="loading-bar"><i id="loading-bar-inner"></i></div>
 </div>
 
-<!-- ------------------- Header ------------------- -->
+<!-- Header -->
 <header class="main-header">
   <div class="header-inner">
     <div class="hdr-left">
-      <input class="search-input" type="text" placeholder="Search products..." id="search-field">
-      <button class="search-btn" id="search-btn">Search</button>
+      <input type="text" placeholder="Search..." class="search-input"/>
+      <button class="search-btn">Search</button>
     </div>
     <div class="hdr-center">
-      <div class="logo-main">Scriptsell</div>
-      <div class="logo-sub">Your Script Marketplace</div>
+      <div class="logo-main">&lt;/&gt; Scriptsell</div>
+      <div class="logo-sub">Best Scripts & Models Online</div>
       <nav class="main-nav">
-        <a href="index.html">Home</a>
-        <a href="#hot-deals">Hot Deals</a>
+        <a href="#why-us">Why Us</a>
         <a href="#products">Products</a>
-        <a href="#all-products">All Products</a>
+        <a href="#recommendations">Recommendations</a>
       </nav>
     </div>
     <div class="hdr-right">
       <div class="stack-row">
-        <button class="btn-pill btn-accent" id="cart-toggle">Cart 🛒</button>
-        <button class="btn-pill" id="admin-toggle">Admin</button>
+        <button class="btn-pill btn-accent" id="admin-btn">Admin Panel</button>
+      </div>
+      <div class="stack-row">
+        <button class="btn-pill">Cart</button>
       </div>
     </div>
   </div>
 </header>
 
-<!-- ------------------- Main Content ------------------- -->
+<!-- Main Content -->
 <main class="content">
   <!-- Why Us Section -->
-  <section class="why-us">
+  <section id="why-us" class="why-us">
     <h2>Why Choose Us</h2>
     <div class="why-us-items">
-      <div class="why-us-item">Fast Delivery</div>
-      <div class="why-us-item">Secure Payments</div>
-      <div class="why-us-item">Trusted Scripts</div>
-      <div class="why-us-item">24/7 Support</div>
+      <div class="why-us-item">High quality scripts</div>
+      <div class="why-us-item">Fast delivery</div>
+      <div class="why-us-item">Affordable prices</div>
+      <div class="why-us-item">Reliable support</div>
     </div>
   </section>
 
-  <!-- Products Section -->
-  <section id="products" class="frame product-area">
-    <div class="product-card">
-      <div class="product-icon">🎮</div>
-      <div class="product-info">
-        <h3>Cool Script 1</h3>
-        <div class="price">$15</div>
-        <ul class="features">
-          <li>Feature A</li>
-          <li>Feature B</li>
-        </ul>
-        <div class="product-actions">
-          <button class="btn-cta btn-add" data-name="Cool Script 1" data-price="15">Add to Cart</button>
-          <button class="btn-cta btn-remove" data-name="Cool Script 1">Remove</button>
+  <!-- Products -->
+  <section id="products" class="product-area">
+    <div class="product-left">
+      <div class="product-card">
+        <div class="product-icon">Script A</div>
+        <div class="product-info">
+          <h3>Script A</h3>
+          <div class="price">$10</div>
+          <ul class="features">
+            <li>Feature 1</li>
+            <li>Feature 2</li>
+          </ul>
+          <div class="product-actions">
+            <button class="btn-cta btn-add" data-name="Script A" data-price="10">Add to Cart</button>
+            <button class="btn-cta btn-remove" data-name="Script A">Remove</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="product-right">
+      <div class="product-card">
+        <div class="product-icon">Script B</div>
+        <div class="product-info">
+          <h3>Script B</h3>
+          <div class="price">$15</div>
+          <ul class="features">
+            <li>Feature 1</li>
+            <li>Feature 2</li>
+          </ul>
+          <div class="product-actions">
+            <button class="btn-cta btn-add" data-name="Script B" data-price="15">Add to Cart</button>
+            <button class="btn-cta btn-remove" data-name="Script B">Remove</button>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Admin Frame -->
-  <div id="admin-frame">
-    <div class="admin-title">Admin Panel</div>
-    <input type="password" class="admin-input" id="admin-pass" placeholder="Enter password">
-    <button class="admin-btn" id="admin-login">Login</button>
-    <div id="admin-ops" style="display:none; flex-direction:column; gap:12px;">
-      <button class="admin-btn" id="add-product">Add Product</button>
-      <button class="admin-btn" id="edit-product">Edit Product</button>
-      <button class="admin-btn" id="delete-product">Delete Product</button>
-    </div>
-  </div>
-
-  <!-- Cart -->
-  <div id="cart" style="display:none;">
-    <div class="cart-header">Cart</div>
-    <div class="cart-items"></div>
-    <button class="checkout-btn" id="checkout-btn">Checkout</button>
+  <!-- Countdown -->
+  <div class="countdown">
+    <div id="days">00</div>:
+    <div id="hours">00</div>:
+    <div id="minutes">00</div>:
+    <div id="seconds">00</div>
   </div>
 </main>
 
-<!-- ------------------- Footer ------------------- -->
+<!-- Cart -->
+<div id="cart">
+  <div class="cart-header">
+    <div>Cart</div>
+    <div id="cart-total">$0</div>
+  </div>
+  <div class="cart-items"></div>
+  <button class="checkout-btn">Buy Everything</button>
+</div>
+
+<!-- Admin Panel -->
+<div id="admin-frame">
+  <div class="admin-title">Admin Login</div>
+  <input type="password" placeholder="Password" class="admin-input" id="admin-password"/>
+  <button class="admin-btn" id="admin-login-btn">Login</button>
+</div>
+
+<!-- Footer -->
 <footer class="main-footer">
-  <div class="footer-top">
-    <div class="footer-section">
-      <h4>About Scriptsell</h4>
-      <p>Your marketplace for the best scripts and models. Safe, fast, and reliable.</p>
-    </div>
-    <div class="footer-section">
-      <h4>Links</h4>
-      <a href="index.html">Home</a>
-      <a href="#products">Products</a>
-      <a href="#all-products">All Products</a>
-    </div>
-    <div class="footer-section">
-      <h4>Follow Us</h4>
-      <div class="social-icons">
-        <a href="#">🐦</a>
-        <a href="#">📘</a>
-        <a href="#">📸</a>
-      </div>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>&copy; 2024 Scriptsell — All Rights Reserved</p>
-  </div>
+  &copy; 2025 Scriptsell. All rights reserved.
 </footer>
 
 <script>
-// ------------------- Loading Screen -------------------
-let loadSteps=["Loading Website","Loading Cookies","Loading Products","Loading Cart","Loading Scripts","Loading Payment"];
-let stepIndex=0;
-let loadBar=document.getElementById("loading-bar-inner");
-let loadText=document.getElementById("loading-text");
-let progress=0;
-
-let loadingInterval=setInterval(()=>{
-  progress+=Math.random()*2;
-  loadBar.style.width=Math.min(progress,100)+"%";
-  if(progress>=100){
+// ------------------- Loading -------------------
+let load = 0;
+const loadBar = document.querySelector('.loading-bar i');
+const loadingScreen = document.getElementById('loading-screen');
+const loadingInterval = setInterval(() => {
+  load += Math.random() * 10;
+  if(load >= 100) load = 100;
+  loadBar.style.width = load + "%";
+  if(load >= 100){
     clearInterval(loadingInterval);
-    document.getElementById("loading-screen").style.display="none";
+    setTimeout(()=>{loadingScreen.style.display="none";}, 600);
   }
-},50);
+}, 100);
 
-setInterval(()=>{
-  loadText.innerText=loadSteps[stepIndex];
-  stepIndex=(stepIndex+1)%loadSteps.length;
-},1000);
-
-// ------------------- Cart System -------------------
-const cartBtn=document.getElementById("cart-toggle");
-const cart=document.getElementById("cart");
-const cartItems=document.querySelector(".cart-items");
-const checkoutBtn=document.getElementById("checkout-btn");
-let cartData=[];
-
-cartBtn.addEventListener("click",()=>{cart.style.display=(cart.style.display==="none")?"flex":"none";});
-document.querySelectorAll(".btn-add").forEach(btn=>{
-  btn.addEventListener("click",()=>{cartData.push({name:btn.dataset.name,price:btn.dataset.price}); updateCart();});
-});
-document.querySelectorAll(".btn-remove").forEach(btn=>{
-  btn.addEventListener("click",()=>{cartData=cartData.filter(item=>item.name!==btn.dataset.name); updateCart();});
-});
-
-function updateCart(){
-  cartItems.innerHTML="";
-  cartData.forEach(item=>{
-    const div=document.createElement("div");
-    div.className="cart-item";
-    div.innerHTML=`<span class="cart-item-name">${item.name}</span><span class="cart-item-price">$${item.price}</span>`;
-    cartItems.appendChild(div);
-  });
-}
-
-// ------------------- Admin System -------------------
-const adminToggle=document.getElementById("admin-toggle");
-const adminFrame=document.getElementById("admin-frame");
-const adminLogin=document.getElementById("admin-login");
-const adminOps=document.getElementById("admin-ops");
-let wrongAttempts=0;
-const blockedKey="adminBlocked";
-
-adminToggle.addEventListener("click",()=>{adminFrame.style.display="flex";});
-
-adminLogin.addEventListener("click",()=>{
-  const pass=document.getElementById("admin-pass").value;
-  if(localStorage.getItem(blockedKey) && Date.now()<Number(localStorage.getItem(blockedKey))){
-    alert("You are blocked from entering the admin for 1 day.");
-    return;
-  }
-  if(pass==="Legend.AymanGaming2024"){
-    adminOps.style.display="flex";
-    alert("Welcome, admin!");
-  }else{
-    wrongAttempts++;
-    if(wrongAttempts>=3){
-      localStorage.setItem(blockedKey,Date.now()+86400000);
-      alert("Blocked for 1 day due to 3 wrong attempts.");
-    }else{
-      alert("Wrong password!");
-    }
-  }
-});
-</script>
-<script>
-// ------------------- Countdown Timer -------------------
-const targetDate=new Date("2026-01-01T00:00:00").getTime();
-const countdownDiv=document.createElement("div");
-countdownDiv.className="countdown";
-document.body.prepend(countdownDiv);
-
+// ------------------- Countdown -------------------
 function updateCountdown(){
-  const now=new Date().getTime();
-  const distance=targetDate-now;
-  if(distance<0){
-    countdownDiv.innerHTML="EXPIRED";
-    return;
-  }
-  const days=Math.floor(distance/(1000*60*60*24));
-  const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-  const minutes=Math.floor((distance%(1000*60*60))/(1000*60));
-  const seconds=Math.floor((distance%(1000*60))/1000);
-  countdownDiv.innerHTML=`
-    <div>${days}d</div>
-    <div>${hours}h</div>
-    <div>${minutes}m</div>
-    <div>${seconds}s</div>`;
+  const target = new Date(Date.now() + 5*24*60*60*1000); // +5 days
+  const now = new Date();
+  const diff = target - now;
+  const days = String(Math.floor(diff/(1000*60*60*24))).padStart(2,'0');
+  const hours = String(Math.floor(diff/(1000*60*60)%24)).padStart(2,'0');
+  const minutes = String(Math.floor(diff/(1000*60)%60)).padStart(2,'0');
+  const seconds = String(Math.floor(diff/1000%60)).padStart(2,'0');
+  document.getElementById('days').innerText=days;
+  document.getElementById('hours').innerText=hours;
+  document.getElementById('minutes').innerText=minutes;
+  document.getElementById('seconds').innerText=seconds;
 }
 setInterval(updateCountdown,1000);
-updateCountdown();
 
-// ------------------- Cart Purchase Blocked Until Countdown Ends -------------------
-checkoutBtn.addEventListener("click",(e)=>{
-  const now=new Date().getTime();
-  if(now<targetDate){
-    alert("You cannot checkout until the countdown ends!");
-    return;
-  }
-  alert("Purchase successful!");
-  cartData=[];
-  updateCart();
-});
+// ------------------- Cart -------------------
+const cartItems = document.querySelector('.cart-items');
+const cartTotal = document.getElementById('cart-total');
+let cart = [];
 
-// ------------------- Product Management -------------------
-let products=[{name:"Cool Script 1",price:15,timer:null}];
-const addBtn=document.getElementById("add-product");
-const editBtn=document.getElementById("edit-product");
-const deleteBtn=document.getElementById("delete-product");
-
-function renderProducts(){
-  const productArea=document.getElementById("products");
-  productArea.innerHTML="";
-  products.forEach(prod=>{
-    const card=document.createElement("div");
-    card.className="product-card";
-    card.innerHTML=`
-      <div class="product-icon">🎮</div>
-      <div class="product-info">
-        <h3>${prod.name}</h3>
-        <div class="price">$${prod.price}</div>
-        <ul class="features">
-          <li>Feature A</li>
-          <li>Feature B</li>
-        </ul>
-        <div class="product-actions">
-          <button class="btn-cta btn-add" data-name="${prod.name}" data-price="${prod.price}">Add to Cart</button>
-          <button class="btn-cta btn-remove" data-name="${prod.name}">Remove</button>
-        </div>
-      </div>`;
-    productArea.appendChild(card);
+function renderCart(){
+  cartItems.innerHTML = '';
+  let total = 0;
+  cart.forEach(item=>{
+    const div = document.createElement('div');
+    div.className='cart-item';
+    div.innerHTML=`<div class="cart-item-name">${item.name}</div><div class="cart-item-price">$${item.price}</div>`;
+    cartItems.appendChild(div);
+    total += parseFloat(item.price);
   });
-  attachCartEvents();
-}
-function attachCartEvents(){
-  document.querySelectorAll(".btn-add").forEach(btn=>{
-    btn.addEventListener("click",()=>{cartData.push({name:btn.dataset.name,price:btn.dataset.price}); updateCart();});
-  });
-  document.querySelectorAll(".btn-remove").forEach(btn=>{
-    btn.addEventListener("click",()=>{cartData=cartData.filter(item=>item.name!==btn.dataset.name); updateCart();});
-  });
+  cartTotal.innerText='$'+total.toFixed(2);
 }
 
-addBtn.addEventListener("click",()=>{
-  const name=prompt("Enter product name:");
-  const price=prompt("Enter product price:");
-  const timerInput=prompt("Optional: Release timer in YYYY-MM-DD HH:MM format (leave empty for none)");
-  let timer=null;
-  if(timerInput){
-    timer=new Date(timerInput).getTime();
-  }
-  products.push({name,price,timer});
-  renderProducts();
-});
-
-editBtn.addEventListener("click",()=>{
-  const name=prompt("Enter the name of the product to edit:");
-  const prod=products.find(p=>p.name===name);
-  if(!prod){alert("Product not found!"); return;}
-  const newPrice=prompt("Enter new price:",prod.price);
-  if(newPrice) prod.price=newPrice;
-  if(prod.timer){
-    const action=prompt("Timer exists. Type 'edit' to change or 'delete' to remove:");
-    if(action==="edit"){
-      const newTimer=prompt("Enter new timer YYYY-MM-DD HH:MM:");
-      if(newTimer) prod.timer=new Date(newTimer).getTime();
-    }else if(action==="delete"){prod.timer=null;}
-  }else{
-    const newTimer=prompt("Optional: Add timer YYYY-MM-DD HH:MM:");
-    if(newTimer) prod.timer=new Date(newTimer).getTime();
-  }
-  renderProducts();
-});
-
-deleteBtn.addEventListener("click",()=>{
-  const name=prompt("Enter product name to delete:");
-  products=products.filter(p=>p.name!==name);
-  renderProducts();
-});
-
-// ------------------- Advanced Background Animation -------------------
-const bgDiv=document.createElement("div");
-bgDiv.style.position="fixed";
-bgDiv.style.top="0";
-bgDiv.style.left="0";
-bgDiv.style.width="100%";
-bgDiv.style.height="100%";
-bgDiv.style.zIndex="-1";
-bgDiv.style.background="linear-gradient(270deg,#ff8c00,#1e3c72,#00c6ff)";
-bgDiv.style.backgroundSize="600% 600%";
-document.body.appendChild(bgDiv);
-
-let bgStep=0;
-setInterval(()=>{
-  bgStep+=0.5;
-  bgDiv.style.backgroundPosition=`${bgStep}% 50%`;
-},50);
-
-// ------------------- Scrollbar Arrow -------------------
-const styleSheet=document.createElement("style");
-styleSheet.innerText=`
-::-webkit-scrollbar {width:12px;}
-::-webkit-scrollbar-track {background:#e0e0e0; border-radius:6px;}
-::-webkit-scrollbar-thumb {background:#0072ff; border-radius:6px; position:relative;}
-::-webkit-scrollbar-thumb::after {content:"↑"; position:absolute; top:2px; left:2px; color:white; font-weight:900; font-size:12px;}
-`;
-document.head.appendChild(styleSheet);
-
-// ------------------- Search with Fuzzy Matching -------------------
-document.getElementById("search-btn").addEventListener("click",()=>{
-  const query=document.getElementById("search-field").value.toLowerCase();
-  if(!query) return;
-  let bestMatch="";
-  let bestScore=0;
-  products.forEach(p=>{
-    let score=0;
-    p.name.toLowerCase().split(" ").forEach(word=>{
-      if(query.includes(word) || word.includes(query)) score++;
-    });
-    if(score>bestScore){bestScore=score; bestMatch=p.name;}
+// Add buttons
+document.querySelectorAll('.btn-add').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const name = btn.getAttribute('data-name');
+    const price = btn.getAttribute('data-price');
+    cart.push({name,price});
+    renderCart();
   });
-  if(bestMatch) alert(`Best match found: ${bestMatch}`);
-  else alert("No product found!");
 });
 
-// ------------------- Fade & Go Up/Down Bar for Loading -------------------
-const fadeDiv=document.createElement("div");
-fadeDiv.style.position="fixed";
-fadeDiv.style.top="0";
-fadeDiv.style.left="0";
-fadeDiv.style.width="100%";
-fadeDiv.style.height="100%";
-fadeDiv.style.background="white";
-fadeDiv.style.opacity="0.5";
-fadeDiv.style.transition="opacity 3s";
-document.body.appendChild(fadeDiv);
-setTimeout(()=>{fadeDiv.style.opacity="0";},2000);
+document.querySelectorAll('.btn-remove').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const name = btn.getAttribute('data-name');
+    cart = cart.filter(i=>i.name!==name);
+    renderCart();
+  });
+});
 
-// Initial Render
-renderProducts();
+document.querySelector('.checkout-btn').addEventListener('click',()=>{
+  if(cart.length===0) return alert('Cart empty!');
+  alert('Purchase successful for '+cart.length+' items!');
+  cart=[];
+  renderCart();
+});
+
+// ------------------- Admin Panel -------------------
+const adminBtn = document.getElementById('admin-btn');
+const adminFrame = document.getElementById('admin-frame');
+const adminLogin = document.getElementById('admin-login-btn');
+const adminPassword = document.getElementById('admin-password');
+
+const ADMIN_PASS = "scriptsell123";
+
+adminBtn.addEventListener('click',()=>{adminFrame.style.display='flex';});
+adminLogin.addEventListener('click',()=>{
+  if(adminPassword.value === ADMIN_PASS){
+    alert('Access Granted!');
+    adminFrame.style.display='none';
+  } else{
+    alert('Wrong Password!');
+  }
+});
 </script>
-<script>
-// ------------------- Mega Loading Screen Animation -------------------
-const loadingOverlay=document.createElement("div");
-loadingOverlay.id="loadingOverlay";
-loadingOverlay.style.position="fixed";
-loadingOverlay.style.top="0";
-loadingOverlay.style.left="0";
-loadingOverlay.style.width="100%";
-loadingOverlay.style.height="100%";
-loadingOverlay.style.background="#111";
-loadingOverlay.style.display="flex";
-loadingOverlay.style.alignItems="center";
-loadingOverlay.style.justifyContent="center";
-loadingOverlay.style.flexDirection="column";
-loadingOverlay.style.zIndex="9999";
-document.body.appendChild(loadingOverlay);
 
-const loadText=document.createElement("div");
-loadText.id="loadText";
-loadText.style.color="white";
-loadText.style.fontSize="24px";
-loadText.style.marginBottom="20px";
-loadingOverlay.appendChild(loadText);
+</body>
+</html>
 
-const loadBarContainer=document.createElement("div");
-loadBarContainer.style.width="400px";
-loadBarContainer.style.height="20px";
-loadBarContainer.style.background="#333";
-loadBarContainer.style.borderRadius="10px";
-loadBarContainer.style.overflow="hidden";
-loadingOverlay.appendChild(loadBarContainer);
-
-const loadBar=document.createElement("div");
-loadBar.style.height="100%";
-loadBar.style.width="0%";
-loadBar.style.background="#0072ff";
-loadBar.style.transition="width 0.1s linear";
-loadBarContainer.appendChild(loadBar);
-
-const loadingSteps=[
-  "Loading Website",
-  "Loading Cookies",
-  "Loading Products",
-  "Loading Cart",
-  "Loading Scripts",
-  "Loading Payment"
-];
-
-let progress=0;
-let stepIndex=0;
-
-const loadingInterval=setInterval(()=>{
-  if(progress>=100){
-    clearInterval(loadingInterval);
-    loadingOverlay.style.opacity="1";
-    loadingOverlay.style.transition="opacity 1.5s";
-    setTimeout(()=>{loadingOverlay.remove();},1500);
-    return;
-  }
-  progress+=Math.random()*3; // random speed 0.5-1.5s per step
-  if(progress>100) progress=100;
-  loadBar.style.width=progress+"%";
-  if(progress>stepIndex*16){ // roughly 6 steps for 100%
-    loadText.innerText=loadingSteps[stepIndex]||"Finishing...";
-    stepIndex++;
-  }
-},100);
-
-// ------------------- Phone → PC → TV → Console Animation Background -------------------
-const deviceAnimDiv=document.createElement("div");
-deviceAnimDiv.style.position="fixed";
-deviceAnimDiv.style.top="50%";
-deviceAnimDiv.style.left="50%";
-deviceAnimDiv.style.transform="translate(-50%,-50%)";
-deviceAnimDiv.style.width="200px";
-deviceAnimDiv.style.height="200px";
-deviceAnimDiv.style.background="url('https://cdn-icons-png.flaticon.com/512/869/869636.png') no-repeat center/contain";
-deviceAnimDiv.style.zIndex="9998";
-document.body.appendChild(deviceAnimDiv);
-
-const deviceImages=[
-  'https://cdn-icons-png.flaticon.com/512/869/869636.png', // phone
-  'https://cdn-icons-png.flaticon.com/512/414/414974.png', // PC
-  'https://cdn-icons-png.flaticon.com/512/126/126477.png', // TV
-  'https://cdn-icons-png.flaticon.com/512/860/860790.png'  // console
-];
-let deviceStep=0;
-setInterval(()=>{
-  deviceStep=(deviceStep+1)%deviceImages.length;
-  deviceAnimDiv.style.background=`url('${deviceImages[deviceStep]}') no-repeat center/contain`;
-},1200);
-
-// ------------------- Admin Password System -------------------
-const adminPassword="Legend.AymanGaming2024";
-let attempts=JSON.parse(localStorage.getItem("adminAttempts"))||0;
-let blockedUntil=JSON.parse(localStorage.getItem("blockedUntil"))||0;
-
-function requestAdminAccess(){
-  const now=Date.now();
-  if(blockedUntil>now){
-    alert("You are blocked from admin access for 1 day.");
-    return;
-  }
-  const input=prompt("Enter admin password:").replace(/./g,"•");
-  if(input==="•".repeat(adminPassword.length)){
-    // correct password
-    alert("Access granted!");
-    attempts=0;
-    localStorage.setItem("adminAttempts",attempts);
-    showAdminPanel();
-  }else{
-    attempts++;
-    localStorage.setItem("adminAttempts",attempts);
-    if(attempts>=3){
-      blockedUntil=now+24*60*60*1000;
-      localStorage.setItem("blockedUntil",blockedUntil);
-      alert("Too many wrong attempts! Blocked for 1 day.");
-    }else{
-      alert("Wrong password. Attempts left: "+(3-attempts));
-      requestAdminAccess();
-    }
-  }
-}
-
-function showAdminPanel(){
-  const adminDiv=document.createElement("div");
-  adminDiv.id="adminPanel";
-  adminDiv.style.position="fixed";
-  adminDiv.style.top="10%";
-  adminDiv.style.right="10%";
-  adminDiv.style.width="400px";
-  adminDiv.style.height="600px";
-  adminDiv.style.background="#222";
-  adminDiv.style.color="white";
-  adminDiv.style.border="2px solid #0072ff";
-  adminDiv.style.borderRadius="10px";
-  adminDiv.style.padding="20px";
-  adminDiv.style.zIndex="9999";
-  adminDiv.style.overflowY="scroll";
-  adminDiv.innerHTML=`
-    <h2>Admin Panel</h2>
-    <button id="adminAddProduct" class="btn-cta">Add Product</button>
-    <button id="adminEditProduct" class="btn-cta">Edit Product</button>
-    <button id="adminDeleteProduct" class="btn-cta">Delete Product</button>
-    <div id="adminLogs"></div>
-  `;
-  document.body.appendChild(adminDiv);
-
-  document.getElementById("adminAddProduct").addEventListener("click",()=>{addBtn.click();});
-  document.getElementById("adminEditProduct").addEventListener("click",()=>{editBtn.click();});
-  document.getElementById("adminDeleteProduct").addEventListener("click",()=>{deleteBtn.click();});
-}
-
-// ------------------- Anti-Hack / Anti-Bug -------------------
-window.addEventListener("contextmenu",(e)=>{e.preventDefault();});
-window.addEventListener("keydown",(e)=>{if(e.key==="F12"||e.ctrlKey||e.shiftKey)e.preventDefault();});
-document.addEventListener("visibilitychange",()=>{if(document.hidden){console.log("Tab hidden - security check");}});
-
-// ------------------- Footer with Icons & Info -------------------
-const footer=document.createElement("footer");
-footer.style.width="100%";
-footer.style.background="#111";
-footer.style.color="white";
-footer.style.padding="40px";
-footer.style.display="flex";
-footer.style.flexDirection="column";
-footer.style.alignItems="center";
-footer.style.justifyContent="center";
-footer.style.borderTop="2px solid #0072ff";
-footer.innerHTML=`
-  <div style="margin-bottom:20px;font-size:18px;">Contact Us:</div>
-  <div style="display:flex;gap:20px;">
-    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" style="width:30px;height:30px;"></a>
-    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733558.png" style="width:30px;height:30px;"></a>
-    <a href="#"><img src="https://cdn-icons-png.flaticon.com/512/733/733609.png" style="width:30px;height:30px;"></a>
-  </div>
-  <div style="margin-top:20px;">&copy; 2025 LegendSidado Gaming</div>
-`;
-document.body.appendChild(footer);
-
-// ------------------- Smooth Button Animations -------------------
-document.querySelectorAll(".btn-cta").forEach(btn=>{
-  btn.style.transition="0.3s";
-  btn.addEventListener("mouseover",()=>{btn.style.transform="scale(1.1)"; btn.style.background="#00c6ff";});
-  btn.addEventListener("mouseout",()=>{btn.style.transform="scale(1)"; btn.style.background="#0072ff";});
-});
-
-// ------------------- Mouse Direction Indicator -------------------
-const cursorDir=document.createElement("div");
-cursorDir.style.position="fixed";
-cursorDir.style.width="20px";
-cursorDir.style.height="20px";
-cursorDir.style.background="white";
-cursorDir.style.borderRadius="50%";
-cursorDir.style.pointerEvents="none";
-cursorDir.style.zIndex="9999";
-document.body.appendChild(cursorDir);
-
-document.addEventListener("mousemove",(e)=>{
-  cursorDir.style.top=e.clientY-10+"px";
-  cursorDir.style.left=e.clientX-10+"px";
-});
-
-// ------------------- Demo Mode & Fake Buttons Removed -------------------
-document.querySelectorAll(".fake-btn").forEach(btn=>btn.remove());
